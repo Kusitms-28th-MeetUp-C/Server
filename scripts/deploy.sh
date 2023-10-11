@@ -11,9 +11,9 @@ if [ -z $IS_GREEN_EXIST ];then
   echo ">>> green container를 up합니다."
   docker-compose up -d green
   while [ 1 = 1 ]; do
-  echo ">>> green health check 중..."
-  sleep 3
-  REQUEST=$(curl http://127.0.0.1:8082)
+    echo ">>> green health check 중..."
+    sleep 3
+    REQUEST=$(curl http://127.0.0.1:8082)
     if [ -n "$REQUEST" ]; then
       echo ">>> 🍃 health check success !"
       break;
