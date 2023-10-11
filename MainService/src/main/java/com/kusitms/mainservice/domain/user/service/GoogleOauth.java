@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.kusitms.mainservice.domain.user.auth.GoogleOauthToken;
 import com.kusitms.mainservice.domain.user.dto.GoogleUser;
-import lombok.Value;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
