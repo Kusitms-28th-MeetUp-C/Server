@@ -8,7 +8,7 @@ jobs:
   check-skip:
     name: Check ot skip CI
     runs-on: ubuntu-latest
-    if: ${{ contains(github.event.head_commit.message, 'Socket') && contains(github.event.head_commit.message, 'Global') }}
+    if: ${{ contains(github.event.head_commit.message, 'Socket') || contains(github.event.head_commit.message, 'Global') }}
     steps:
       - run: echo "${{ github.event.head_commit.message }}"
 
@@ -33,7 +33,7 @@ jobs:
           touch ./application.yml
           echo "$APPLICATION_SOCKET" > ./application.yml
         env:
-          APPLICATION_DEV: ${{ secrets.APPLICATION_SOCKET }}
+          APPLICATION_SOCKET: ${{ secrets.APPLICATION_SOCKET }}
 
       - name: 🍀 gradle build를 위한 권한 설정
         run: |
