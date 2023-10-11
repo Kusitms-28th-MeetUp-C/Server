@@ -68,7 +68,7 @@ jobs:
           host: ${{ secrets.MAIN_EC2_HOST }}
           key: ${{ secrets.MAIN_EC2_KEY }}
           port: ${{ secrets.MAIN_EC2_PORT }}
-          source: "./docker-compose.yml"
+          source: "./MainService/docker-compose.yml"
           target: "/home/ubuntu/"
 
       - name: 🍀 docker hub 에서 pull 후 deploy
