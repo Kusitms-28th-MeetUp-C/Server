@@ -1,5 +1,5 @@
 ## Code Convention 🍀 
-[MeetUP C팀의 Code Convention 보러가기 ✔️]()
+[MeetUP C팀의 Code Convention 보러가기 ✔️](https://ultra-wallet-036.notion.site/Code-convention-34b0bd40253c430a95acc22e5260c29b?pvs=4)
 
 <br>
 
