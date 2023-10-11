@@ -1,6 +1,6 @@
-## 🍀 Description
+## 🍀 Issue
 
 
 
 ## 🍀 Todo
-- [ ] 
+- [ ] 정
