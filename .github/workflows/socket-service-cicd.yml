@@ -25,7 +25,7 @@ jobs:
 
       - name: 🍀 application.yml 설정
         run: |
-          cd ./MainService
+          cd ./SocketService
           cd ./src/main
           mkdir resources
           cd ./resources
@@ -34,7 +34,7 @@ jobs:
         env:
           APPLICATION_SOCKET: ${{ secrets.APPLICATION_SOCKET }}
 
-      - name: 🍀 gradle build를 위한 권한 설정
+      - name: 🍀 gradle build를 위한 권한 설정정
         run: |
           cd ./SocketService
           chmod +x gradlew
