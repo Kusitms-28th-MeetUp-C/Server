@@ -27,13 +27,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtTokenProvider tokenProvider;
-    //    private final ExceptionHandleFilter exceptionFilter;
-    // private final CorsFilter corsFilter;
+
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
-    //
-//    private final PrincipalOauthUserService principalOauthUserService;
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -84,18 +81,6 @@ public class SecurityConfig {
                 // JwtFilter 를 addFilterBefore 로 등록했던 JwtSecurityConfig 클래스를 적용
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
-        // .apply(new JwtSecurityConfig(tokenProvider))
-//                .and()
-//                .formLogin()
-//                .loginPage("/loginForm") //미인증자일경우 해당 uri를 호출
-//                .loginProcessingUrl("/login") //login 주소가 호출되면 시큐리티가 낚아 채서(post로 오는것) 대신 로그인 진행 -> 컨트롤러를 안만들어도 된다.
-//                .defaultSuccessUrl("/")
-//              http
-//                .oauth2Login()
-//                .loginPage("/loginForm")
-//                .defaultSuccessUrl("/")
-//                .userInfoEndpoint()
-//                .userService(principalOauthUserService);//구;
 
         return http.build();
     }

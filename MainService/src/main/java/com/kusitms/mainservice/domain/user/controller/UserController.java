@@ -30,35 +30,14 @@ public class UserController {
 
     private final UserService userService;
 
-    @Value("${app.kakao.client.id}")
-    private String KAKAO_CLIENT_ID;
 
-    @Value("${app.kakao.client.secret}")
-    private String KAKAO_CLIENT_SECRET ;
-    @Value("${app.kakao.callback.url}")
-    private String KAKAO_REDIRECT_URI;
-
-    @GetMapping("/login")
-    public String login() {
-        return "redirect:" + ENDPOINT + "?client_id=" + CLIENT_ID + "&redirect_uri=" + REDIRECT_URI
-                + "&response_type=" + RESPONSE_TYPE + "&scope=" + SCOPE;
-    }
-    @GetMapping("/login/kakao")
-    public String kakaologin() {
-        return "redirect:" + KAKAO_ENDPOINT + "?client_id=" + KAKAO_CLIENT_ID + "&redirect_uri=" + KAKAO_REDIRECT_URI
-                + "&response_type=" + RESPONSE_TYPE + "&scope=" + KAKAO_SCOPE;
-    }
 
     @GetMapping("/oauth/{socialLoginType}/callback/code")
     public ResponseEntity<OAuthLoginResponseDto> oauthLoginwithtoken(@PathVariable String socialLoginType, @RequestParam String code) throws JsonProcessingException {
         return new ResponseEntity(userService.oauthLoginWithToken( socialLoginType,userService.getOauthTokenWithCode(socialLoginType,code)),HttpStatus.OK);
-        //return new ResponseEntity(new TokenResponse(token, "bearer"), HttpStatus.OK);
-
     }
     @PostMapping("/oauth/{socialLoginType}/callback/token")
     public ResponseEntity<OAuthLoginResponseDto> oauthLoginwithtoken(@PathVariable String socialLoginType, @RequestBody OAuthToken oAuthToken) throws JsonProcessingException {
         return new ResponseEntity(userService.oauthLoginWithToken( socialLoginType,oAuthToken),HttpStatus.OK);
-        //return new ResponseEntity(new TokenResponse(token, "bearer"), HttpStatus.OK);
-
-    }
+       }
 }
