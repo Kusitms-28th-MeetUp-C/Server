@@ -1,5 +1,8 @@
 package com.kusitms.mainservice.domain.user.oauth;
 
+import lombok.Getter;
+
+@Getter
 public class OAuthToken {
 
     private String accessToken;
@@ -21,27 +24,4 @@ public class OAuthToken {
         this.tokenType = tokenType;
     }
 
-    public String getAccessToken() {
-        return accessToken;
-    }
-
-    public String getExpiresIn() {
-        return expiresIn;
-    }
-
-    public String getIdToken() {
-        return idToken;
-    }
-
-    public String getRefreshToken() {
-        return refreshToken;
-    }
-
-    public String getScope() {
-        return scope;
-    }
-
-    public String getTokenType() {
-        return tokenType;
-    }
 }

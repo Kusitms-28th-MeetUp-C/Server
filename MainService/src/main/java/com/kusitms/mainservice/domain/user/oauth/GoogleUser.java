@@ -2,7 +2,10 @@ package com.kusitms.mainservice.domain.user.oauth;
 
 
 import com.kusitms.mainservice.domain.user.domain.User;
-
+import lombok.Builder;
+import lombok.Getter;
+@Builder
+@Getter
 public class GoogleUser {
 
     public String id;
@@ -28,39 +31,14 @@ public class GoogleUser {
         this.locale = locale;
     }
 
-    public User toUser(String accessToken) {
-        return new User(email, name, picture, accessToken);
+    public User toUser() {
+        return User.builder()
+                .email(email)
+                .name(name)
+                .picture(picture)
+                .build();
     }
 
-    public String getId() {
-        return id;
-    }
 
-    public String getEmail() {
-        return email;
-    }
 
-    public Boolean getVerifiedEmail() {
-        return verifiedEmail;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getGivenName() {
-        return givenName;
-    }
-
-    public String getFamilyName() {
-        return familyName;
-    }
-
-    public String getPicture() {
-        return picture;
-    }
-
-    public String getLocale() {
-        return locale;
-    }
 }
