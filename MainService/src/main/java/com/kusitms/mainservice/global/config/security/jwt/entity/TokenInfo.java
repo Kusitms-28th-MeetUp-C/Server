@@ -1,4 +1,4 @@
-package com.kusitms.mainservice.domain.user.security.jwt;
+package com.kusitms.mainservice.global.config.security.jwt.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
