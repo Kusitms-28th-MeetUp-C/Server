@@ -18,6 +18,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
@@ -25,7 +27,12 @@ import java.util.List;
 @EnableWebSecurity
 @Configuration
 @RequiredArgsConstructor
-public class SecurityConfig {
+public class SecurityConfig implements WebMvcConfigurer {
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("*");
+    }
     private final JwtTokenProvider tokenProvider;
 
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -40,23 +47,24 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // CSRF 설정 Disable
-        http.csrf().disable()
+        http.csrf().disable();
+        http
                 .cors(c -> {
                     CorsConfigurationSource source = request -> {
                         // Cors 허용 패턴
                         CorsConfiguration config = new CorsConfiguration();
-                        config.setAllowedOrigins(List.of("http://localhost:3000", ""));
+                        config.setAllowedOrigins(List.of("*"));
                         config.setAllowedHeaders(List.of("*"));
                         config.setAllowedMethods(List.of("*"));
-                        config.setAllowCredentials(true);
+                        config.setAllowCredentials(false);
 
                         return config;
                     };
                     c.configurationSource(source);
-                })
+                });
 
                 // exception handling 할 때 만든 클래스를 추가
-                .exceptionHandling()
+                http.exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .accessDeniedHandler(jwtAccessDeniedHandler)
                 .and()

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
+@CrossOrigin("*")
 public class UserController {
 
     private static final String ENDPOINT = "https://accounts.google.com/o/oauth2/v2/auth";
@@ -31,7 +32,11 @@ public class UserController {
     private final UserService userService;
 
 
-
+    @GetMapping("/login")
+    public String login() {
+        return "redirect:" + ENDPOINT + "?client_id=" + CLIENT_ID + "&redirect_uri=" + REDIRECT_URI
+                + "&response_type=" + RESPONSE_TYPE + "&scope=" + SCOPE;
+    }
     @GetMapping("/oauth/{socialLoginType}/callback/code")
     public ResponseEntity<OAuthLoginResponseDto> oauthLoginwithtoken(@PathVariable String socialLoginType, @RequestParam String code) throws JsonProcessingException {
         return new ResponseEntity(userService.oauthLoginWithToken( socialLoginType,userService.getOauthTokenWithCode(socialLoginType,code)),HttpStatus.OK);
