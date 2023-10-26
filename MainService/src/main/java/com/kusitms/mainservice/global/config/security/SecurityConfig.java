@@ -46,6 +46,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         // CSRF 설정 Disable
         http.csrf().disable();
         http
