@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
-@CrossOrigin("*")
 public class UserController {
 
     private static final String ENDPOINT = "https://accounts.google.com/o/oauth2/v2/auth";
