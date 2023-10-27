@@ -28,6 +28,7 @@ import java.util.List;
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig implements WebMvcConfigurer {
+    //cors설정
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
