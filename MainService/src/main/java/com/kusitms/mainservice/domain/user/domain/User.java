@@ -1,28 +1,37 @@
 package com.kusitms.mainservice.domain.user.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.kusitms.mainservice.domain.user.auth.PlatformUserInfo;
+import jakarta.persistence.*;
 import lombok.*;
 
-@Entity
-@Data
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@NoArgsConstructor
+@Builder
+@Getter
+@Table(name = "user")
+@Entity
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
+    private Platform platform;
+    private String platformId;
     private String email;
     private String name;
-    private String picture;
+    private String profile;
     private String refreshToken;
-    public void updateRefreshToken(String newRefreshToken) {
-        this.refreshToken = newRefreshToken;
+
+    public static User createUser(PlatformUserInfo platformUserInfo) {
+        return User.builder()
+                .platformId(platformUserInfo.getId())
+                .email(platformUserInfo.getEmail())
+                .name(platformUserInfo.getName())
+                .profile(platformUserInfo.getPicture())
+                .build();
     }
 
-
-
+    public void updateRefreshToken(String refreshToken){
+        this.refreshToken = refreshToken;
+    }
 }

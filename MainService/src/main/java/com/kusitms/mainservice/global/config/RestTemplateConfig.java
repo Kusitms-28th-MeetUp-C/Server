@@ -12,7 +12,6 @@ import java.nio.charset.Charset;
 
 @Configuration
 public class RestTemplateConfig {
-
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
         return restTemplateBuilder
