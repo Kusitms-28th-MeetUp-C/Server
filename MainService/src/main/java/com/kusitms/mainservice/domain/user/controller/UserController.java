@@ -17,14 +17,14 @@ public class UserController {
     private final AuthService authService;
 
     @PostMapping("/signIn")
-    public ResponseEntity<SuccessResponse<?>> signIn(@RequestHeader("Authorization") final String authToken,
+    public ResponseEntity<SuccessResponse<?>> signIn(@RequestParam final String authToken,
                                                      @RequestBody final UserSignInRequestDto requestDto) {
         final UserAuthResponseDto responseDto = authService.signIn(requestDto, authToken);
         return SuccessResponse.ok(responseDto);
     }
 
     @PostMapping("/signUp")
-    public ResponseEntity<SuccessResponse<?>> signUp(@RequestHeader("Authorization") final String authToken,
+    public ResponseEntity<SuccessResponse<?>> signUp(@RequestParam final String authToken,
                                                      @RequestBody final UserSignUpRequestDto requestDto) {
         final UserAuthResponseDto responseDto = authService.signUp(requestDto, authToken);
         return SuccessResponse.ok(responseDto);

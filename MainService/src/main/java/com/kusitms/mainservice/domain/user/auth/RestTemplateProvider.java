@@ -37,7 +37,8 @@ public class RestTemplateProvider {
         } else {
             GoogleUserInfo googleUserInfo = googleAuthProvider.getGoogleUserInfoFromPlatformInfo(platformInfo);
             return PlatformUserInfo.createPlatformUserInfo(
-                    Long.toString(googleUserInfo.getId()),
+                    googleUserInfo.getId(),
+//                    Long.toString(googleUserInfo.getId()),
                     googleUserInfo.getEmail(),
                     googleUserInfo.getName(),
                     googleUserInfo.getPicture());
