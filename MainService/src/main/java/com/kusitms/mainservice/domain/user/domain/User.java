@@ -1,8 +1,13 @@
 package com.kusitms.mainservice.domain.user.domain;
 
+import com.kusitms.mainservice.domain.roadmap.domain.Roadmap;
+import com.kusitms.mainservice.domain.roadmap.domain.UserRoadmap;
 import com.kusitms.mainservice.domain.user.auth.PlatformUserInfo;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -21,6 +26,12 @@ public class User {
     private String name;
     private String profile;
     private String refreshToken;
+    @OneToMany(mappedBy = "user")
+    @Builder.Default
+    private List<UserRoadmap> userRoadmapList = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    @Builder.Default
+    private List<Roadmap> roadmapList = new ArrayList<>();
 
     public static User createUser(PlatformUserInfo platformUserInfo) {
         return User.builder()
@@ -31,7 +42,7 @@ public class User {
                 .build();
     }
 
-    public void updateRefreshToken(String refreshToken){
+    public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }
 }
