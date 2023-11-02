@@ -1,7 +1,11 @@
 package com.kusitms.mainservice.domain.roadmap.domain;
 
+import com.kusitms.mainservice.domain.template.domain.TemplateDownload;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -19,4 +23,7 @@ public class RoadmapDetail {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "roadmap_id")
     private Roadmap roadmap;
+    @OneToMany(mappedBy = "RoadmapDetail")
+    @Builder.Default
+    private List<TemplateDownload> templateDownloadList = new ArrayList<>();
 }

@@ -5,6 +5,9 @@ import com.kusitms.mainservice.domain.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -23,6 +26,8 @@ public class Template {
     @ManyToOne
     @JoinColumn(name = "maker_id")
     private User user;
-
+    @OneToMany(mappedBy = "Template")
+    @Builder.Default
+    private List<TemplateDownload> templateDownloadList = new ArrayList<>();
 }
 
