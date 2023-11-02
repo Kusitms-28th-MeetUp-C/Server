@@ -16,6 +16,7 @@ public class TemplateReview {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "template_review_id")
     private Long id;
+    @Enumerated(EnumType.STRING)
     private Rating rating;
     private String content;
 }
