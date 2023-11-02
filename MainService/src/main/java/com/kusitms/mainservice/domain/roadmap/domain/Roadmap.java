@@ -20,6 +20,7 @@ public class Roadmap {
     private Long id;
     private String title;
     private String goal;
+    @Enumerated(value = EnumType.STRING)
     private RoadmapType roadmapType;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "maker_id")
