@@ -47,7 +47,7 @@ public class AuthService {
         Platform platform = getEnumPlatformFromStringPlatform(userSignUpRequestDto.getPlatform());
         PlatformUserInfo platformUser = getPlatformUserInfoFromRestTemplate(platform, authToken);
         validateDuplicateUser(platform, platformUser.getId());
-        User createdUser = saveUser(platformUser);
+        User createdUser = saveUser(platformUser, platform);
         TokenInfo tokenInfo = issueAccessTokenAndRefreshToken(createdUser);
         updateRefreshToken(tokenInfo.getRefreshToken(), createdUser);
         return UserAuthResponseDto.of(createdUser, tokenInfo);
@@ -58,8 +58,8 @@ public class AuthService {
             throw new ConflictException(DUPLICATE_USER);
     }
 
-    private User saveUser(PlatformUserInfo platformUser) {
-        User createdUser = User.createUser(platformUser);
+    private User saveUser(PlatformUserInfo platformUser, Platform platform) {
+        User createdUser = User.createUser(platformUser, platform);
         userRepository.save(createdUser);
         return createdUser;
     }

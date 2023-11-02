@@ -20,6 +20,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
+    @Enumerated(EnumType.STRING)
     private Platform platform;
     private String platformId;
     private String email;
@@ -33,8 +34,9 @@ public class User {
     @Builder.Default
     private List<Roadmap> roadmapList = new ArrayList<>();
 
-    public static User createUser(PlatformUserInfo platformUserInfo) {
+    public static User createUser(PlatformUserInfo platformUserInfo, Platform platform) {
         return User.builder()
+                .platform(platform)
                 .platformId(platformUserInfo.getId())
                 .email(platformUserInfo.getEmail())
                 .name(platformUserInfo.getName())
