@@ -1,9 +1,12 @@
 package com.kusitms.mainservice.domain.template.domain;
 
-import com.kusitms.mainservice.domain.roadmap.domain.RoadmapDetail;
+import com.kusitms.mainservice.domain.roadmap.domain.RoadmapTemplate;
 import com.kusitms.mainservice.domain.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -24,7 +27,7 @@ public class TemplateDownload {
     private Template template;
     @OneToOne
     private CustomTemplate customTemplate;
-    @ManyToOne
-    @JoinColumn(name = "roadmap_detail_id")
-    private RoadmapDetail roadmapDetail;
+    @OneToMany(mappedBy = "templateDownload")
+    @Builder.Default
+    private List<RoadmapTemplate> roadmapTemplateList = new ArrayList<>();
 }
