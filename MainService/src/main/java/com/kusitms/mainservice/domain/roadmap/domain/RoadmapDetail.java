@@ -1,6 +1,5 @@
 package com.kusitms.mainservice.domain.roadmap.domain;
 
-import com.kusitms.mainservice.domain.template.domain.TemplateDownload;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,7 +22,7 @@ public class RoadmapDetail {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "roadmap_id")
     private Roadmap roadmap;
-    @OneToMany(mappedBy = "RoadmapDetail")
+    @OneToMany(mappedBy = "roadmapDetail")
     @Builder.Default
-    private List<TemplateDownload> templateDownloadList = new ArrayList<>();
+    private List<RoadmapTemplate> roadmapTemplateList = new ArrayList<>();
 }
