@@ -2,26 +2,25 @@ package com.kusitms.mainservice.domain.template.domain;
 
 import com.kusitms.mainservice.domain.user.domain.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Entity
-@Data
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@NoArgsConstructor
+@Builder
+@Getter
+@Table(name = "reviewer")
+@Entity
 public class Reviewer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reviewer_id")
     private Long id;
-
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
     @ManyToOne
+    @JoinColumn(name = "review_content_id")
     private TemplateReview templateReview;
-    @ManyToOne
-    private TemplateMaker templateMaker;
+    @OneToOne
+    private Template template;
 }
