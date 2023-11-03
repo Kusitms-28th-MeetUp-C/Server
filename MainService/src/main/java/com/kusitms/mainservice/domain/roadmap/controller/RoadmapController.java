@@ -17,7 +17,7 @@ public class RoadmapController {
     private final RoadmapUserService roadmapUserService;
 
     @GetMapping("/team")
-    public ResponseEntity<SuccessResponse<?>> getTeamRoadmap(@RequestParam final Long teamId){
+    public ResponseEntity<SuccessResponse<?>> getTeamRoadmap(@RequestParam final Long teamId) {
         final BaseRoadmapResponseDto responseDto = roadmapUserService.getTeamRoadmap(teamId);
         return SuccessResponse.ok(responseDto);
     }

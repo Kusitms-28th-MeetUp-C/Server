@@ -21,7 +21,7 @@ public class TeamSpace {
     @JoinColumn(name = "team_id")
     private Team team;
 
-    public static TeamSpace createTeamSpace(String url, TeamSpaceType teamSpaceType, Team team){
+    public static TeamSpace createTeamSpace(String url, TeamSpaceType teamSpaceType, Team team) {
         TeamSpace teamSpace = TeamSpace.builder()
                 .url(url)
                 .teamSpaceType(teamSpaceType)

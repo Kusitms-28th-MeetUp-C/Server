@@ -55,7 +55,7 @@ public class User {
         this.refreshToken = refreshToken;
     }
 
-    public void updateTeamList(Team team){
+    public void updateTeamList(Team team) {
         this.teamList.add(team);
     }
 }
