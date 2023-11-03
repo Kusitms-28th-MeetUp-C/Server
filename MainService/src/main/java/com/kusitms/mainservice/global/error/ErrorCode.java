@@ -15,6 +15,8 @@ public enum ErrorCode {
     INVALID_PLATFORM_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 플랫폼 타입입니다."),
     INVALID_ROADMAP_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 로드맵 타입입니다."),
     INVALID_TEMPLATE_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 회의록 타입입니다."),
+    INVALID_TEAM_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 팀 타입입니다."),
+    INVALID_TEAM_SPACE_SIZE(HttpStatus.BAD_REQUEST, "유효하지 않은 팀 스페이스 크기입니다."),
 
     /**
      * 401 Unauthorized
@@ -52,6 +54,7 @@ public enum ErrorCode {
      */
     CONFLICT(HttpStatus.CONFLICT, "이미 존재하는 리소스입니다."),
     DUPLICATE_USER(HttpStatus.CONFLICT, "이미 존재하는 회원입니다."),
+    DUPLICATE_TEAM(HttpStatus.CONFLICT, "이미 존재하는 팀입니다."),
 
 
     /**
