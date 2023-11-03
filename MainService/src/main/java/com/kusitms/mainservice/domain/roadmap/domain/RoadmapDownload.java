@@ -1,6 +1,6 @@
 package com.kusitms.mainservice.domain.roadmap.domain;
 
-import com.kusitms.mainservice.domain.roadmap.domain.Roadmap;
+import com.kusitms.mainservice.domain.user.domain.Team;
 import com.kusitms.mainservice.domain.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,17 +9,19 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Getter
-@Table(name = "user_roadmap")
+@Table(name = "roadmap_download")
 @Entity
-public class UserRoadmap {
+public class RoadmapDownload {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_roadmap_id")
+    @Column(name = "roadmap_download_id")
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "roadmap_id")
     private Roadmap roadmap;
+    @OneToOne
+    private Team team;
 }
