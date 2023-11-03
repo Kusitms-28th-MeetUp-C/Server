@@ -1,10 +1,13 @@
 package com.kusitms.mainservice.domain.user.service;
 
+import com.kusitms.mainservice.domain.roadmap.domain.RoadmapDownload;
+import com.kusitms.mainservice.domain.roadmap.repository.RoadmapDownloadRepository;
 import com.kusitms.mainservice.domain.user.domain.Team;
 import com.kusitms.mainservice.domain.user.domain.TeamSpace;
 import com.kusitms.mainservice.domain.user.domain.TeamType;
 import com.kusitms.mainservice.domain.user.domain.User;
 import com.kusitms.mainservice.domain.user.dto.request.TeamRequestDto;
+import com.kusitms.mainservice.domain.user.dto.request.TeamRoadmapRequestDto;
 import com.kusitms.mainservice.domain.user.dto.request.TeamSpaceRequestDto;
 import com.kusitms.mainservice.domain.user.dto.request.UpdateTeamRequestDto;
 import com.kusitms.mainservice.domain.user.dto.response.TeamResponseDto;
@@ -34,6 +37,7 @@ import static com.kusitms.mainservice.global.error.ErrorCode.*;
 public class TeamService {
     private final UserRepository userRepository;
     private final TeamRepository teamRepository;
+    private final RoadmapDownloadRepository roadmapDownloadRepository;
     private final static int MAX_SPACE_SIZE = 3;
 
     public TeamResponseDto createTeam(Long userId, TeamRequestDto teamRequestDto) {
@@ -55,6 +59,12 @@ public class TeamService {
         return TeamResponseDto.of(team, teamSpaceResponseDtoList);
     }
 
+    public void addTeamRoadmap(Long userId, TeamRoadmapRequestDto teamRoadmapRequestDto) {
+        Team team = getTeamFromTeamId(teamRoadmapRequestDto.getTeamId());
+        RoadmapDownload roadmapDownload = getRoadmapDownloadFromRoadmapId(teamRoadmapRequestDto.getRoadmapId(), userId);
+        addDownloadRoadToTeam(team, roadmapDownload);
+    }
+
     private List<TeamSpaceResponseDto> createTeamSpaceResponseDtoList(List<TeamSpace> teamSpaceList) {
         return teamSpaceList.stream()
                 .map(TeamSpaceResponseDto::of)
@@ -70,6 +80,10 @@ public class TeamService {
                 .collect(Collectors.toList());
     }
 
+    private void addDownloadRoadToTeam(Team team, RoadmapDownload roadmapDownload) {
+        team.addRoadmapDownload(roadmapDownload);
+    }
+
     private List<TeamSpace> updateTeamSpace(List<TeamSpaceRequestDto> spaceList, Team team) {
         team.resetTeamSpaceList();
         return createTeamSpaceFromRequestDto(spaceList, team);
@@ -78,6 +92,11 @@ public class TeamService {
     private Team createTeamFromRequestDto(TeamRequestDto teamRequestDto, User user) {
         TeamType teamType = getEnumTeamTypeFromStringTeamType(teamRequestDto.getTeamType());
         return Team.createTeam(teamRequestDto.getTitle(), teamType, teamRequestDto.getIntroduction(), user);
+    }
+
+    private RoadmapDownload getRoadmapDownloadFromRoadmapId(Long roadmapId, Long userId) {
+        return roadmapDownloadRepository.findByRoadmapIdAndUserId(roadmapId, userId)
+                .orElseThrow(() -> new EntityNotFoundException(ROADMAP_DOWNLOAD_NOT_FOUND));
     }
 
     private Team getTeamFromTeamId(Long teamId) {
