@@ -17,6 +17,7 @@ public enum ErrorCode {
     INVALID_TEMPLATE_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 회의록 타입입니다."),
     INVALID_TEAM_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 팀 타입입니다."),
     INVALID_TEAM_SPACE_SIZE(HttpStatus.BAD_REQUEST, "유효하지 않은 팀 스페이스 크기입니다."),
+    EMPTY_TEAM_SPACE(HttpStatus.BAD_REQUEST, "요청에 팀 스페이스 정보가 없습니다."),
 
     /**
      * 401 Unauthorized
@@ -41,6 +42,7 @@ public enum ErrorCode {
      */
     ENTITY_NOT_FOUND(HttpStatus.NOT_FOUND, "엔티티를 찾을 수 없습니다."),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."),
+    TEAM_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 팀입니다."),
     TEMPLATE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회의록입니다."),
     ROADMAP_DOWNLOAD_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 로드맵 다운로드 기록입니다."),
 
