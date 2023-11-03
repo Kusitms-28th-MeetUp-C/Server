@@ -15,7 +15,7 @@ public class RoadmapDetailResponseDto {
     private String title;
     private List<TemplateTitleResponseDto> templateList;
 
-    public static RoadmapDetailResponseDto of(RoadmapDetail roadmapDetail, List<TemplateTitleResponseDto> templateList){
+    public static RoadmapDetailResponseDto of(RoadmapDetail roadmapDetail, List<TemplateTitleResponseDto> templateList) {
         return RoadmapDetailResponseDto.builder()
                 .stepId(roadmapDetail.getId())
                 .step(roadmapDetail.getStep())

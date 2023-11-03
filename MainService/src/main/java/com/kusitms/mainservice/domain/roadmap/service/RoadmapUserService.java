@@ -7,8 +7,6 @@ import com.kusitms.mainservice.domain.roadmap.domain.RoadmapTemplate;
 import com.kusitms.mainservice.domain.roadmap.dto.response.BaseRoadmapResponseDto;
 import com.kusitms.mainservice.domain.roadmap.dto.response.RoadmapDetailResponseDto;
 import com.kusitms.mainservice.domain.roadmap.repository.RoadmapDownloadRepository;
-import com.kusitms.mainservice.domain.roadmap.repository.RoadmapRepository;
-import com.kusitms.mainservice.domain.template.domain.TemplateDownload;
 import com.kusitms.mainservice.domain.template.dto.response.TemplateTitleResponseDto;
 import com.kusitms.mainservice.global.error.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +22,8 @@ import static com.kusitms.mainservice.global.error.ErrorCode.ROADMAP_DOWNLOAD_NO
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
-public class RoadmapService {
+public class RoadmapUserService {
     private final RoadmapDownloadRepository roadmapDownloadRepository;
-    private final RoadmapRepository roadmapRepository;
 
     public BaseRoadmapResponseDto getTeamRoadmap(Long teamId) {
         RoadmapDownload downloadRoadmap = getDownloadRoadmapFromTeamId(teamId);
@@ -45,7 +42,7 @@ public class RoadmapService {
                 .collect(Collectors.toList());
     }
 
-    private List<TemplateTitleResponseDto> createTemplateTitleResponseDtoList(RoadmapDetail roadmapDetail){
+    private List<TemplateTitleResponseDto> createTemplateTitleResponseDtoList(RoadmapDetail roadmapDetail) {
         List<RoadmapTemplate> roadmapTemplateList = roadmapDetail.getRoadmapTemplateList();
         return roadmapTemplateList.stream()
                 .map(roadmapTemplate -> TemplateTitleResponseDto.of(roadmapTemplate.getTemplateDownload().getTemplate()))

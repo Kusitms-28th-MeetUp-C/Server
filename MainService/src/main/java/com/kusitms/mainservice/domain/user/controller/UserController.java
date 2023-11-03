@@ -1,10 +1,11 @@
 package com.kusitms.mainservice.domain.user.controller;
 
 
-import com.kusitms.mainservice.domain.user.dto.request.UserSignInRequestDto;
-import com.kusitms.mainservice.domain.user.dto.request.UserSignUpRequestDto;
+import com.kusitms.mainservice.domain.user.dto.request.*;
+import com.kusitms.mainservice.domain.user.dto.response.TeamResponseDto;
 import com.kusitms.mainservice.domain.user.dto.response.UserAuthResponseDto;
 import com.kusitms.mainservice.domain.user.service.AuthService;
+import com.kusitms.mainservice.domain.user.service.TeamService;
 import com.kusitms.mainservice.global.common.SuccessResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class UserController {
     private final AuthService authService;
+    private final TeamService teamService;
 
     @PostMapping("/signIn")
     public ResponseEntity<SuccessResponse<?>> signIn(@RequestParam final String authToken,
@@ -30,4 +32,23 @@ public class UserController {
         return SuccessResponse.ok(responseDto);
     }
 
+    @PostMapping("/team")
+    public ResponseEntity<SuccessResponse<?>> createTeam(@RequestHeader final Long userId,
+                                                         @RequestBody final TeamRequestDto requestDto) {
+        final TeamResponseDto responseDto = teamService.createTeam(userId, requestDto);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @PatchMapping("/team")
+    public ResponseEntity<SuccessResponse<?>> updateTeamInfo(@RequestBody final UpdateTeamRequestDto requestDto) {
+        final TeamResponseDto responseDto = teamService.updateTeamInfo(requestDto);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @PostMapping("/team/roadmap")
+    public ResponseEntity<SuccessResponse<?>> addTeamRoadmap(@RequestHeader final Long userId,
+                                                             @RequestBody final TeamRoadmapRequestDto requestDto) {
+        teamService.addTeamRoadmap(userId, requestDto);
+        return SuccessResponse.ok(null);
+    }
 }

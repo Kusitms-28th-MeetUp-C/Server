@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.kusitms.mainservice.domain.roadmap.domain.RoadmapType.getEnumPeriodFromStringPeriod;
+import static com.kusitms.mainservice.domain.roadmap.domain.RoadmapType.getEnumRoadmapTypeFromStringRoadmapType;
 import static com.kusitms.mainservice.global.error.ErrorCode.TEMPLATE_NOT_FOUND;
 
 @Slf4j
@@ -50,7 +50,7 @@ public class TemplateUserService {
         String templateContents = getTemplateContents(templateId);
         List<Template> templateList = getTemplateListOfSameCategory(template.getTemplateType());
         List<RelatedTemplateResponseDto> relatedTemplateResponseDtoList = createRelatatedTemplateList(templateList);
-        RoadmapType roadmapType = getEnumPeriodFromStringPeriod(template.getTemplateType().getStringTemplateType());
+        RoadmapType roadmapType = getEnumRoadmapTypeFromStringRoadmapType(template.getTemplateType().getStringTemplateType());
         List<Roadmap> roadmapList = getRoadmapListOfSameCategory(roadmapType);
         List<RelatedRoadmapResponseDto> relatedRoadmapResponseDtoList = createRelatedRoadmapList(roadmapList);
         return OriginalTemplateDetailResponseDto.of(template, templateContents, relatedTemplateResponseDtoList, relatedRoadmapResponseDtoList);

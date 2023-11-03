@@ -24,4 +24,8 @@ public class RoadmapDownload {
     private Roadmap roadmap;
     @OneToOne
     private Team team;
+
+    public void addTeam(Team team) {
+        this.team = team;
+    }
 }
