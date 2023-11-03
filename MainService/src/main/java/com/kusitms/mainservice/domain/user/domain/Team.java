@@ -1,6 +1,5 @@
 package com.kusitms.mainservice.domain.user.domain;
 
-import com.kusitms.mainservice.domain.roadmap.domain.Roadmap;
 import com.kusitms.mainservice.domain.roadmap.domain.RoadmapDownload;
 import jakarta.persistence.*;
 import lombok.*;
@@ -45,15 +44,23 @@ public class Team {
         user.updateTeamList(team);
         return team;
     }
-    public void addTeamSpaceList(TeamSpace teamSpace){
+
+    public void addRoadmapDownload(RoadmapDownload roadmapDownload) {
+        this.roadmapDownload = roadmapDownload;
+        roadmapDownload.addTeam(this);
+    }
+
+    public void addTeamSpaceList(TeamSpace teamSpace) {
         this.teamSpaceList.add(teamSpace);
     }
+
     public void updateTeamInfo(String title, String teamType, String introduction) {
         this.title = Objects.isNull(title) ? this.title : title;
         this.teamType = Objects.isNull(teamType) ? this.teamType : getEnumTeamTypeFromStringTeamType(teamType);
         this.introduction = Objects.isNull(introduction) ? this.introduction : introduction;
     }
-    public void resetTeamSpaceList(){
+
+    public void resetTeamSpaceList() {
         this.teamSpaceList = new ArrayList<>();
     }
 }
