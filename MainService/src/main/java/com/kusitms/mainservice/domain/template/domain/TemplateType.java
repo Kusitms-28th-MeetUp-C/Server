@@ -21,9 +21,9 @@ public enum TemplateType {
 
     private final String stringTemplateType;
 
-    public static TemplateType getEnumPeriodFromStringPeriod(String stringTemplateType) {
+    public static TemplateType getEnumTemplateTypeFromStringTemplateType(String stringTemplateType) {
         return Arrays.stream(values())
-                .filter(period -> period.stringTemplateType.equals(stringTemplateType))
+                .filter(templateType -> templateType.stringTemplateType.equals(stringTemplateType))
                 .findFirst()
                 .orElseThrow(() -> new InvalidValueException(INVALID_TEMPLATE_TYPE));
     }
