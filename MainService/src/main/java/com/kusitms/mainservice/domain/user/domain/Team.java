@@ -7,6 +7,9 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import static com.kusitms.mainservice.domain.user.domain.TeamType.getEnumTeamTypeFromStringTeamType;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -42,8 +45,15 @@ public class Team {
         user.updateTeamList(team);
         return team;
     }
-
     public void addTeamSpaceList(TeamSpace teamSpace){
         this.teamSpaceList.add(teamSpace);
+    }
+    public void updateTeamInfo(String title, String teamType, String introduction) {
+        this.title = Objects.isNull(title) ? this.title : title;
+        this.teamType = Objects.isNull(teamType) ? this.teamType : getEnumTeamTypeFromStringTeamType(teamType);
+        this.introduction = Objects.isNull(introduction) ? this.introduction : introduction;
+    }
+    public void resetTeamSpaceList(){
+        this.teamSpaceList = new ArrayList<>();
     }
 }
