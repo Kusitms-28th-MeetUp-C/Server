@@ -8,7 +8,6 @@ import com.kusitms.mainservice.domain.roadmap.dto.response.BaseRoadmapResponseDt
 import com.kusitms.mainservice.domain.roadmap.dto.response.RoadmapDetailResponseDto;
 import com.kusitms.mainservice.domain.roadmap.repository.RoadmapDownloadRepository;
 import com.kusitms.mainservice.domain.roadmap.repository.RoadmapRepository;
-import com.kusitms.mainservice.domain.template.domain.TemplateDownload;
 import com.kusitms.mainservice.domain.template.dto.response.TemplateTitleResponseDto;
 import com.kusitms.mainservice.global.error.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,7 @@ import static com.kusitms.mainservice.global.error.ErrorCode.ROADMAP_DOWNLOAD_NO
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
-public class RoadmapService {
+public class RoadmapUserService {
     private final RoadmapDownloadRepository roadmapDownloadRepository;
     private final RoadmapRepository roadmapRepository;
 
