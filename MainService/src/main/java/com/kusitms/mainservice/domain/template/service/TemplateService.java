@@ -1,11 +1,10 @@
 package com.kusitms.mainservice.domain.template.service;
 
+import com.kusitms.mainservice.domain.template.domain.Template;
 import com.kusitms.mainservice.domain.template.domain.TemplateContent;
-import com.kusitms.mainservice.domain.template.domain.MySQLTemplate;
-import com.kusitms.mainservice.domain.template.repository.MakerRepository;
-import com.kusitms.mainservice.domain.template.repository.MongoDBRepository;
-import com.kusitms.mainservice.domain.template.repository.MongoRepository;
-import com.kusitms.mainservice.domain.template.repository.MySQLRepository;
+import com.kusitms.mainservice.domain.template.domain.TemplateData;
+import com.kusitms.mainservice.domain.template.repository.TemplateContentRepository;
+import com.kusitms.mainservice.domain.template.repository.TemplateRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,19 +18,20 @@ import java.util.List;
 @Transactional
 @Service
 public class TemplateService {
-    private final MySQLRepository mySQLRepository;
-    private final MongoDBRepository mongoDBRepository;
-    public List<> getAllData() {
-        List<MySQLTemplate> mySQLDataList = mySQLRepository.findAll();
-        List<> dataCombinations = new ArrayList<>();
+    private final TemplateRepository templateRepository;
+    private final TemplateContentRepository templateContentRepository;
 
-        for (MySQLTemplate mySQLTemplate : mySQLTemplateList) {
-            TemplateContent templateContent = mongoDBRepository.findById(mySQLTemplate.getId().toString()).orElse(null);
+    public List<TemplateData> getAllData(Long id) {
+        List<Template> mySQLDataList = templateRepository.findAll();
+        List<TemplateData> templateData = new ArrayList<>();
+
+        for (Template template : mySQLDataList) {
+            TemplateContent templateContent = templateContentRepository.findById(id.toString()).orElse(null);
             if (templateContent != null) {
-                dataCombinations.add(new MySQLMongoDB(mySQLTemplate, templateContent));
+                templateData.add(new TemplateData(template, templateContent));
             }
         }
 
-        return ;
+        return templateData;
     }
 }

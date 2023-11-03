@@ -3,6 +3,7 @@ package com.kusitms.mainservice.domain.template.controller;
 import com.kusitms.mainservice.domain.template.dto.TemplateResponseDto;
 import com.kusitms.mainservice.domain.template.service.TemplateService;
 import com.kusitms.mainservice.global.common.SuccessResponse;
+import com.kusitms.mainservice.global.config.auth.UserId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/api/template")
 public class TemplateController {
     private final TemplateService templateService;
-    @GetMapping
-    public ResponseEntity<SuccessResponse<?>> getPlatformList(){
+    @GetMapping("/detail")
+    public ResponseEntity<SuccessResponse<?>> getPlatformList(@UserId final Long userId){
         final TemplateResponseDto responseDto = templateService;
         return SuccessResponse.ok(responseDto);
     }
