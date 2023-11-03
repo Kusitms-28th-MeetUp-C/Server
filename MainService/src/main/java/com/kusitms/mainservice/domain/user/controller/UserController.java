@@ -2,6 +2,7 @@ package com.kusitms.mainservice.domain.user.controller;
 
 
 import com.kusitms.mainservice.domain.user.dto.request.TeamRequestDto;
+import com.kusitms.mainservice.domain.user.dto.request.UpdateTeamRequestDto;
 import com.kusitms.mainservice.domain.user.dto.request.UserSignInRequestDto;
 import com.kusitms.mainservice.domain.user.dto.request.UserSignUpRequestDto;
 import com.kusitms.mainservice.domain.user.dto.response.TeamResponseDto;
@@ -41,4 +42,9 @@ public class UserController {
         return SuccessResponse.ok(responseDto);
     }
 
+    @PatchMapping("/team")
+    public ResponseEntity<SuccessResponse<?>> updateTeamInfo(@RequestBody final UpdateTeamRequestDto requestDto) {
+        final TeamResponseDto responseDto = teamService.updateTeamInfo(requestDto);
+        return SuccessResponse.ok(responseDto);
+    }
 }
