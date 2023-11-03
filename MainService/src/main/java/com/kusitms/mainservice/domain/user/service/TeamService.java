@@ -6,6 +6,7 @@ import com.kusitms.mainservice.domain.user.domain.TeamType;
 import com.kusitms.mainservice.domain.user.domain.User;
 import com.kusitms.mainservice.domain.user.dto.request.TeamRequestDto;
 import com.kusitms.mainservice.domain.user.dto.request.TeamSpaceRequestDto;
+import com.kusitms.mainservice.domain.user.dto.request.UpdateTeamRequestDto;
 import com.kusitms.mainservice.domain.user.dto.response.TeamResponseDto;
 import com.kusitms.mainservice.domain.user.dto.response.TeamSpaceResponseDto;
 import com.kusitms.mainservice.domain.user.repository.TeamRepository;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.kusitms.mainservice.domain.user.domain.TeamSpaceType.getEnumSpaceTypeFromStringSpaceType;
@@ -44,6 +46,15 @@ public class TeamService {
         return TeamResponseDto.of(createTeam, teamSpaceResponseDtoList);
     }
 
+    public TeamResponseDto updateTeamInfo(UpdateTeamRequestDto updateTeamRequestDto) {
+        validateTeamSpaceSize(updateTeamRequestDto.getSpaceList());
+        Team team = getTeamFromTeamId(updateTeamRequestDto.getTeamId());
+        team.updateTeamInfo(updateTeamRequestDto.getTitle(), updateTeamRequestDto.getTeamType(), updateTeamRequestDto.getIntroduction());
+        List<TeamSpace> teamSpaceList = updateTeamSpace(updateTeamRequestDto.getSpaceList(), team);
+        List<TeamSpaceResponseDto> teamSpaceResponseDtoList = createTeamSpaceResponseDtoList(teamSpaceList);
+        return TeamResponseDto.of(team, teamSpaceResponseDtoList);
+    }
+
     private List<TeamSpaceResponseDto> createTeamSpaceResponseDtoList(List<TeamSpace> teamSpaceList) {
         return teamSpaceList.stream()
                 .map(TeamSpaceResponseDto::of)
@@ -59,9 +70,19 @@ public class TeamService {
                 .collect(Collectors.toList());
     }
 
+    private List<TeamSpace> updateTeamSpace(List<TeamSpaceRequestDto> spaceList, Team team) {
+        team.resetTeamSpaceList();
+        return createTeamSpaceFromRequestDto(spaceList, team);
+    }
+
     private Team createTeamFromRequestDto(TeamRequestDto teamRequestDto, User user) {
         TeamType teamType = getEnumTeamTypeFromStringTeamType(teamRequestDto.getTeamType());
         return Team.createTeam(teamRequestDto.getTitle(), teamType, teamRequestDto.getIntroduction(), user);
+    }
+
+    private Team getTeamFromTeamId(Long teamId) {
+        return teamRepository.findById(teamId)
+                .orElseThrow(() -> new EntityNotFoundException(TEAM_NOT_FOUND));
     }
 
     private User getUserFromUserId(Long userId) {
@@ -70,6 +91,8 @@ public class TeamService {
     }
 
     private void validateTeamSpaceSize(List<TeamSpaceRequestDto> requestDtoList) {
+        if (Objects.isNull(requestDtoList))
+            throw new InvalidValueException(EMPTY_TEAM_SPACE);
         if (requestDtoList.size() > MAX_SPACE_SIZE)
             throw new InvalidValueException(INVALID_TEAM_SPACE_SIZE);
     }
