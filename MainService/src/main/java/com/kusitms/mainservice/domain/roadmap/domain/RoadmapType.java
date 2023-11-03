@@ -21,9 +21,9 @@ public enum RoadmapType {
 
     private final String stringRoadmapType;
 
-    public static RoadmapType getEnumPeriodFromStringPeriod(String stringRoadmapType) {
+    public static RoadmapType getEnumRoadmapTypeFromStringRoadmapType(String stringRoadmapType) {
         return Arrays.stream(values())
-                .filter(period -> period.stringRoadmapType.equals(stringRoadmapType))
+                .filter(roadmapType -> roadmapType.stringRoadmapType.equals(stringRoadmapType))
                 .findFirst()
                 .orElseThrow(() -> new InvalidValueException(INVALID_ROADMAP_TYPE));
     }
