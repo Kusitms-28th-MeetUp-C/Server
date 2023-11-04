@@ -1,6 +1,6 @@
 package com.kusitms.mainservice.domain.roadmap.domain;
 
-import com.kusitms.mainservice.domain.template.domain.Template;
+import com.kusitms.mainservice.domain.template.domain.CustomTemplate;
 import com.kusitms.mainservice.domain.template.domain.TemplateDownload;
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,17 +9,17 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Getter
-@Table(name = "roadmap_template")
+@Table(name = "custom_roadmap_template")
 @Entity
-public class RoadmapTemplate {
+public class CustomRoadmapTemplate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "roadmap_template_id")
+    @Column(name = "custom_roadmap_template_id")
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "roadmap_datail_id")
-    private RoadmapSpace roadmapSpace;
+    @JoinColumn(name = "custom_roadmap_space_id")
+    private CustomRoadmapSpace customRoadmapSpace;
     @ManyToOne
-    @JoinColumn(name = "template_id")
-    private Template template;
+    @JoinColumn(name = "custom_template_id")
+    private CustomTemplate customTemplate;
 }

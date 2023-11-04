@@ -1,6 +1,6 @@
 package com.kusitms.mainservice.domain.roadmap.dto.response;
 
-import com.kusitms.mainservice.domain.roadmap.domain.RoadmapDetail;
+import com.kusitms.mainservice.domain.roadmap.domain.RoadmapSpace;
 import com.kusitms.mainservice.domain.template.dto.response.TemplateTitleResponseDto;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,11 +15,11 @@ public class RoadmapDetailResponseDto {
     private String title;
     private List<TemplateTitleResponseDto> templateList;
 
-    public static RoadmapDetailResponseDto of(RoadmapDetail roadmapDetail, List<TemplateTitleResponseDto> templateList) {
+    public static RoadmapDetailResponseDto of(RoadmapSpace roadmapSpace, List<TemplateTitleResponseDto> templateList) {
         return RoadmapDetailResponseDto.builder()
-                .stepId(roadmapDetail.getId())
-                .step(roadmapDetail.getStep())
-                .title(roadmapDetail.getTitle())
+                .stepId(roadmapSpace.getId())
+                .step(roadmapSpace.getStep())
+                .title(roadmapSpace.getTitle())
                 .templateList(templateList)
                 .build();
     }

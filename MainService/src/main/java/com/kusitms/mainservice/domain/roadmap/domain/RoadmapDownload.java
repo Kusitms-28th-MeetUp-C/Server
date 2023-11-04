@@ -1,9 +1,12 @@
 package com.kusitms.mainservice.domain.roadmap.domain;
 
-import com.kusitms.mainservice.domain.user.domain.Team;
+import com.kusitms.mainservice.domain.team.domain.Team;
 import com.kusitms.mainservice.domain.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -23,9 +26,12 @@ public class RoadmapDownload {
     @JoinColumn(name = "roadmap_id")
     private Roadmap roadmap;
     @OneToOne
-    private Team team;
+    private CustomRoadmap customRoadmap;
+    @OneToMany(mappedBy = "roadmapDownload")
+    @Builder.Default
+    private List<Team> teamList = new ArrayList<>();
 
-    public void addTeam(Team team) {
-        this.team = team;
+    public void addTeam(Team team){
+        this.teamList.add(team);
     }
 }

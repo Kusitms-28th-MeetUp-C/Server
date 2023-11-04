@@ -18,9 +18,9 @@ public class Reviewer {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    @ManyToOne
-    @JoinColumn(name = "review_content_id")
-    private TemplateReview templateReview;
     @OneToOne
+    private TemplateReview templateReview;
+    @ManyToOne
+    @JoinColumn(name = "template_id")
     private Template template;
 }

@@ -2,6 +2,7 @@ package com.kusitms.mainservice.domain.user.domain;
 
 import com.kusitms.mainservice.domain.roadmap.domain.Roadmap;
 import com.kusitms.mainservice.domain.roadmap.domain.RoadmapDownload;
+import com.kusitms.mainservice.domain.team.domain.Team;
 import com.kusitms.mainservice.domain.template.domain.TemplateDownload;
 import com.kusitms.mainservice.domain.user.auth.PlatformUserInfo;
 import jakarta.persistence.*;
