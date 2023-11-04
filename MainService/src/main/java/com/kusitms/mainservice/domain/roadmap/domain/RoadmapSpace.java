@@ -10,9 +10,9 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Getter
-@Table(name = "roadmap_detail")
+@Table(name = "roadmap_space")
 @Entity
-public class RoadmapDetail {
+public class RoadmapSpace {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "roadmap_detail_id")
@@ -22,7 +22,7 @@ public class RoadmapDetail {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "roadmap_id")
     private Roadmap roadmap;
-    @OneToMany(mappedBy = "roadmapDetail")
+    @OneToMany(mappedBy = "roadmapSpace")
     @Builder.Default
-    private List<RoadmapTemplate> roadmapTemplateList = new ArrayList<>();
+    private List<RoadmapTemplate> RoadmapTemplateList = new ArrayList<>();
 }

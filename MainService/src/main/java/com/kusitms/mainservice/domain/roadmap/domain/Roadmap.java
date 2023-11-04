@@ -30,5 +30,5 @@ public class Roadmap {
     private User user;
     @OneToMany(mappedBy = "roadmap")
     @Builder.Default
-    private List<RoadmapDetail> roadmapDetailList = new ArrayList<>();
+    private List<RoadmapSpace> roadmapSpaceList = new ArrayList<>();
 }

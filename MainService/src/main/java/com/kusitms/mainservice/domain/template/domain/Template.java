@@ -29,6 +29,9 @@ public class Template {
     private User user;
     @OneToMany(mappedBy = "template")
     @Builder.Default
+    private List<Reviewer> reviewerList = new ArrayList<>();
+    @OneToMany(mappedBy = "template")
+    @Builder.Default
     private List<TemplateDownload> templateDownloadList = new ArrayList<>();
 }
 
