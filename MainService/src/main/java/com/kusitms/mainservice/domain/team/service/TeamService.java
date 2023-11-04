@@ -1,18 +1,18 @@
-package com.kusitms.mainservice.domain.user.service;
+package com.kusitms.mainservice.domain.team.service;
 
 import com.kusitms.mainservice.domain.roadmap.domain.RoadmapDownload;
 import com.kusitms.mainservice.domain.roadmap.repository.RoadmapDownloadRepository;
-import com.kusitms.mainservice.domain.user.domain.Team;
-import com.kusitms.mainservice.domain.user.domain.TeamSpace;
-import com.kusitms.mainservice.domain.user.domain.TeamType;
+import com.kusitms.mainservice.domain.team.domain.Team;
+import com.kusitms.mainservice.domain.team.domain.TeamSpace;
+import com.kusitms.mainservice.domain.team.domain.TeamType;
+import com.kusitms.mainservice.domain.team.dto.request.TeamRequestDto;
+import com.kusitms.mainservice.domain.team.dto.request.TeamRoadmapRequestDto;
+import com.kusitms.mainservice.domain.team.dto.request.TeamSpaceRequestDto;
+import com.kusitms.mainservice.domain.team.dto.request.UpdateTeamRequestDto;
+import com.kusitms.mainservice.domain.team.dto.response.TeamResponseDto;
+import com.kusitms.mainservice.domain.team.dto.response.TeamSpaceResponseDto;
+import com.kusitms.mainservice.domain.team.repository.TeamRepository;
 import com.kusitms.mainservice.domain.user.domain.User;
-import com.kusitms.mainservice.domain.user.dto.request.TeamRequestDto;
-import com.kusitms.mainservice.domain.user.dto.request.TeamRoadmapRequestDto;
-import com.kusitms.mainservice.domain.user.dto.request.TeamSpaceRequestDto;
-import com.kusitms.mainservice.domain.user.dto.request.UpdateTeamRequestDto;
-import com.kusitms.mainservice.domain.user.dto.response.TeamResponseDto;
-import com.kusitms.mainservice.domain.user.dto.response.TeamSpaceResponseDto;
-import com.kusitms.mainservice.domain.user.repository.TeamRepository;
 import com.kusitms.mainservice.domain.user.repository.UserRepository;
 import com.kusitms.mainservice.global.error.exception.ConflictException;
 import com.kusitms.mainservice.global.error.exception.EntityNotFoundException;
@@ -26,8 +26,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.kusitms.mainservice.domain.user.domain.TeamSpaceType.getEnumSpaceTypeFromStringSpaceType;
-import static com.kusitms.mainservice.domain.user.domain.TeamType.getEnumTeamTypeFromStringTeamType;
+import static com.kusitms.mainservice.domain.team.domain.TeamSpaceType.getEnumSpaceTypeFromStringSpaceType;
+import static com.kusitms.mainservice.domain.team.domain.TeamType.getEnumTeamTypeFromStringTeamType;
 import static com.kusitms.mainservice.global.error.ErrorCode.*;
 
 @Slf4j
@@ -51,6 +51,7 @@ public class TeamService {
     }
 
     public TeamResponseDto updateTeamInfo(UpdateTeamRequestDto updateTeamRequestDto) {
+        validateDuplicateTeamTitleWithNull(updateTeamRequestDto.getTitle());
         validateTeamSpaceSize(updateTeamRequestDto.getSpaceList());
         Team team = getTeamFromTeamId(updateTeamRequestDto.getTeamId());
         team.updateTeamInfo(updateTeamRequestDto.getTitle(), updateTeamRequestDto.getTeamType(), updateTeamRequestDto.getIntroduction());
@@ -114,6 +115,12 @@ public class TeamService {
             throw new InvalidValueException(EMPTY_TEAM_SPACE);
         if (requestDtoList.size() > MAX_SPACE_SIZE)
             throw new InvalidValueException(INVALID_TEAM_SPACE_SIZE);
+    }
+
+    private void validateDuplicateTeamTitleWithNull(String title) {
+        if (Objects.isNull(title)) return;
+        if (teamRepository.existsTeamByTitle(title))
+            throw new ConflictException(DUPLICATE_TEAM);
     }
 
     private void validateDuplicateTeamTitle(String title) {

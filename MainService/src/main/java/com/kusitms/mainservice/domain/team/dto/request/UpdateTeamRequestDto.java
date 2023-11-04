@@ -1,4 +1,4 @@
-package com.kusitms.mainservice.domain.user.dto.request;
+package com.kusitms.mainservice.domain.team.dto.request;
 
 import lombok.AccessLevel;
 import lombok.Getter;

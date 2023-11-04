@@ -1,6 +1,7 @@
-package com.kusitms.mainservice.domain.user.domain;
+package com.kusitms.mainservice.domain.team.domain;
 
 import com.kusitms.mainservice.domain.roadmap.domain.RoadmapDownload;
+import com.kusitms.mainservice.domain.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.kusitms.mainservice.domain.user.domain.TeamType.getEnumTeamTypeFromStringTeamType;
+import static com.kusitms.mainservice.domain.team.domain.TeamType.getEnumTeamTypeFromStringTeamType;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -28,7 +29,8 @@ public class Team {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "roadmap_download_id")
     private RoadmapDownload roadmapDownload;
     @OneToMany(mappedBy = "team")
     @Builder.Default

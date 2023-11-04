@@ -1,8 +1,8 @@
-package com.kusitms.mainservice.domain.user.dto.response;
+package com.kusitms.mainservice.domain.team.dto.response;
 
 
-import com.kusitms.mainservice.domain.user.domain.TeamSpace;
-import com.kusitms.mainservice.domain.user.domain.TeamSpaceType;
+import com.kusitms.mainservice.domain.team.domain.TeamSpace;
+import com.kusitms.mainservice.domain.team.domain.TeamSpaceType;
 import lombok.Builder;
 import lombok.Getter;
 

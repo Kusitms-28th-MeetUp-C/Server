@@ -1,4 +1,4 @@
-package com.kusitms.mainservice.domain.user.domain;
+package com.kusitms.mainservice.domain.team.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
