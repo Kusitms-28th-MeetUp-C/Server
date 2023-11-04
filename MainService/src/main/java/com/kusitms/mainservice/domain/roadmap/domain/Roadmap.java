@@ -19,7 +19,6 @@ public class Roadmap {
     @Column(name = "roadmap_id")
     private Long id;
     private String title;
-    private String goal;
     @Enumerated(value = EnumType.STRING)
     private RoadmapType roadmapType;
     @OneToMany(mappedBy = "roadmap")
