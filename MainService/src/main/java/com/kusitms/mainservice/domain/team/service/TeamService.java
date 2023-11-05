@@ -1,14 +1,23 @@
 package com.kusitms.mainservice.domain.team.service;
 
+import com.kusitms.mainservice.domain.roadmap.domain.Roadmap;
+import com.kusitms.mainservice.domain.roadmap.domain.RoadmapSpace;
+import com.kusitms.mainservice.domain.roadmap.domain.RoadmapTemplate;
+import com.kusitms.mainservice.domain.roadmap.dto.response.BaseRoadmapResponseDto;
+import com.kusitms.mainservice.domain.roadmap.dto.response.RoadmapDetailResponseDto;
 import com.kusitms.mainservice.domain.team.domain.Team;
 import com.kusitms.mainservice.domain.team.domain.TeamSpace;
 import com.kusitms.mainservice.domain.team.domain.TeamType;
 import com.kusitms.mainservice.domain.team.dto.request.TeamRequestDto;
 import com.kusitms.mainservice.domain.team.dto.request.TeamSpaceRequestDto;
 import com.kusitms.mainservice.domain.team.dto.request.UpdateTeamRequestDto;
+import com.kusitms.mainservice.domain.team.dto.response.TeamListElementsResponseDto;
+import com.kusitms.mainservice.domain.team.dto.response.TeamListResponseDto;
 import com.kusitms.mainservice.domain.team.dto.response.TeamResponseDto;
 import com.kusitms.mainservice.domain.team.dto.response.TeamSpaceResponseDto;
 import com.kusitms.mainservice.domain.team.repository.TeamRepository;
+import com.kusitms.mainservice.domain.template.domain.Template;
+import com.kusitms.mainservice.domain.template.dto.response.TemplateTitleResponseDto;
 import com.kusitms.mainservice.domain.user.domain.User;
 import com.kusitms.mainservice.domain.user.repository.UserRepository;
 import com.kusitms.mainservice.global.error.exception.ConflictException;
@@ -36,6 +45,12 @@ public class TeamService {
     private final TeamRepository teamRepository;
     private final static int MAX_SPACE_SIZE = 3;
 
+    public TeamListResponseDto getAllTeamList(Long userId) {
+        List<Team> teamList = getTeamListFromUserId(userId);
+        List<TeamListElementsResponseDto> teamListElementsResponseDtoList = createBaseTeamResponseDtoList(teamList);
+        return TeamListResponseDto.of(teamListElementsResponseDtoList);
+    }
+
     public TeamResponseDto createTeam(Long userId, TeamRequestDto teamRequestDto) {
         validateDuplicateTeamTitle(teamRequestDto.getTitle());
         validateTeamSpaceSize(teamRequestDto.getSpaceList());
@@ -56,6 +71,47 @@ public class TeamService {
         return TeamResponseDto.of(team, teamSpaceResponseDtoList);
     }
 
+    private List<TeamListElementsResponseDto> createBaseTeamResponseDtoList(List<Team> teamList) {
+        return teamList.stream()
+                .map(team ->
+                        TeamListElementsResponseDto.of(
+                                createTeamResponseDto(team),
+                                createBaseRoadmapResponseDto(team.getRoadmapDownload().getRoadmap())))
+                .collect(Collectors.toList());
+    }
+
+    private TeamResponseDto createTeamResponseDto(Team team) {
+        List<TeamSpaceResponseDto> teamSpaceResponseDtoList = createTeamSpaceResponseDtoList(team.getTeamSpaceList());
+        return TeamResponseDto.of(team, teamSpaceResponseDtoList);
+    }
+
+    private BaseRoadmapResponseDto createBaseRoadmapResponseDto(Roadmap roadmap) {
+        List<RoadmapDetailResponseDto> roadmapDetailResponseDtoList = createRoadmapDetailResponseDtoList(roadmap.getRoadmapSpaceList());
+        return BaseRoadmapResponseDto.of(roadmap, roadmapDetailResponseDtoList);
+    }
+
+    private List<RoadmapDetailResponseDto> createRoadmapDetailResponseDtoList(List<RoadmapSpace> roadmapSpaceList) {
+        return roadmapSpaceList.stream()
+                .map(roadmapSpace ->
+                        RoadmapDetailResponseDto.of(
+                                roadmapSpace,
+                                createTemplateTitleResponseDtoList(roadmapSpace.getRoadmapTemplateList())))
+                .collect(Collectors.toList());
+    }
+
+    private List<TemplateTitleResponseDto> createTemplateTitleResponseDtoList(List<RoadmapTemplate> roadmapTemplateList) {
+        List<Template> templateList = getTeamListFromRoadmapTemplate(roadmapTemplateList);
+        return templateList.stream()
+                .map(TemplateTitleResponseDto::of)
+                .collect(Collectors.toList());
+    }
+
+    private List<Template> getTeamListFromRoadmapTemplate(List<RoadmapTemplate> roadmapTemplateList) {
+        return roadmapTemplateList.stream()
+                .map(RoadmapTemplate::getTemplate)
+                .collect(Collectors.toList());
+    }
+
     private List<TeamSpaceResponseDto> createTeamSpaceResponseDtoList(List<TeamSpace> teamSpaceList) {
         return teamSpaceList.stream()
                 .map(TeamSpaceResponseDto::of)
@@ -65,7 +121,8 @@ public class TeamService {
     private List<TeamSpace> createTeamSpaceFromRequestDto(List<TeamSpaceRequestDto> requestDtoList, Team createTeam) {
         return requestDtoList.stream()
                 .map(teamSpaceRequestDto ->
-                        TeamSpace.createTeamSpace(teamSpaceRequestDto.getUrl(),
+                        TeamSpace.createTeamSpace(
+                                teamSpaceRequestDto.getUrl(),
                                 getEnumSpaceTypeFromStringSpaceType(teamSpaceRequestDto.getSpaceType()),
                                 createTeam))
                 .collect(Collectors.toList());
@@ -79,6 +136,10 @@ public class TeamService {
     private Team createTeamFromRequestDto(TeamRequestDto teamRequestDto, User user) {
         TeamType teamType = getEnumTeamTypeFromStringTeamType(teamRequestDto.getTeamType());
         return Team.createTeam(teamRequestDto.getTitle(), teamType, teamRequestDto.getIntroduction(), user);
+    }
+
+    private List<Team> getTeamListFromUserId(Long userId) {
+        return teamRepository.findAllByUserId(userId);
     }
 
     private Team getTeamFromTeamId(Long teamId) {
