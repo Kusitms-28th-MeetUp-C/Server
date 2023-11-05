@@ -3,6 +3,9 @@ package com.kusitms.mainservice.domain.roadmap.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
@@ -20,4 +23,7 @@ public class CustomRoadmap {
     private RoadmapType roadmapType;
     @OneToOne
     private RoadmapDownload roadmapDownload;
+    @OneToMany(mappedBy = "customRoadmap")
+    @Builder.Default
+    private List<CustomRoadmapSpace> customRoadmapSpaceList = new ArrayList<>();
 }
