@@ -9,4 +9,6 @@ import java.util.List;
 public interface TemplateRepository extends JpaRepository<Template, Long> {
     List<Template> findTop3ByTemplateType(TemplateType templateType);
     List<Template> findAllByTemplateType(TemplateType templateType);
+    List<Template> findByTitleContaining(String keyword);
+
 }

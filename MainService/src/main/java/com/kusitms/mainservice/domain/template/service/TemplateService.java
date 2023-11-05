@@ -34,6 +34,11 @@ public class TemplateService {
         List<SearchBaseTemplateResponseDto> searchbaseTemplateResponseDtoList= createSearchBaseTemplateResponseDtoList(templateList);
         return SearchTemplateResponseDto.of(searchbaseTemplateResponseDtoList);
     }
+    public SearchTemplateResponseDto searchTemplatesByTitle(String title) {
+        List<Template> templateList = getTemplateByTitle(title);
+        List<SearchBaseTemplateResponseDto> searchbaseTemplateResponseDtoList= createSearchBaseTemplateResponseDtoList(templateList);
+        return SearchTemplateResponseDto.of(searchbaseTemplateResponseDtoList);
+    }
     private List<Template> getTemplateFromTemplateType(TemplateType templateType) {
         return templateRepository.findAllByTemplateType(templateType);
     }
@@ -59,4 +64,8 @@ public class TemplateService {
 
         return roadmapTitleResponseDtoList;
     }
+    private List<Template> getTemplateByTitle(String title) {
+        return templateRepository.findByTitleContaining(title);
+    }
+
 }
