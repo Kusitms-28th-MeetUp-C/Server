@@ -13,6 +13,8 @@ public enum ErrorCode {
      */
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
     INVALID_PLATFORM_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 플랫폼 타입입니다."),
+    INVALID_ROADMAP_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 로드맵 타입입니다."),
+    INVALID_TEMPLATE_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 회의록 타입입니다."),
 
     /**
      * 401 Unauthorized
@@ -37,6 +39,8 @@ public enum ErrorCode {
      */
     ENTITY_NOT_FOUND(HttpStatus.NOT_FOUND, "엔티티를 찾을 수 없습니다."),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."),
+    TEMPLATE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회의록입니다."),
+    ROADMAP_DOWNLOAD_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 로드맵 다운로드 기록입니다."),
 
     /**
      * 405 Method Not Allowed

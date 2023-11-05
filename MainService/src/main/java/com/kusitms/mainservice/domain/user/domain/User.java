@@ -1,7 +1,8 @@
 package com.kusitms.mainservice.domain.user.domain;
 
 import com.kusitms.mainservice.domain.roadmap.domain.Roadmap;
-import com.kusitms.mainservice.domain.roadmap.domain.UserRoadmap;
+import com.kusitms.mainservice.domain.roadmap.domain.RoadmapDownload;
+import com.kusitms.mainservice.domain.template.domain.TemplateDownload;
 import com.kusitms.mainservice.domain.user.auth.PlatformUserInfo;
 import jakarta.persistence.*;
 import lombok.*;
@@ -29,10 +30,16 @@ public class User {
     private String refreshToken;
     @OneToMany(mappedBy = "user")
     @Builder.Default
-    private List<UserRoadmap> userRoadmapList = new ArrayList<>();
+    private List<Team> teamList = new ArrayList<>();
     @OneToMany(mappedBy = "user")
     @Builder.Default
     private List<Roadmap> roadmapList = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    @Builder.Default
+    private List<RoadmapDownload> roadmapDownloadList = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    @Builder.Default
+    private List<TemplateDownload> templateDownloadList = new ArrayList<>();
 
     public static User createUser(PlatformUserInfo platformUserInfo, Platform platform) {
         return User.builder()

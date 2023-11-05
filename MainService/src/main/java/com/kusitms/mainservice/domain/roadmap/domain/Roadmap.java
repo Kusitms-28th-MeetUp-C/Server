@@ -22,7 +22,10 @@ public class Roadmap {
     private String goal;
     @Enumerated(value = EnumType.STRING)
     private RoadmapType roadmapType;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "roadmap")
+    @Builder.Default
+    private List<RoadmapDownload> roadmapDownloadList = new ArrayList<>();
+    @ManyToOne
     @JoinColumn(name = "maker_id")
     private User user;
     @OneToMany(mappedBy = "roadmap")

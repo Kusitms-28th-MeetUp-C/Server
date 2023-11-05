@@ -1,4 +1,4 @@
-package com.kusitms.mainservice.domain.template.dto;
+package com.kusitms.mainservice.domain.template.dto.response;
 
 import com.kusitms.mainservice.domain.template.domain.TemplateType;
 import jakarta.persistence.EnumType;
