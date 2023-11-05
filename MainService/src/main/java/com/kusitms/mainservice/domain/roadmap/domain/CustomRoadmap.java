@@ -1,6 +1,5 @@
 package com.kusitms.mainservice.domain.roadmap.domain;
 
-import com.kusitms.mainservice.domain.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,23 +10,20 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Getter
-@Table(name = "roadmap")
+@Table(name = "custom_roadmap")
 @Entity
-public class Roadmap {
+public class CustomRoadmap {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "roadmap_id")
+    @Column(name = "custom_roadmap_id")
     private Long id;
     private String title;
+    private String goal;
     @Enumerated(value = EnumType.STRING)
     private RoadmapType roadmapType;
-    @OneToMany(mappedBy = "roadmap")
+    @OneToOne
+    private RoadmapDownload roadmapDownload;
+    @OneToMany(mappedBy = "customRoadmap")
     @Builder.Default
-    private List<RoadmapDownload> roadmapDownloadList = new ArrayList<>();
-    @ManyToOne
-    @JoinColumn(name = "maker_id")
-    private User user;
-    @OneToMany(mappedBy = "roadmap")
-    @Builder.Default
-    private List<RoadmapSpace> roadmapSpaceList = new ArrayList<>();
+    private List<CustomRoadmapSpace> customRoadmapSpaceList = new ArrayList<>();
 }

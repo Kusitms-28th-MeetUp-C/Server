@@ -42,8 +42,21 @@ public class TemplateService {
                 .map(template ->
                         SearchBaseTemplateResponseDto.of(
                                 template,
-                                createRoadmapTitleResponseDto(template)))
+                                createRoadmapTitleResponseDto(templateList)))
                 .collect(Collectors.toList());
     }
+    private  List<RoadmapTitleResponseDto> createRoadmapTitleResponseDto(List<Template> templateList){
+        List<RoadmapTitleResponseDto> roadmapTitleResponseDtoList = new ArrayList<>();
 
+        for (Template template : templateList) {
+            List<RoadmapTitleResponseDto> titles = template.getRoadmapTemplates()
+                    .stream()
+                    .map(roadmapTemplate -> RoadmapTitleResponseDto.of(roadmapTemplate.getRoadmapSpace().getTitle()))
+                    .collect(Collectors.toList());
+
+            roadmapTitleResponseDtoList.addAll(titles);
+        }
+
+        return roadmapTitleResponseDtoList;
+    }
 }
