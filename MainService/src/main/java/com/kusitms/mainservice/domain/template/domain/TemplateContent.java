@@ -8,4 +8,5 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class TemplateContent {
     private Long template_id;
     private String content;
+    private String introduction;
 }

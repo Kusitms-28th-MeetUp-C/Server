@@ -7,7 +7,6 @@ import lombok.Getter;
 @Getter
 public class ReviewContentResponseDto {
     private String content;
-
     public static ReviewContentResponseDto of(String content){
         return ReviewContentResponseDto.builder()
                 .content(content)

@@ -10,12 +10,16 @@ public class TemplateDetailUserResponseDto {
     private Long id;
     private String profile;
     private String name;
+    private int templateNum;
+    private int roadmapNum;
 
-    public static TemplateDetailUserResponseDto of(User user){
+    public static TemplateDetailUserResponseDto of(User user,int templateNum, int roadmapNum){
         return TemplateDetailUserResponseDto.builder()
                 .id(user.getId())
                 .profile(user.getProfile())
                 .name(user.getName())
+                .templateNum(templateNum)
+                .roadmapNum(roadmapNum)
                 .build();
     }
 }
