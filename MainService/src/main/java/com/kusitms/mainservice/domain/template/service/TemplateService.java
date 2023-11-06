@@ -55,7 +55,7 @@ public class TemplateService {
     public TemplateDetailResponseDto getTemplateDetail(Long templateId){
         Template template = templateRepository.findByTemplateId(templateId);
         TemplateContent templateContent = templateContentRepository.findByTemplateId(templateId);
-        List<Template> templateList = templateRepository.findAllByTemplateType(template.getTemplateType());
+        List<Template> templateList = getTemplatesBySameCategory(template.getTemplateType());
         List<RoadmapTitleResponseDto> roadmapTitleResponseDtoList = createRoadmapTitleResponseDto(templateList);
         List<SearchBaseTemplateResponseDto> relatedTemplate = createSearchBaseTemplateResponseDtoList(templateList);
         RatingResponseDto ratingResponseDto = createRatingResponse(template);
@@ -136,5 +136,8 @@ public class TemplateService {
     }
     private int getRoadmapCountByUser(User user) {
         return roadmapRepository.countByUser(user);
+    }
+    private List<Template> getTemplatesBySameCategory(TemplateType templateType){
+        return templateRepository.findAllByTemplateType(templateType);
     }
 }
