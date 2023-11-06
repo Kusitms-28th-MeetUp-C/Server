@@ -3,6 +3,7 @@ package com.kusitms.mainservice.domain.template.controller;
 
 import com.kusitms.mainservice.domain.template.domain.TemplateType;
 import com.kusitms.mainservice.domain.template.dto.response.SearchTemplateResponseDto;
+import com.kusitms.mainservice.domain.template.dto.response.TemplateDetailResponseDto;
 import com.kusitms.mainservice.domain.template.service.TemplateService;
 import com.kusitms.mainservice.global.common.SuccessResponse;
 import lombok.RequiredArgsConstructor;
@@ -28,5 +29,10 @@ public class TemplateController {
         return SuccessResponse.ok(searchTemplateResponseDtoList);
     }
 
+    @GetMapping("/detail")
+    public ResponseEntity<SuccessResponse<?>> getTemplateDetailBytemplateId(@RequestParam Long templateId){
+        final TemplateDetailResponseDto templateDetailResponseDto = templateService.getTemplateDetail(templateId);
+        return SuccessResponse.ok(templateDetailResponseDto);
+    }
 
 }
