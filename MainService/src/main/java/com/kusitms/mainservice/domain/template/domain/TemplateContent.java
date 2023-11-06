@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Getter
 @Document(collection = "template_contents")
 public class TemplateContent {
-    private Long template_id;
+    private Long templateId;
     private String content;
     private String introduction;
 }
