@@ -7,10 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TemplateDownloadRepository extends JpaRepository<TemplateDownload, Long> {
     List<TemplateDownload> findAllByUserId(Long userId);
 
     @Query("SELECT COUNT(td) FROM TemplateDownload td WHERE td.template = :template")
-    int countUsersByTemplate(@Param("template") Template template);
+    int countDownloadsByTemplate(@Param("template") Optional<Template> template);
 }
