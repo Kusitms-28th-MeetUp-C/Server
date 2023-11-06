@@ -1,4 +1,4 @@
-package com.kusitms.socketservice.config;
+package com.kusitms.socketservice.global.config;
 
 import com.kusitms.socketservice.sevice.RedisSubscriber;
 import org.springframework.context.annotation.Bean;

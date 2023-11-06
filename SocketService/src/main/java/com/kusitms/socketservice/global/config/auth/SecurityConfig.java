@@ -1,6 +1,6 @@
-package com.kusitms.socketservice.config.auth;
+package com.kusitms.socketservice.global.config.auth;
 
-import com.kusitms.socketservice.common.JwtProvider;
+import com.kusitms.socketservice.global.common.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

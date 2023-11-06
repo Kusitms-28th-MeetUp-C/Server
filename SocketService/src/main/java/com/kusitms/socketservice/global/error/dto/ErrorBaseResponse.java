@@ -1,6 +1,6 @@
-package com.kusitms.socketservice.error.dto;
+package com.kusitms.socketservice.global.error.dto;
 
-import com.kusitms.socketservice.error.ErrorCode;
+import com.kusitms.socketservice.global.error.ErrorCode;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

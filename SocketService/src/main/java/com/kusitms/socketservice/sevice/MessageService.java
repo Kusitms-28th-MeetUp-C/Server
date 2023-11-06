@@ -2,13 +2,13 @@ package com.kusitms.socketservice.sevice;
 
 import com.kusitms.socketservice.domain.MeetingRoom;
 import com.kusitms.socketservice.dto.request.MessageRequestDto;
-import com.kusitms.socketservice.error.socketException.EntityNotFoundException;
+import com.kusitms.socketservice.global.error.socketException.EntityNotFoundException;
 import com.kusitms.socketservice.repository.MeetingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.kusitms.socketservice.error.ErrorCode.MEETING_NOT_FOUND;
+import static com.kusitms.socketservice.global.error.ErrorCode.MEETING_NOT_FOUND;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)

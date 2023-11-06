@@ -1,9 +1,9 @@
-package com.kusitms.socketservice.config.auth;
+package com.kusitms.socketservice.global.config.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kusitms.socketservice.error.dto.ErrorBaseResponse;
-import com.kusitms.socketservice.error.httpException.InvalidValueException;
-import com.kusitms.socketservice.error.httpException.UnauthorizedException;
+import com.kusitms.socketservice.global.error.dto.ErrorBaseResponse;
+import com.kusitms.socketservice.global.error.httpException.InvalidValueException;
+import com.kusitms.socketservice.global.error.httpException.UnauthorizedException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,7 +14,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-import static com.kusitms.socketservice.error.ErrorCode.INTERNAL_SERVER_ERROR;
+import static com.kusitms.socketservice.global.error.ErrorCode.INTERNAL_SERVER_ERROR;
 
 @Slf4j
 public class ExceptionHandlerFilter extends OncePerRequestFilter {

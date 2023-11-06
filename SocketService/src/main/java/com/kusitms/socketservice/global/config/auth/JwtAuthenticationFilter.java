@@ -1,7 +1,7 @@
-package com.kusitms.socketservice.config.auth;
+package com.kusitms.socketservice.global.config.auth;
 
-import com.kusitms.socketservice.common.JwtProvider;
-import com.kusitms.socketservice.error.httpException.UnauthorizedException;
+import com.kusitms.socketservice.global.common.JwtProvider;
+import com.kusitms.socketservice.global.error.httpException.UnauthorizedException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,7 +15,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-import static com.kusitms.socketservice.error.ErrorCode.INVALID_ACCESS_TOKEN;
+import static com.kusitms.socketservice.global.error.ErrorCode.INVALID_ACCESS_TOKEN;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {

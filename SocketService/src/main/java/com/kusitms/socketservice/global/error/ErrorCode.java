@@ -1,4 +1,4 @@
-package com.kusitms.socketservice.error;
+package com.kusitms.socketservice.global.error;
 
 import lombok.AccessLevel;
 import lombok.Getter;

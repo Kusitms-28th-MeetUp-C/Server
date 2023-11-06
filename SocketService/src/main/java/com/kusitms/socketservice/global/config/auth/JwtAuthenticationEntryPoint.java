@@ -1,7 +1,7 @@
-package com.kusitms.socketservice.config.auth;
+package com.kusitms.socketservice.global.config.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kusitms.socketservice.error.dto.ErrorBaseResponse;
+import com.kusitms.socketservice.global.error.dto.ErrorBaseResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-import static com.kusitms.socketservice.error.ErrorCode.UNAUTHORIZED;
+import static com.kusitms.socketservice.global.error.ErrorCode.UNAUTHORIZED;
 
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {

@@ -1,6 +1,6 @@
-package com.kusitms.socketservice.error.handler;
+package com.kusitms.socketservice.global.error.handler;
 
-import com.kusitms.socketservice.error.ErrorCode;
+import com.kusitms.socketservice.global.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;

@@ -1,6 +1,6 @@
-package com.kusitms.socketservice.error.socketException;
+package com.kusitms.socketservice.global.error.socketException;
 
-import com.kusitms.socketservice.error.ErrorCode;
+import com.kusitms.socketservice.global.error.ErrorCode;
 
 public class EntityNotFoundException extends BusinessException {
     public EntityNotFoundException(ErrorCode errorCode) {

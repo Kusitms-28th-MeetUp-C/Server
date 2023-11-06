@@ -1,7 +1,7 @@
-package com.kusitms.socketservice.common;
+package com.kusitms.socketservice.global.common;
 
-import com.kusitms.socketservice.config.auth.UserAuthentication;
-import com.kusitms.socketservice.error.socketException.UnauthorizedException;
+import com.kusitms.socketservice.global.config.auth.UserAuthentication;
+import com.kusitms.socketservice.global.error.socketException.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
@@ -19,7 +19,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.Collections;
 
-import static com.kusitms.socketservice.error.ErrorCode.INVALID_ACCESS_TOKEN_VALUE;
+import static com.kusitms.socketservice.global.error.ErrorCode.INVALID_ACCESS_TOKEN_VALUE;
 
 @Slf4j
 @RequiredArgsConstructor

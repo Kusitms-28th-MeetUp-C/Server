@@ -1,6 +1,6 @@
-package com.kusitms.socketservice.common;
+package com.kusitms.socketservice.global.common;
 
-import com.kusitms.socketservice.error.httpException.UnauthorizedException;
+import com.kusitms.socketservice.global.error.httpException.UnauthorizedException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
@@ -13,8 +13,8 @@ import java.util.Base64;
 import java.util.Collection;
 import java.util.Date;
 
-import static com.kusitms.socketservice.error.ErrorCode.EXPIRED_ACCESS_TOKEN;
-import static com.kusitms.socketservice.error.ErrorCode.INVALID_ACCESS_TOKEN_VALUE;
+import static com.kusitms.socketservice.global.error.ErrorCode.EXPIRED_ACCESS_TOKEN;
+import static com.kusitms.socketservice.global.error.ErrorCode.INVALID_ACCESS_TOKEN_VALUE;
 
 @Getter
 @Component

@@ -1,7 +1,7 @@
-package com.kusitms.socketservice.config;
+package com.kusitms.socketservice.global.config;
 
-import com.kusitms.socketservice.common.AuthenticationInterceptor;
-import com.kusitms.socketservice.error.handler.MessageErrorHandler;
+import com.kusitms.socketservice.global.common.AuthenticationInterceptor;
+import com.kusitms.socketservice.global.error.handler.MessageErrorHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;

@@ -1,13 +1,13 @@
 package com.kusitms.socketservice.domain;
 
-import com.kusitms.socketservice.error.socketException.EntityNotFoundException;
+import com.kusitms.socketservice.global.error.socketException.EntityNotFoundException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
 
-import static com.kusitms.socketservice.error.ErrorCode.MESSAGE_TYPE_NOT_FOUND;
+import static com.kusitms.socketservice.global.error.ErrorCode.MESSAGE_TYPE_NOT_FOUND;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)

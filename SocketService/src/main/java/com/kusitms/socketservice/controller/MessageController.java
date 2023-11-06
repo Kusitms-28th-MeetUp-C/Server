@@ -1,7 +1,7 @@
 package com.kusitms.socketservice.controller;
 
 import com.kusitms.socketservice.dto.request.MessageRequestDto;
-import com.kusitms.socketservice.error.socketException.BusinessException;
+import com.kusitms.socketservice.global.error.socketException.BusinessException;
 import com.kusitms.socketservice.sevice.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.Header;

@@ -1,6 +1,6 @@
-package com.kusitms.socketservice.error.httpException;
+package com.kusitms.socketservice.global.error.httpException;
 
-import com.kusitms.socketservice.error.ErrorCode;
+import com.kusitms.socketservice.global.error.ErrorCode;
 import lombok.Getter;
 
 @Getter
