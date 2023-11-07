@@ -16,12 +16,16 @@ public enum ErrorCode {
     INVALID_ACCESS_TOKEN_VALUE(HttpStatus.UNAUTHORIZED, "액세스 토큰의 값이 올바르지 않습니다."),
     EXPIRED_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, "액세스 토큰이 만료되었습니다. 재발급 받아주세요."),
     INVALID_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, "액세스 토큰의 형식이 올바르지 않습니다. Bearer 타입을 확인해 주세요."),
+    INVALID_ROADMAP_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 로드맵 타입입니다."),
+    INVALID_TEMPLATE_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 회의록 타입입니다."),
 
     /**
      * 404 Not Found
      */
-    MEETING_NOT_FOUND(HttpStatus.NOT_FOUND, "모임 정보를 찾을 수 없습니다."),
+    CHATTING_NOT_FOUND(HttpStatus.NOT_FOUND, "채팅 정보를 찾을 수 없습니다."),
     MESSAGE_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "모임 정보를 찾을 수 없습니다."),
+    SEARCH_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "검색 종류를 찾을 수 없습니다."),
+    SUB_SEARCH_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "세부 검색 종류를 찾을 수 없습니다."),
 
     /**
      * 500 Internal Server Error
