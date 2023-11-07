@@ -38,7 +38,7 @@ public class TemplateController {
 
     @GetMapping("/save")
     public ResponseEntity<SuccessResponse<?>> saveTemplate(){
-        final GetTeamForSaveTemplateResponseDto getTeamForSaveTemplateResponseDto = templateService.saveTemplate();
+        final GetTeamForSaveTemplateResponseDto getTeamForSaveTemplateResponseDto = templateService.getTeamForSaveTemplate();
         return SuccessResponse.ok(getTeamForSaveTemplateResponseDto);
     }
 }

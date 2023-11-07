@@ -66,7 +66,7 @@ public class TemplateService {
         TemplateDetailUserResponseDto templateDetailUserResponseDto =createTemplateDetailUserResponseDto(templateId);
         return TemplateDetailResponseDto.of(template, templateContent,roadmapTitleResponseDto,SearchTemplateResponseDto.of(relatedTemplate),ratingResponseDto, teamCount,reviewContentResponseDtoList, templateDetailUserResponseDto );
     }
-    public GetTeamForSaveTemplateResponseDto saveTemplate(){
+    public GetTeamForSaveTemplateResponseDto getTeamForSaveTemplate(){
         List<Team> teams = teamRepository.findAll();
         List<TeamTitleResponseDto> teamTitleResponseDtoList = new ArrayList<>();
         for(Team team : teams){
@@ -79,6 +79,7 @@ public class TemplateService {
         //commit
         return GetTeamForSaveTemplateResponseDto.of(teamTitleResponseDtoList);
     }
+    public void saveTemplate
     private List<Template> getTemplateFromTemplateType(TemplateType templateType) {
         return templateRepository.findAllByTemplateType(templateType);
     }
