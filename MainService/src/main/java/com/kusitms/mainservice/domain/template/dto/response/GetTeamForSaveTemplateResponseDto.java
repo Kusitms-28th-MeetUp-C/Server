@@ -8,12 +8,12 @@ import java.util.List;
 
 @Builder
 @Getter
-public class SaveTemplateResponseDto {
+public class GetTeamForSaveTemplateResponseDto {
     private List<TeamTitleResponseDto> teamTitleResponseDtoList;
 
-    public static SaveTemplateResponseDto of(List<TeamTitleResponseDto> teamTitleResponseDtoList){
+    public static GetTeamForSaveTemplateResponseDto of(List<TeamTitleResponseDto> teamTitleResponseDtoList){
 
-        return SaveTemplateResponseDto.builder()
+        return GetTeamForSaveTemplateResponseDto.builder()
                 .teamTitleResponseDtoList(teamTitleResponseDtoList)
                 .build();
     }
