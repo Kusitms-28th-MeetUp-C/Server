@@ -14,5 +14,5 @@ public class SearchCustomTemplate {
     private String relatedTeamTitle;
     private String relatedRoadmapTitle;
     private TemplateType templateType;
-    private boolean isOpend;
+    private boolean isOpened;
 }

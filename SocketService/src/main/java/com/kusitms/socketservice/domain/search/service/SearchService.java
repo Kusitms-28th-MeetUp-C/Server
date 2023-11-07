@@ -76,7 +76,7 @@ public class SearchService {
                                 SearchResultType.STEP,
                                 searchStep.getTitle(),
                                 searchStep.getRelatedRoadmapTitle(),
-                                false,
+                                searchStep.isOpend(),
                                 searchStep.getRoadmapType().getStringRoadmapType()))
                 .collect(Collectors.toList());
     }
@@ -89,7 +89,7 @@ public class SearchService {
                                 SearchResultType.ROADMAP,
                                 searchCustomRoadmap.getTitle(),
                                 searchCustomRoadmap.getRelatedTeamTitle(),
-                                false,
+                                searchCustomRoadmap.isOpened(),
                                 searchCustomRoadmap.getRoadmapType().getStringRoadmapType()))
                 .collect(Collectors.toList());
     }
@@ -102,7 +102,7 @@ public class SearchService {
                                 SearchResultType.TEMPLATE,
                                 searchCustomTemplate.getTitle(),
                                 searchCustomTemplate.getRelatedTeamTitle(),
-                                false,
+                                searchCustomTemplate.isOpened(),
                                 searchCustomTemplate.getRelatedRoadmapTitle()))
                 .collect(Collectors.toList());
     }
