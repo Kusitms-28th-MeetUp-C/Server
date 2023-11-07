@@ -13,5 +13,5 @@ public class SearchCustomRoadmap {
     private String title;
     private RoadmapType roadmapType;
     private String relatedTeamTitle;
-    private boolean isOpend;
+    private boolean isOpened;
 }

@@ -140,9 +140,7 @@ public class SearchService {
     private List<SearchResultElementResponseDto> joinSearchResultList(List<SearchResultElementResponseDto> searchCustomTemplateList,
                                                                       List<SearchResultElementResponseDto> searchCustomRoadmpList,
                                                                       List<SearchResultElementResponseDto> searchCustomStepList) {
-        return Stream.concat(searchCustomStepList.stream(),
-                        Stream.concat(searchCustomTemplateList.stream(),
-                                searchCustomRoadmpList.stream()))
-                .collect(Collectors.toList());
+        return Stream.concat(searchCustomStepList.stream(), Stream.concat(searchCustomTemplateList.stream(),
+                        searchCustomRoadmpList.stream())).collect(Collectors.toList());
     }
 }
