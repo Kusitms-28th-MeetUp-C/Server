@@ -2,6 +2,7 @@ package com.kusitms.mainservice.domain.template.controller;
 
 
 import com.kusitms.mainservice.domain.template.domain.TemplateType;
+import com.kusitms.mainservice.domain.template.dto.response.SaveTemplateResponseDto;
 import com.kusitms.mainservice.domain.template.dto.response.SearchTemplateResponseDto;
 import com.kusitms.mainservice.domain.template.dto.response.TemplateDetailResponseDto;
 import com.kusitms.mainservice.domain.template.service.TemplateService;
@@ -35,4 +36,9 @@ public class TemplateController {
         return SuccessResponse.ok(templateDetailResponseDto);
     }
 
+    @GetMapping("/save")
+    public ResponseEntity<SuccessResponse<?>> saveTemplate(){
+        final SaveTemplateResponseDto saveTemplateResponseDto= templateService.saveTemplate();
+        return SuccessResponse.ok(saveTemplateResponseDto);
+    }
 }

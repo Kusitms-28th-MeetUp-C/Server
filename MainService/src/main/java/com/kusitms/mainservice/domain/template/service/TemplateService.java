@@ -4,6 +4,9 @@ package com.kusitms.mainservice.domain.template.service;
 import com.kusitms.mainservice.domain.roadmap.domain.RoadmapTemplate;
 import com.kusitms.mainservice.domain.roadmap.dto.response.RoadmapTitleResponseDto;
 import com.kusitms.mainservice.domain.roadmap.repository.RoadmapRepository;
+import com.kusitms.mainservice.domain.team.domain.Team;
+import com.kusitms.mainservice.domain.team.dto.response.TeamTitleResponseDto;
+import com.kusitms.mainservice.domain.team.repository.TeamRepository;
 import com.kusitms.mainservice.domain.template.domain.*;
 import com.kusitms.mainservice.domain.template.dto.response.*;
 import com.kusitms.mainservice.domain.template.repository.ReviewerRepository;
@@ -33,6 +36,7 @@ public class TemplateService {
     private final ReviewerRepository reviewerRepository;
     private final TemplateDownloadRepository templateDownloadRepository;
     private final RoadmapRepository roadmapRepository;
+    private final TeamRepository teamRepository;
     public SearchTemplateResponseDto searchTemplatesByCategory(TemplateType templateType) {
         if(TemplateType.ALL.equals(templateType)) {
             List<Template> templateList = templateRepository.findAll();
@@ -61,6 +65,18 @@ public class TemplateService {
         List<ReviewContentResponseDto> reviewContentResponseDtoList = createReviewContentResponseDto(template);
         TemplateDetailUserResponseDto templateDetailUserResponseDto =createTemplateDetailUserResponseDto(templateId);
         return TemplateDetailResponseDto.of(template, templateContent,roadmapTitleResponseDto,SearchTemplateResponseDto.of(relatedTemplate),ratingResponseDto, teamCount,reviewContentResponseDtoList, templateDetailUserResponseDto );
+    }
+    public SaveTemplateResponseDto saveTemplate(){
+        List<Team> teams = teamRepository.findAll();
+        List<TeamTitleResponseDto> teamTitleResponseDtoList = new ArrayList<>();
+        for(Team team : teams){
+            List<TeamTitleResponseDto> titles = team.getTeamSpaceList()
+                    .stream()
+                    .map(teamSpace -> TeamTitleResponseDto.of(teamSpace.getTeam().getTitle()))
+                    .collect(Collectors.toList());
+            teamTitleResponseDtoList.addAll(titles);
+        }
+        return SaveTemplateResponseDto.of(teamTitleResponseDtoList);
     }
     private List<Template> getTemplateFromTemplateType(TemplateType templateType) {
         return templateRepository.findAllByTemplateType(templateType);
