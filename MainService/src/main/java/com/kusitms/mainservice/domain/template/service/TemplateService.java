@@ -79,7 +79,8 @@ public class TemplateService {
         //commit
         return GetTeamForSaveTemplateResponseDto.of(teamTitleResponseDtoList);
     }
-    public void saveTemplate(){
+    public void saveTemplateByTeamId(Long id){
+        Optional<Team> team = teamRepository.findById(id);
 
     }
     private List<Template> getTemplateFromTemplateType(TemplateType templateType) {
