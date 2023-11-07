@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface TeamRepository extends JpaRepository<Team, Long> {
     boolean existsTeamByTitle(String title);
-    List<Team> findAll();
+
     List<Team> findAllByUserId(Long userId);
 }
