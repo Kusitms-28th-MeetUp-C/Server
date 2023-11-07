@@ -1,6 +1,6 @@
 package com.kusitms.socketservice.global.config;
 
-import com.kusitms.socketservice.sevice.RedisSubscriber;
+import com.kusitms.socketservice.domain.chat.service.RedisSubscriber;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
