@@ -76,6 +76,7 @@ public class TemplateService {
                     .collect(Collectors.toList());
             teamTitleResponseDtoList.addAll(titles);
         }
+        //commit
         return SaveTemplateResponseDto.of(teamTitleResponseDtoList);
     }
     private List<Template> getTemplateFromTemplateType(TemplateType templateType) {
