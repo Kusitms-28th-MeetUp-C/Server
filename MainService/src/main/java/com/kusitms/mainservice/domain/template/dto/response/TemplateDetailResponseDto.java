@@ -18,20 +18,20 @@ public class TemplateDetailResponseDto {
     private int upload;
     private String content;
     private String introduction;
-    private List<SearchBaseTemplateResponseDto> relatedTemplate;
+    private SearchTemplateResponseDto relatedTemplate;
     private RatingResponseDto averageRating;
     private int teamCount;
     private List<ReviewContentResponseDto> reviews;
     private TemplateDetailUserResponseDto user;
 
-    public static TemplateDetailResponseDto of(Optional<Template> template, TemplateContent templateContent, List<RoadmapTitleResponseDto> connectedRoadmap, List<SearchBaseTemplateResponseDto> relatedTemplate, RatingResponseDto averageRating, int teamCount, List<ReviewContentResponseDto> reviews, TemplateDetailUserResponseDto user){
+    public static TemplateDetailResponseDto of(Optional<Template> template, Optional<TemplateContent> templateContent, List<RoadmapTitleResponseDto> connectedRoadmap,SearchTemplateResponseDto searchTemplateResponseDto, RatingResponseDto averageRating, int teamCount, List<ReviewContentResponseDto> reviews, TemplateDetailUserResponseDto user){
         return TemplateDetailResponseDto.builder()
                 .templateId(template.get().getId())
                 .estimatedTime(template.get().getEstimatedTime())
                 .connectedRoadmap(connectedRoadmap)
-                .content(templateContent.getContent())
-                .introduction(templateContent.getIntroduction())
-                .relatedTemplate(relatedTemplate)
+                .content(templateContent.get().getContent())
+                .introduction(templateContent.get().getIntroduction())
+                .relatedTemplate(searchTemplateResponseDto)
                 .averageRating(averageRating)
                 .teamCount(teamCount)
                 .reviews(reviews)

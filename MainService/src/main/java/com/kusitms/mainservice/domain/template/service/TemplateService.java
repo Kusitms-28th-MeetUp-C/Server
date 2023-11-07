@@ -1,6 +1,7 @@
 package com.kusitms.mainservice.domain.template.service;
 
 
+import com.kusitms.mainservice.domain.roadmap.domain.RoadmapTemplate;
 import com.kusitms.mainservice.domain.roadmap.dto.response.RoadmapTitleResponseDto;
 import com.kusitms.mainservice.domain.roadmap.repository.RoadmapRepository;
 import com.kusitms.mainservice.domain.template.domain.*;
@@ -51,15 +52,15 @@ public class TemplateService {
     }
     public TemplateDetailResponseDto getTemplateDetail(Long templateId){
         Optional<Template> template = templateRepository.findById(templateId);
-        TemplateContent templateContent = templateContentRepository.findByTemplateId(templateId);
-        List<Template> templateList = getTemplatesBySameCategory(template.get().getTemplateType());
-        List<RoadmapTitleResponseDto> roadmapTitleResponseDtoList = createRoadmapTitleResponseDto(templateList);
+        Optional<TemplateContent> templateContent = templateContentRepository.findById(templateId.toString());
+        List<Template> templateList = getTemplatesBySameCategoryAndId(template.get().getTemplateType(),template);
+        List<RoadmapTitleResponseDto> roadmapTitleResponseDto = getRoadmapTitleResponseDto(template);
         List<SearchBaseTemplateResponseDto> relatedTemplate = createSearchBaseTemplateResponseDtoList(templateList);
         RatingResponseDto ratingResponseDto = createRatingResponse(template);
         int teamCount = getTeamCount(template);
         List<ReviewContentResponseDto> reviewContentResponseDtoList = createReviewContentResponseDto(template);
         TemplateDetailUserResponseDto templateDetailUserResponseDto =createTemplateDetailUserResponseDto(templateId);
-        return TemplateDetailResponseDto.of(template, templateContent,roadmapTitleResponseDtoList,relatedTemplate,ratingResponseDto, teamCount,reviewContentResponseDtoList, templateDetailUserResponseDto );
+        return TemplateDetailResponseDto.of(template, templateContent,roadmapTitleResponseDto,SearchTemplateResponseDto.of(relatedTemplate),ratingResponseDto, teamCount,reviewContentResponseDtoList, templateDetailUserResponseDto );
     }
     private List<Template> getTemplateFromTemplateType(TemplateType templateType) {
         return templateRepository.findAllByTemplateType(templateType);
@@ -84,6 +85,20 @@ public class TemplateService {
             roadmapTitleResponseDtoList.addAll(titles);
         }
 
+        return roadmapTitleResponseDtoList;
+    }
+    private List<RoadmapTitleResponseDto> getRoadmapTitleResponseDto(Optional<Template> template) {
+
+        List<RoadmapTitleResponseDto> roadmapTitleResponseDtoList = new ArrayList<>();
+
+        List<RoadmapTemplate> roadmapTemplates = template.get().getRoadmapTemplates();
+        for (RoadmapTemplate roadmapTemplate : roadmapTemplates) {
+            String title = roadmapTemplate.getRoadmapSpace().getTitle();
+            RoadmapTitleResponseDto titleResponseDto = RoadmapTitleResponseDto.of(title);
+            roadmapTitleResponseDtoList.add(titleResponseDto);
+
+
+        }
         return roadmapTitleResponseDtoList;
     }
     private List<Template> getTemplateByTitle(String title) {
@@ -134,7 +149,9 @@ public class TemplateService {
     private int getRoadmapCountByUser(User user) {
         return roadmapRepository.countByUser(user);
     }
-    private List<Template> getTemplatesBySameCategory(TemplateType templateType){
-        return templateRepository.findAllByTemplateType(templateType);
+    private List<Template> getTemplatesBySameCategoryAndId(TemplateType templateType, Optional<Template> template){
+        List<Template> templates = templateRepository.findAllByTemplateType(templateType);
+        template.ifPresent(t -> templates.removeIf(existingTemplate -> existingTemplate.getId().equals(t.getId())));
+        return templates;
     }
 }
