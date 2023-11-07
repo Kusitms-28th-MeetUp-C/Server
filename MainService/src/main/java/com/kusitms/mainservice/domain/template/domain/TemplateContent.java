@@ -1,11 +1,17 @@
 package com.kusitms.mainservice.domain.template.domain;
 
+import jakarta.persistence.Id;
 import lombok.Getter;
+
+import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
+@Setter
 @Document(collection = "template_contents")
 public class TemplateContent {
-    private Long template_id;
+    @Id
+    private String id;
     private String content;
+    private String introduction;
 }

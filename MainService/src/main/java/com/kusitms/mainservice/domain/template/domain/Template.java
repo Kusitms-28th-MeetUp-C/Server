@@ -1,5 +1,6 @@
 package com.kusitms.mainservice.domain.template.domain;
 
+import com.kusitms.mainservice.domain.roadmap.domain.RoadmapTemplate;
 import com.kusitms.mainservice.domain.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -33,5 +34,9 @@ public class Template {
     @OneToMany(mappedBy = "template")
     @Builder.Default
     private List<TemplateDownload> templateDownloadList = new ArrayList<>();
+    @OneToMany(mappedBy = "template")
+    @Builder.Default
+    private List<RoadmapTemplate> roadmapTemplates = new ArrayList<>();
+
 }
 

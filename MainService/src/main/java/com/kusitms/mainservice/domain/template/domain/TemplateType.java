@@ -11,6 +11,7 @@ import static com.kusitms.mainservice.global.error.ErrorCode.INVALID_TEMPLATE_TY
 @RequiredArgsConstructor
 @Getter
 public enum TemplateType {
+    ALL("all"),
     IT("it"),
     SURVEY_DATA_ANALYSIS("survey_data_analysis"),
     CORPORATE_ANALYSIS("corporate_analysis"),

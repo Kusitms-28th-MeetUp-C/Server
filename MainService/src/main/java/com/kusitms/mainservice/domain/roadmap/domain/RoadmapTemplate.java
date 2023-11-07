@@ -17,7 +17,7 @@ public class RoadmapTemplate {
     @Column(name = "roadmap_template_id")
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "roadmap_datail_id")
+    @JoinColumn(name = "roadmap_detail_id")
     private RoadmapSpace roadmapSpace;
     @ManyToOne
     @JoinColumn(name = "template_id")
