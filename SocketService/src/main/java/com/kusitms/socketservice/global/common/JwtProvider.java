@@ -55,14 +55,13 @@ public class JwtProvider {
         return Keys.hmacShaKeyFor(encoded.getBytes());
     }
 
-    public String generateToken(Long userId, boolean isAccessToken, Collection<? extends GrantedAuthority> authorities) {
+    public String generateToken(Long userId, boolean isAccessToken) {
         final Date now = new Date();
         final Date expiration = new Date(now.getTime() + (isAccessToken ? ACCESS_TOKEN_EXPIRE_TIME : REFRESH_TOKEN_EXPIRE_TIME));
         return Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setSubject(String.valueOf(userId))
                 .setIssuedAt(now)
-                .claim("role", authorities.stream().findFirst().get().toString())
                 .setExpiration(expiration)
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
