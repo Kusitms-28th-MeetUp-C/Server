@@ -11,6 +11,7 @@ import lombok.Getter;
 @Getter
 public class CustomTemplateDetailResponseDto {
     private Long templateId;
+    private Long originalTemplateId;
     private String templateName;
     private TemplateType templateType;
     private String content;
@@ -21,6 +22,7 @@ public class CustomTemplateDetailResponseDto {
                                                      TeamResponseDto teamInfo) {
         return CustomTemplateDetailResponseDto.builder()
                 .templateId(template.getId())
+                .originalTemplateId(template.getTemplateDownload().getTemplate().getId())
                 .templateName(template.getTitle())
                 .templateType(template.getTemplateType())
                 .content(content)

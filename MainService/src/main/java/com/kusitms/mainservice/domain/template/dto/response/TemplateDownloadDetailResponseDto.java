@@ -10,22 +10,25 @@ import lombok.Getter;
 @Getter
 public class TemplateDownloadDetailResponseDto {
     private Long templateId;
+    private Long originalTemplateId;
     private String templateName;
     private TemplateType templateType;
     private String content;
 
-    public static TemplateDownloadDetailResponseDto ofCustomTemplate(CustomTemplate template, String title) {
+    public static TemplateDownloadDetailResponseDto ofCustomTemplate(CustomTemplate template, Long originalTemplateId, String title) {
         return TemplateDownloadDetailResponseDto.builder()
                 .templateId(template.getId())
+                .originalTemplateId(originalTemplateId)
                 .templateName(template.getTitle())
                 .templateType(template.getTemplateType())
                 .content(title)
                 .build();
     }
 
-    public static TemplateDownloadDetailResponseDto ofTemplate(Template template, String title) {
+    public static TemplateDownloadDetailResponseDto ofTemplate(Template template, Long originalTemplateId, String title) {
         return TemplateDownloadDetailResponseDto.builder()
                 .templateId(template.getId())
+                .originalTemplateId(originalTemplateId)
                 .templateName(template.getTitle())
                 .templateType(template.getTemplateType())
                 .content(title)

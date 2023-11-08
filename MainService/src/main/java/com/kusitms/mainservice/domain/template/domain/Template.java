@@ -23,7 +23,8 @@ public class Template {
     private String title;
     @Enumerated(EnumType.STRING)
     private TemplateType templateType;
-    private int count;
+    @Builder.Default
+    private int count = 0;
     private int estimatedTime;
     @ManyToOne
     @JoinColumn(name = "maker_id")
@@ -37,6 +38,5 @@ public class Template {
     @OneToMany(mappedBy = "template")
     @Builder.Default
     private List<RoadmapTemplate> roadmapTemplates = new ArrayList<>();
-
 }
 
