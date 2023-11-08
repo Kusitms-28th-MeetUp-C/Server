@@ -38,5 +38,9 @@ public class Template {
     @OneToMany(mappedBy = "template")
     @Builder.Default
     private List<RoadmapTemplate> roadmapTemplates = new ArrayList<>();
+
+    public void addReviewer(Reviewer reviewer){
+        this.reviewerList.add(reviewer);
+    }
 }
 
