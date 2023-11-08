@@ -16,7 +16,17 @@ public class TemplateReview {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "template_review_id")
     private Long id;
-//    @Enumerated(EnumType.STRING)
-    private int rating;
     private String content;
+    @OneToOne
+    private Reviewer reviewer;
+
+    public static TemplateReview createTemplateReview(String content){
+        return TemplateReview.builder()
+                .content(content)
+                .build();
+    }
+
+    public void addReviewer(Reviewer reviewer){
+        this.reviewer = reviewer;
+    }
 }
