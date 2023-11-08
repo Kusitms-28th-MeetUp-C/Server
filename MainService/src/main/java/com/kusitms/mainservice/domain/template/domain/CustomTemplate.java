@@ -24,4 +24,6 @@ public class CustomTemplate {
     @OneToMany(mappedBy = "customTemplate")
     @Builder.Default
     List<CustomRoadmapTemplate> customRoadmapTemplateList = new ArrayList<>();
+    @OneToOne
+    private TemplateDownload templateDownload;
 }
