@@ -23,4 +23,16 @@ public class Reviewer {
     @ManyToOne
     @JoinColumn(name = "template_id")
     private Template template;
+
+    public static Reviewer createReviewer(User user, TemplateReview templateReview, Template template){
+        Reviewer reviewer = Reviewer.builder()
+                .user(user)
+                .templateReview(templateReview)
+                .template(template)
+                .build();
+        user.addReviewer(reviewer);
+        templateReview.addReviewer(reviewer);
+        template.addReviewer(reviewer);
+        return reviewer;
+    }
 }
