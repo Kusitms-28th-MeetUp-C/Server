@@ -87,7 +87,7 @@ public class TemplateManageService {
     public void createTemplateReview(Long userId, TemplateReviewRequestDto templateReviewRequestDto){
         User user = getUserFromUserId(userId);
         Template template = getTemplateFromTemplateId(templateReviewRequestDto.getMeetingId());
-        TemplateReview createdTemplateReview = TemplateReview.createTemplateReview(templateReviewRequestDto.getContent());
+        TemplateReview createdTemplateReview = TemplateReview.createTemplateReview(templateReviewRequestDto.getContent(), templateReviewRequestDto.getRating());
         Reviewer createdReviewer = Reviewer.createReviewer(user, createdTemplateReview, template);
         saveReviewer(createdReviewer);
         saveTemplateReview(createdTemplateReview);

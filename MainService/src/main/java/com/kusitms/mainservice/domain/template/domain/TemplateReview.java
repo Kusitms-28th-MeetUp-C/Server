@@ -17,11 +17,13 @@ public class TemplateReview {
     @Column(name = "template_review_id")
     private Long id;
     private String content;
+    private int rating;
     @OneToOne
     private Reviewer reviewer;
 
-    public static TemplateReview createTemplateReview(String content){
+    public static TemplateReview createTemplateReview(String content, int rating){
         return TemplateReview.builder()
+                .rating(rating)
                 .content(content)
                 .build();
     }

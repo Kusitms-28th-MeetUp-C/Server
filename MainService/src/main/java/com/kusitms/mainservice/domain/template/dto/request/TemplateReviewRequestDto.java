@@ -8,5 +8,6 @@ import lombok.NoArgsConstructor;
 @Getter
 public class TemplateReviewRequestDto {
     private Long meetingId;
+    private int rating;
     private String content;
 }
