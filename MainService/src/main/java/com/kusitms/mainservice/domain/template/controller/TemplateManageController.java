@@ -1,8 +1,9 @@
 package com.kusitms.mainservice.domain.template.controller;
 
 import com.kusitms.mainservice.domain.template.dto.response.CustomTemplateDetailResponseDto;
+import com.kusitms.mainservice.domain.template.dto.response.OriginalTemplateResponseDto;
 import com.kusitms.mainservice.domain.template.dto.response.TemplateDownloadDetailResponseDto;
-import com.kusitms.mainservice.domain.template.service.CustomTemplateService;
+import com.kusitms.mainservice.domain.template.service.TemplateManageService;
 import com.kusitms.mainservice.global.common.SuccessResponse;
 import com.kusitms.mainservice.global.config.auth.UserId;
 import lombok.RequiredArgsConstructor;
@@ -13,26 +14,34 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
-@RequestMapping("/api/custom/template")
+@RequestMapping("/api/template/manage")
 @RestController
-public class CustomTemplateController {
-    private final CustomTemplateService customTemplateService;
+public class TemplateManageController {
+    private final TemplateManageService templateManageService;
 
-    @GetMapping("/detail/team")
+    @GetMapping("/team")
     public ResponseEntity<SuccessResponse<?>> getTeamTemplateDetailInfo(@UserId final Long userId,
                                                                           @RequestParam final Long templateId,
                                                                           @RequestParam final String roadmapTitle,
                                                                           @RequestParam final String teamTitle) {
-        final CustomTemplateDetailResponseDto responseDto = customTemplateService.getTeamTemplateDetailInfo(userId, roadmapTitle, teamTitle, templateId);
+        final CustomTemplateDetailResponseDto responseDto = templateManageService.getTeamTemplateDetailInfo(userId, roadmapTitle, teamTitle, templateId);
         return SuccessResponse.ok(responseDto);
     }
 
-    @GetMapping("/detail")
-    public ResponseEntity<SuccessResponse<?>> getTemplateDetailInfo(@RequestParam final Long templateId,
+    @GetMapping
+    public ResponseEntity<SuccessResponse<?>> getTemplateDetailInfo(@UserId final Long userId,
+                                                                    @RequestParam final Long templateId,
                                                                     @RequestParam final boolean isOpened) {
         final TemplateDownloadDetailResponseDto responseDto;
-        if(isOpened) responseDto = customTemplateService.getDownloadTemplateDetailInfo(templateId);
-        else responseDto = customTemplateService.getDownloadCustomTemplateDetailInfo(templateId);
+        if(isOpened) responseDto = templateManageService.getDownloadTemplateDetailInfo(userId, templateId);
+        else responseDto = templateManageService.getDownloadCustomTemplateDetailInfo(templateId);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @GetMapping("/original")
+    public ResponseEntity<SuccessResponse<?>> getOriginalTemplateInfo(@UserId final Long userId,
+                                                                      @RequestParam final Long relatedTemplateId) {
+        final OriginalTemplateResponseDto responseDto = templateManageService.getOriginalTemplateInfo(userId, relatedTemplateId);
         return SuccessResponse.ok(responseDto);
     }
 }
