@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface ReviewerRepository extends JpaRepository<Reviewer,Long> {
+public interface ReviewerRepository extends JpaRepository<Reviewer, Long> {
     List<Reviewer> findByTemplate(Optional<Template> template);
 }
