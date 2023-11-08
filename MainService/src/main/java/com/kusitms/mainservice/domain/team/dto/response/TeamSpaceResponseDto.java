@@ -6,6 +6,9 @@ import com.kusitms.mainservice.domain.team.domain.TeamSpaceType;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Builder
 @Getter
 public class TeamSpaceResponseDto {
@@ -19,5 +22,11 @@ public class TeamSpaceResponseDto {
                 .spaceType(teamSpace.getTeamSpaceType())
                 .url(teamSpace.getUrl())
                 .build();
+    }
+
+    public static List<TeamSpaceResponseDto> listOf(List<TeamSpace> teamSpaceList){
+        return teamSpaceList.stream()
+                .map(TeamSpaceResponseDto::of)
+                .collect(Collectors.toList());
     }
 }

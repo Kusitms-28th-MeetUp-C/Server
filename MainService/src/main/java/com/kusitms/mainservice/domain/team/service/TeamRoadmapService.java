@@ -2,13 +2,11 @@ package com.kusitms.mainservice.domain.team.service;
 
 import com.kusitms.mainservice.domain.roadmap.domain.CustomRoadmap;
 import com.kusitms.mainservice.domain.roadmap.domain.CustomRoadmapSpace;
-import com.kusitms.mainservice.domain.roadmap.domain.CustomRoadmapTemplate;
 import com.kusitms.mainservice.domain.roadmap.domain.RoadmapDownload;
 import com.kusitms.mainservice.domain.roadmap.dto.response.CustomRoadmapDetailResponseDto;
 import com.kusitms.mainservice.domain.roadmap.dto.response.CustomRoadmapSpaceDetailResponseDto;
 import com.kusitms.mainservice.domain.roadmap.repository.RoadmapDownloadRepository;
 import com.kusitms.mainservice.domain.team.domain.Team;
-import com.kusitms.mainservice.domain.team.domain.TeamSpace;
 import com.kusitms.mainservice.domain.team.dto.request.TeamRoadmapRequestDto;
 import com.kusitms.mainservice.domain.team.dto.response.TeamRoadmapDetailResponseDto;
 import com.kusitms.mainservice.domain.team.dto.response.TeamSpaceResponseDto;
@@ -36,8 +34,7 @@ public class TeamRoadmapService {
 
     public TeamRoadmapDetailResponseDto getTeamRoadmapDetail(Long teamId) {
         Team team = getTeamFromTeamId(teamId);
-        List<TeamSpace> teamSpaceList = team.getTeamSpaceList();
-        List<TeamSpaceResponseDto> teamSpaceResponseDtoList = createTeamSpaceResponseDtoList(teamSpaceList);
+        List<TeamSpaceResponseDto> teamSpaceResponseDtoList = TeamSpaceResponseDto.listOf(team.getTeamSpaceList());
         CustomRoadmap teamRoadmap = team.getRoadmapDownload().getCustomRoadmap();
         List<CustomRoadmapSpaceDetailResponseDto> teamRoadmapSpaceDetailResponseDtoList
                 = createTeamRoadmapSpaceDetailResponseDto(teamRoadmap.getCustomRoadmapSpaceList());
@@ -49,32 +46,14 @@ public class TeamRoadmapService {
     public void addTeamRoadmap(Long userId, TeamRoadmapRequestDto teamRoadmapRequestDto) {
         Team team = getTeamFromTeamId(teamRoadmapRequestDto.getTeamId());
         RoadmapDownload roadmapDownload = getRoadmapDownloadFromRoadmapId(teamRoadmapRequestDto.getRoadmapId(), userId);
-        addDownloadRoadToTeam(team, roadmapDownload);
+        team.addRoadmapDownload(roadmapDownload);
     }
 
     private List<CustomRoadmapSpaceDetailResponseDto> createTeamRoadmapSpaceDetailResponseDto(List<CustomRoadmapSpace> teamRoadmapSpaceList) {
         return teamRoadmapSpaceList.stream()
                 .map(customRoadmapSpace ->
-                        CustomRoadmapSpaceDetailResponseDto.of(customRoadmapSpace,
-                                createBaseCustomTemplateResponseDtoList(customRoadmapSpace)))
+                        CustomRoadmapSpaceDetailResponseDto.of(customRoadmapSpace, BaseCustomTemplateResponseDto.listOf(customRoadmapSpace)))
                 .collect(Collectors.toList());
-    }
-
-    private List<TeamSpaceResponseDto> createTeamSpaceResponseDtoList(List<TeamSpace> teamSpaceList) {
-        return teamSpaceList.stream()
-                .map(TeamSpaceResponseDto::of)
-                .collect(Collectors.toList());
-    }
-
-    private List<BaseCustomTemplateResponseDto> createBaseCustomTemplateResponseDtoList(CustomRoadmapSpace customRoadmapSpace) {
-        List<CustomRoadmapTemplate> customRoadmapTemplateList = customRoadmapSpace.getCustomRoadmapTemplateList();
-        return customRoadmapTemplateList.stream()
-                .map(customRoadmapTemplate -> BaseCustomTemplateResponseDto.of(customRoadmapTemplate.getCustomTemplate()))
-                .collect(Collectors.toList());
-    }
-
-    private void addDownloadRoadToTeam(Team team, RoadmapDownload roadmapDownload) {
-        team.addRoadmapDownload(roadmapDownload);
     }
 
     private Team getTeamFromTeamId(Long teamId) {
