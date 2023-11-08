@@ -40,7 +40,7 @@ public class CustomTemplateService {
     private final CustomRoadmapRepository customRoadmapRepository;
     private final TeamRepository teamRepository;
 
-    public CustomTemplateDetailResponseDto getCustomTemplateDetailInfo(Long userId, String roadmapTitle, String teamTitle, Long templateId) {
+    public CustomTemplateDetailResponseDto getTeamTemplateDetailInfo(Long userId, String roadmapTitle, String teamTitle, Long templateId) {
         CustomTemplate customTemplate = getCustomTemplateFromTemplateId(templateId);
         TemplateContent templateContent = getTemplateContentFromTemplateId(templateId);
         CustomRoadmap relatedRoadmap = getCustomRoadmapFromUserIdAndTitle(userId, roadmapTitle);
@@ -50,10 +50,16 @@ public class CustomTemplateService {
         return CustomTemplateDetailResponseDto.of(customTemplate, templateContent.getContent(), baseRoadmapResponseDto, teamResponseDto);
     }
 
-    public TemplateDownloadDetailResponseDto getTemplateDetailInfo(Long templateId) {
+    public TemplateDownloadDetailResponseDto getDownloadTemplateDetailInfo(Long templateId) {
         Template template = getTemplateFromTemplateId(templateId);
         TemplateContent templateContent = getTemplateContentFromTemplateId(templateId);
-        return TemplateDownloadDetailResponseDto.of(template, templateContent.getContent());
+        return TemplateDownloadDetailResponseDto.ofTemplate(template, templateContent.getContent());
+    }
+
+    public TemplateDownloadDetailResponseDto getDownloadCustomTemplateDetailInfo(Long templateId) {
+        CustomTemplate customTemplate = getCustomTemplateFromTemplateId(templateId);
+        TemplateContent templateContent = getTemplateContentFromTemplateId(templateId);
+        return TemplateDownloadDetailResponseDto.ofCustomTemplate(customTemplate, templateContent.getContent());
     }
 
     private TeamResponseDto createTeamResponseDto(Team team) {

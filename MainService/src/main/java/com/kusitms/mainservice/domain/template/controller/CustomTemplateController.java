@@ -19,17 +19,20 @@ public class CustomTemplateController {
     private final CustomTemplateService customTemplateService;
 
     @GetMapping("/detail/team")
-    public ResponseEntity<SuccessResponse<?>> getCustomTemplateDetailInfo(@UserId final Long userId,
+    public ResponseEntity<SuccessResponse<?>> getTeamTemplateDetailInfo(@UserId final Long userId,
                                                                           @RequestParam final Long templateId,
                                                                           @RequestParam final String roadmapTitle,
                                                                           @RequestParam final String teamTitle) {
-        final CustomTemplateDetailResponseDto responseDto = customTemplateService.getCustomTemplateDetailInfo(userId, roadmapTitle, teamTitle, templateId);
+        final CustomTemplateDetailResponseDto responseDto = customTemplateService.getTeamTemplateDetailInfo(userId, roadmapTitle, teamTitle, templateId);
         return SuccessResponse.ok(responseDto);
     }
 
     @GetMapping("/detail")
-    public ResponseEntity<SuccessResponse<?>> getTemplateDetailInfo(@RequestParam final Long templateId) {
-        final TemplateDownloadDetailResponseDto responseDto = customTemplateService.getTemplateDetailInfo(templateId);
+    public ResponseEntity<SuccessResponse<?>> getTemplateDetailInfo(@RequestParam final Long templateId,
+                                                                    @RequestParam final boolean isOpened) {
+        final TemplateDownloadDetailResponseDto responseDto;
+        if(isOpened) responseDto = customTemplateService.getDownloadTemplateDetailInfo(templateId);
+        else responseDto = customTemplateService.getDownloadCustomTemplateDetailInfo(templateId);
         return SuccessResponse.ok(responseDto);
     }
 }

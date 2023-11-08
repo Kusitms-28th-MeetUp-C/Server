@@ -1,5 +1,6 @@
 package com.kusitms.mainservice.domain.template.dto.response;
 
+import com.kusitms.mainservice.domain.template.domain.CustomTemplate;
 import com.kusitms.mainservice.domain.template.domain.Template;
 import com.kusitms.mainservice.domain.template.domain.TemplateType;
 import lombok.Builder;
@@ -13,7 +14,16 @@ public class TemplateDownloadDetailResponseDto {
     private TemplateType templateType;
     private String content;
 
-    public static TemplateDownloadDetailResponseDto of(Template template, String title) {
+    public static TemplateDownloadDetailResponseDto ofCustomTemplate(CustomTemplate template, String title) {
+        return TemplateDownloadDetailResponseDto.builder()
+                .templateId(template.getId())
+                .templateName(template.getTitle())
+                .templateType(template.getTemplateType())
+                .content(title)
+                .build();
+    }
+
+    public static TemplateDownloadDetailResponseDto ofTemplate(Template template, String title) {
         return TemplateDownloadDetailResponseDto.builder()
                 .templateId(template.getId())
                 .templateName(template.getTitle())
