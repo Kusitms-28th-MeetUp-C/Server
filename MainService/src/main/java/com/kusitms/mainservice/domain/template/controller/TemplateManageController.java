@@ -1,5 +1,6 @@
 package com.kusitms.mainservice.domain.template.controller;
 
+import com.kusitms.mainservice.domain.template.dto.request.TemplateReviewRequestDto;
 import com.kusitms.mainservice.domain.template.dto.response.CustomTemplateDetailResponseDto;
 import com.kusitms.mainservice.domain.template.dto.response.OriginalTemplateResponseDto;
 import com.kusitms.mainservice.domain.template.dto.response.TemplateDownloadDetailResponseDto;
@@ -8,10 +9,7 @@ import com.kusitms.mainservice.global.common.SuccessResponse;
 import com.kusitms.mainservice.global.config.auth.UserId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/template/manage")
@@ -43,5 +41,12 @@ public class TemplateManageController {
                                                                       @RequestParam final Long relatedTemplateId) {
         final OriginalTemplateResponseDto responseDto = templateManageService.getOriginalTemplateInfo(userId, relatedTemplateId);
         return SuccessResponse.ok(responseDto);
+    }
+
+    @PostMapping("/review")
+    public ResponseEntity<SuccessResponse<?>> createTemplateReview(@UserId final Long userId,
+                                                                   @RequestBody final TemplateReviewRequestDto requestDto) {
+        templateManageService.createTemplateReview(userId, requestDto);
+        return SuccessResponse.created(null);
     }
 }
