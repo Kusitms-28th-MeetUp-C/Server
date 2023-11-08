@@ -13,20 +13,16 @@ import com.kusitms.mainservice.domain.team.domain.Team;
 import com.kusitms.mainservice.domain.team.dto.response.TeamResponseDto;
 import com.kusitms.mainservice.domain.team.dto.response.TeamSpaceResponseDto;
 import com.kusitms.mainservice.domain.team.repository.TeamRepository;
-import com.kusitms.mainservice.domain.template.domain.CustomTemplate;
-import com.kusitms.mainservice.domain.template.domain.Template;
-import com.kusitms.mainservice.domain.template.domain.TemplateContent;
-import com.kusitms.mainservice.domain.template.domain.TemplateDownload;
+import com.kusitms.mainservice.domain.template.domain.*;
+import com.kusitms.mainservice.domain.template.dto.request.TemplateReviewRequestDto;
 import com.kusitms.mainservice.domain.template.dto.response.BaseCustomTemplateResponseDto;
 import com.kusitms.mainservice.domain.template.dto.response.CustomTemplateDetailResponseDto;
 import com.kusitms.mainservice.domain.template.dto.response.OriginalTemplateResponseDto;
 import com.kusitms.mainservice.domain.template.dto.response.TemplateDownloadDetailResponseDto;
-import com.kusitms.mainservice.domain.template.repository.CustomTemplateRepository;
-import com.kusitms.mainservice.domain.template.repository.TemplateContentRepository;
-import com.kusitms.mainservice.domain.template.repository.TemplateDownloadRepository;
-import com.kusitms.mainservice.domain.template.repository.TemplateRepository;
+import com.kusitms.mainservice.domain.template.repository.*;
 import com.kusitms.mainservice.domain.user.domain.User;
 import com.kusitms.mainservice.domain.user.dto.response.MakerResponseDto;
+import com.kusitms.mainservice.domain.user.repository.UserRepository;
 import com.kusitms.mainservice.global.error.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,9 +44,12 @@ public class TemplateManageService {
     private final TemplateContentRepository teamContentRepository;
     private final CustomTemplateRepository customTemplateRepository;
     private final CustomRoadmapRepository customRoadmapRepository;
+    private final UserRepository userRepository;
     private final TeamRepository teamRepository;
     private final TemplateDownloadRepository templateDownloadRepository;
+    private final TemplateReviewRepository templateReviewRepository;
     private final RoadmapRepository roadmapRepository;
+    private final ReviewerRepository reviewerRepository;
 
     public OriginalTemplateResponseDto getOriginalTemplateInfo(Long userId, Long templateId){
         Template template = getTemplateFromTemplateId(templateId);
@@ -84,6 +83,16 @@ public class TemplateManageService {
         Long relatedTemplateId = customTemplate.getTemplateDownload().getId();
         return TemplateDownloadDetailResponseDto.ofCustomTemplate(customTemplate, relatedTemplateId, templateContent.getContent());
     }
+
+    public void createTemplateReview(Long userId, TemplateReviewRequestDto templateReviewRequestDto){
+        User user = getUserFromUserId(userId);
+        Template template = getTemplateFromTemplateId(templateReviewRequestDto.getMeetingId());
+        TemplateReview createdTemplateReview = TemplateReview.createTemplateReview(templateReviewRequestDto.getContent());
+        Reviewer createdReviewer = Reviewer.createReviewer(user, createdTemplateReview, template);
+        saveReviewer(createdReviewer);
+        saveTemplateReview(createdTemplateReview);
+    }
+
 
     private MakerResponseDto createMakerResponseDto(Template template, Long sessionId){
         User maker = template.getUser();
@@ -157,5 +166,18 @@ public class TemplateManageService {
     private Template getTemplateFromTemplateId(Long templateId) {
         return templateRepository.findById(templateId)
                 .orElseThrow(() -> new EntityNotFoundException(TEMPLATE_NOT_FOUND));
+    }
+
+    private User getUserFromUserId(Long userId){
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND));
+    }
+
+    private void saveReviewer(Reviewer reviewer){
+        reviewerRepository.save(reviewer);
+    }
+
+    private void saveTemplateReview(TemplateReview templateReview){
+        templateReviewRepository.save(templateReview);
     }
 }
