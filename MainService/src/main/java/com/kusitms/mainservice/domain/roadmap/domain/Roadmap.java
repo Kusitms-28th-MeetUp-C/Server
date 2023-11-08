@@ -19,6 +19,8 @@ public class Roadmap {
     @Column(name = "roadmap_id")
     private Long id;
     private String title;
+    @Builder.Default
+    private int count = 0;
     @Enumerated(value = EnumType.STRING)
     private RoadmapType roadmapType;
     @OneToMany(mappedBy = "roadmap")

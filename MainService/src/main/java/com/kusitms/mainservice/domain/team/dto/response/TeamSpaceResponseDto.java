@@ -16,17 +16,17 @@ public class TeamSpaceResponseDto {
     private TeamSpaceType spaceType;
     private String url;
 
+    public static List<TeamSpaceResponseDto> listOf(List<TeamSpace> teamSpaceList){
+        return teamSpaceList.stream()
+                .map(TeamSpaceResponseDto::of)
+                .collect(Collectors.toList());
+    }
+
     public static TeamSpaceResponseDto of(TeamSpace teamSpace) {
         return TeamSpaceResponseDto.builder()
                 .spaceId(teamSpace.getId())
                 .spaceType(teamSpace.getTeamSpaceType())
                 .url(teamSpace.getUrl())
                 .build();
-    }
-
-    public static List<TeamSpaceResponseDto> listOf(List<TeamSpace> teamSpaceList){
-        return teamSpaceList.stream()
-                .map(TeamSpaceResponseDto::of)
-                .collect(Collectors.toList());
     }
 }

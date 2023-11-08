@@ -18,6 +18,7 @@ public interface TemplateRepository extends JpaRepository<Template, Long> {
     List<Template> findByTitleContaining(String keyword);
     Optional<Template> findById(Long Id);
     int countByUser(User user);
+    int countByUserId(Long userId);
     @Query("SELECT t.user FROM Template t WHERE t.id = :template_id")
     User findUserById(@Param("template_id") Long template_id);
 }
