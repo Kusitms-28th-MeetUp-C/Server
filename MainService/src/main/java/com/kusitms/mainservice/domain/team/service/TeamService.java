@@ -86,30 +86,8 @@ public class TeamService {
     }
 
     private BaseRoadmapResponseDto createBaseRoadmapResponseDto(Roadmap roadmap) {
-        List<RoadmapDetailResponseDto> roadmapDetailResponseDtoList = createRoadmapDetailResponseDtoList(roadmap.getRoadmapSpaceList());
+        List<RoadmapDetailResponseDto> roadmapDetailResponseDtoList = RoadmapDetailResponseDto.listOf(roadmap);
         return BaseRoadmapResponseDto.of(roadmap, roadmapDetailResponseDtoList);
-    }
-
-    private List<RoadmapDetailResponseDto> createRoadmapDetailResponseDtoList(List<RoadmapSpace> roadmapSpaceList) {
-        return roadmapSpaceList.stream()
-                .map(roadmapSpace ->
-                        RoadmapDetailResponseDto.of(
-                                roadmapSpace,
-                                createTemplateTitleResponseDtoList(roadmapSpace.getRoadmapTemplateList())))
-                .collect(Collectors.toList());
-    }
-
-    private List<TemplateTitleResponseDto> createTemplateTitleResponseDtoList(List<RoadmapTemplate> roadmapTemplateList) {
-        List<Template> templateList = getTeamListFromRoadmapTemplate(roadmapTemplateList);
-        return templateList.stream()
-                .map(TemplateTitleResponseDto::of)
-                .collect(Collectors.toList());
-    }
-
-    private List<Template> getTeamListFromRoadmapTemplate(List<RoadmapTemplate> roadmapTemplateList) {
-        return roadmapTemplateList.stream()
-                .map(RoadmapTemplate::getTemplate)
-                .collect(Collectors.toList());
     }
 
     private List<TeamSpaceResponseDto> createTeamSpaceResponseDtoList(List<TeamSpace> teamSpaceList) {

@@ -3,6 +3,7 @@ package com.kusitms.mainservice.domain.user.domain;
 import com.kusitms.mainservice.domain.roadmap.domain.Roadmap;
 import com.kusitms.mainservice.domain.roadmap.domain.RoadmapDownload;
 import com.kusitms.mainservice.domain.team.domain.Team;
+import com.kusitms.mainservice.domain.template.domain.Reviewer;
 import com.kusitms.mainservice.domain.template.domain.TemplateDownload;
 import com.kusitms.mainservice.domain.user.auth.PlatformUserInfo;
 import jakarta.persistence.*;
@@ -42,6 +43,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     @Builder.Default
     private List<TemplateDownload> templateDownloadList = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    @Builder.Default
+    private List<Reviewer> reviewerList = new ArrayList<>();
 
     public static User createUser(PlatformUserInfo platformUserInfo, Platform platform) {
         return User.builder()
@@ -51,6 +55,10 @@ public class User {
                 .name(platformUserInfo.getName())
                 .profile(platformUserInfo.getPicture())
                 .build();
+    }
+
+    public void addReviewer(Reviewer reviewer){
+        this.reviewerList.add(reviewer);
     }
 
     public void updateRefreshToken(String refreshToken) {

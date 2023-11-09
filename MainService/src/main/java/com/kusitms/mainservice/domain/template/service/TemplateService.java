@@ -105,7 +105,7 @@ public class TemplateService {
         for (Template template : templateList) {
             List<RoadmapTitleResponseDto> titles = template.getRoadmapTemplates()
                     .stream()
-                    .map(roadmapTemplate -> RoadmapTitleResponseDto.of(roadmapTemplate.getRoadmapSpace().getTitle()))
+                    .map(roadmapTemplate -> RoadmapTitleResponseDto.of(roadmapTemplate.getRoadmapSpace().getRoadmap().getTitle()))
                     .collect(Collectors.toList());
 
             roadmapTitleResponseDtoList.addAll(titles);
@@ -119,7 +119,7 @@ public class TemplateService {
 
         List<RoadmapTemplate> roadmapTemplates = template.get().getRoadmapTemplates();
         for (RoadmapTemplate roadmapTemplate : roadmapTemplates) {
-            String title = roadmapTemplate.getRoadmapSpace().getTitle();
+            String title = roadmapTemplate.getRoadmapSpace().getRoadmap().getTitle();
             RoadmapTitleResponseDto titleResponseDto = RoadmapTitleResponseDto.of(title);
             roadmapTitleResponseDtoList.add(titleResponseDto);
 
