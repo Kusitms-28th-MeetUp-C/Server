@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class TemplateController {
     private final TemplateService templateService;
 
-    @GetMapping("/title/{title}")
+        @GetMapping("/title/{title}")
     public ResponseEntity<SuccessResponse<?>> getTemplateBytitle(@PathVariable final String title){
         final SearchTemplateResponseDto searchTemplateResponseDtoList = templateService.searchTemplatesByTitle(title);
         return SuccessResponse.ok(searchTemplateResponseDtoList);
