@@ -7,8 +7,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
 @Setter
-@Document(collection = "template_contents")
-public class TemplateContent {
+@Document(collection = "custom_template_contents")
+public class CustomTemplateContent {
     @Id
     private String id;
     private Long templateId;

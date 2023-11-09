@@ -38,7 +38,7 @@ public class TemplateService {
     private final RoadmapRepository roadmapRepository;
     private final TeamRepository teamRepository;
     private final UserRepository userRepository;
-    private final CustomTemplateRepository customTemplateRepository;
+    private final CustomTemplateContentRepository customtemplateContentRepository;
     public SearchTemplateResponseDto searchTemplatesByCategory(TemplateType templateType) {
         if(TemplateType.ALL.equals(templateType)) {
             List<Template> templateList = templateRepository.findAll();
@@ -83,14 +83,27 @@ public class TemplateService {
         //commit
         return GetTeamForSaveTemplateResponseDto.of(teamTitleResponseDtoList);
     }
-    public String saveTemplateByUserId(SaveTemplateResponseDto saveTemplateResponseDto){
+    public String saveTemplateByTemplateIdAndUserId(SaveTemplateResponseDto saveTemplateResponseDto){
         Optional<Template> template = templateRepository.findById(saveTemplateResponseDto.getTemplateid());
         Optional<User> user = userRepository.findById(saveTemplateResponseDto.getUserid());
         TemplateDownload templateDownload = TemplateDownload.createTemplateDownload(user.get(),template.get());
         templateDownloadRepository.save(templateDownload);
-        return "저장";
+        CustomTemplateContent customTemplateContent = setAndGetCustomTemplateContent(saveTemplateResponseDto);
+        return customTemplateContent.getContent();
 
     }
+    @Transactional
+    private CustomTemplateContent setAndGetCustomTemplateContent(SaveTemplateResponseDto saveTemplateResponseDto){
+        Optional<CustomTemplateContent> opCustomtemplateContent = Optional.of(new CustomTemplateContent());
+        CustomTemplateContent customtemplateContent = opCustomtemplateContent.get();
+        Optional<TemplateContent> templateContent = templateContentRepository.findByTemplateId(saveTemplateResponseDto.getTemplateid());
+        customtemplateContent.setId(templateContent.get().getId());
+        customtemplateContent.setTemplateId(templateContent.get().getTemplateId());
+        customtemplateContent.setContent(templateContent.get().getContent());
+        customtemplateContent.setIntroduction(templateContent.get().getIntroduction());
+        customtemplateContentRepository.save(customtemplateContent);
+        return customtemplateContent;
+        }
     private List<Template> getTemplateFromTemplateType(TemplateType templateType) {
         return templateRepository.findAllByTemplateType(templateType);
     }

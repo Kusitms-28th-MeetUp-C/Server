@@ -44,7 +44,7 @@ public class TemplateController {
     }
     @PostMapping("/save/user")
     public ResponseEntity<SuccessResponse<?>>saveTemplateForUser(@RequestBody SaveTemplateResponseDto saveTemplateResponseDto){
-        final String dd = templateService.saveTemplateByUserId(saveTemplateResponseDto);
+        final String dd = templateService.saveTemplateByTemplateIdAndUserId(saveTemplateResponseDto);
     return SuccessResponse.ok(dd);
     }
 }

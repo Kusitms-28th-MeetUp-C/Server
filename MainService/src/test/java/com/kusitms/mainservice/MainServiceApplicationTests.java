@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Optional;
+
 @DataMongoTest
 class MainServiceApplicationTests {
     @Autowired
@@ -31,12 +33,13 @@ class MainServiceApplicationTests {
 //            System.out.println("MongoDB Port: " + port);
 //            System.out.println("Database Name: " + databaseName);
 
-//        TemplateContent templateContent = new TemplateContent();
-//
-//        templateContent.setId("1");
-//        templateContent.setContent("테스트");
-//        templateContent.setIntroduction("테스트");
-//        templateContentRepository.save(templateContent);
+        Optional<TemplateContent> opTemplateContent = Optional.of(new TemplateContent());
+        TemplateContent templateContent = opTemplateContent.get();
+
+        templateContent.setId("5");
+        templateContent.setContent("테스트5");
+        templateContent.setIntroduction("테스트5");
+        templateContentRepository.save(templateContent);
     }
 
 }
