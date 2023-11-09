@@ -9,18 +9,18 @@ import com.kusitms.mainservice.domain.team.dto.response.TeamTitleResponseDto;
 import com.kusitms.mainservice.domain.team.repository.TeamRepository;
 import com.kusitms.mainservice.domain.template.domain.*;
 import com.kusitms.mainservice.domain.template.dto.response.*;
-import com.kusitms.mainservice.domain.template.repository.ReviewerRepository;
-import com.kusitms.mainservice.domain.template.repository.TemplateContentRepository;
-import com.kusitms.mainservice.domain.template.repository.TemplateDownloadRepository;
-import com.kusitms.mainservice.domain.template.repository.TemplateRepository;
+import com.kusitms.mainservice.domain.template.repository.*;
 
 import com.kusitms.mainservice.domain.user.domain.User;
+import com.kusitms.mainservice.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.config.annotation.web.oauth2.resourceserver.OpaqueTokenDsl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,6 +37,8 @@ public class TemplateService {
     private final TemplateDownloadRepository templateDownloadRepository;
     private final RoadmapRepository roadmapRepository;
     private final TeamRepository teamRepository;
+    private final UserRepository userRepository;
+    private final CustomTemplateRepository customTemplateRepository;
     public SearchTemplateResponseDto searchTemplatesByCategory(TemplateType templateType) {
         if(TemplateType.ALL.equals(templateType)) {
             List<Template> templateList = templateRepository.findAll();
@@ -64,8 +66,10 @@ public class TemplateService {
         int teamCount = getTeamCount(template);
         List<ReviewContentResponseDto> reviewContentResponseDtoList = createReviewContentResponseDto(template);
         TemplateDetailUserResponseDto templateDetailUserResponseDto =createTemplateDetailUserResponseDto(templateId);
-        return TemplateDetailResponseDto.of(template, templateContent,roadmapTitleResponseDto,SearchTemplateResponseDto.of(relatedTemplate),ratingResponseDto, teamCount,reviewContentResponseDtoList, templateDetailUserResponseDto );
+        String date = template.get().getDate();
+        return TemplateDetailResponseDto.of(template, templateContent,roadmapTitleResponseDto,SearchTemplateResponseDto.of(relatedTemplate),ratingResponseDto, teamCount,reviewContentResponseDtoList, templateDetailUserResponseDto, date);
     }
+
     public GetTeamForSaveTemplateResponseDto getTeamForSaveTemplateByUserId(Long id){
         List<Team> teams = teamRepository.findAllByUserId(id);
         List<TeamTitleResponseDto> teamTitleResponseDtoList = new ArrayList<>();
@@ -79,8 +83,12 @@ public class TemplateService {
         //commit
         return GetTeamForSaveTemplateResponseDto.of(teamTitleResponseDtoList);
     }
-    public void saveTemplateByTeamId(Long id){
-        Optional<Team> team = teamRepository.findById(id);
+    public String saveTemplateByUserId(SaveTemplateResponseDto saveTemplateResponseDto){
+        Optional<Template> template = templateRepository.findById(saveTemplateResponseDto.getTemplateid());
+        Optional<User> user = userRepository.findById(saveTemplateResponseDto.getUserid());
+        TemplateDownload templateDownload = TemplateDownload.createTemplateDownload(user.get(),template.get());
+        templateDownloadRepository.save(templateDownload);
+        return "저장";
 
     }
     private List<Template> getTemplateFromTemplateType(TemplateType templateType) {
@@ -91,22 +99,8 @@ public class TemplateService {
                 .map(template ->
                         SearchBaseTemplateResponseDto.of(
                                 template,
-                                createRoadmapTitleResponseDto(templateList)))
+                                getRoadmapTitleResponseDto(Optional.of(template))))
                 .collect(Collectors.toList());
-    }
-    private  List<RoadmapTitleResponseDto> createRoadmapTitleResponseDto(List<Template> templateList){
-        List<RoadmapTitleResponseDto> roadmapTitleResponseDtoList = new ArrayList<>();
-
-        for (Template template : templateList) {
-            List<RoadmapTitleResponseDto> titles = template.getRoadmapTemplates()
-                    .stream()
-                    .map(roadmapTemplate -> RoadmapTitleResponseDto.of(roadmapTemplate.getRoadmapSpace().getTitle()))
-                    .collect(Collectors.toList());
-
-            roadmapTitleResponseDtoList.addAll(titles);
-        }
-
-        return roadmapTitleResponseDtoList;
     }
     private List<RoadmapTitleResponseDto> getRoadmapTitleResponseDto(Optional<Template> template) {
 
@@ -114,7 +108,7 @@ public class TemplateService {
 
         List<RoadmapTemplate> roadmapTemplates = template.get().getRoadmapTemplates();
         for (RoadmapTemplate roadmapTemplate : roadmapTemplates) {
-            String title = roadmapTemplate.getRoadmapSpace().getTitle();
+            String title = roadmapTemplate.getRoadmapSpace().getRoadmap().getTitle();
             RoadmapTitleResponseDto titleResponseDto = RoadmapTitleResponseDto.of(title);
             roadmapTitleResponseDtoList.add(titleResponseDto);
 

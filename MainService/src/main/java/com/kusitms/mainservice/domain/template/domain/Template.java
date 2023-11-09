@@ -4,8 +4,11 @@ import com.kusitms.mainservice.domain.roadmap.domain.RoadmapTemplate;
 import com.kusitms.mainservice.domain.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -15,6 +18,7 @@ import java.util.List;
 @Getter
 @Table(name = "template")
 @Entity
+@Setter
 public class Template {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +30,8 @@ public class Template {
     @Builder.Default
     private int count = 0;
     private int estimatedTime;
+
+    private String date;
     @ManyToOne
     @JoinColumn(name = "maker_id")
     private User user;
@@ -39,6 +45,11 @@ public class Template {
     @Builder.Default
     private List<RoadmapTemplate> roadmapTemplates = new ArrayList<>();
 
+//    @PrePersist
+    public void onCreate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        this.date = dateFormat.format(new Date());
+    }
     public void addReviewer(Reviewer reviewer){
         this.reviewerList.add(reviewer);
     }

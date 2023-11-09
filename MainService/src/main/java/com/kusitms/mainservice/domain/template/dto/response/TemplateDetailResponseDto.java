@@ -6,6 +6,7 @@ import com.kusitms.mainservice.domain.template.domain.TemplateContent;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,7 +16,7 @@ public class TemplateDetailResponseDto {
     private Long templateId;
     private int estimatedTime;
     private List<RoadmapTitleResponseDto> connectedRoadmap;
-    private int upload;
+    private String createdAt;
     private String content;
     private String introduction;
     private SearchTemplateResponseDto relatedTemplate;
@@ -24,11 +25,12 @@ public class TemplateDetailResponseDto {
     private List<ReviewContentResponseDto> reviews;
     private TemplateDetailUserResponseDto user;
 
-    public static TemplateDetailResponseDto of(Optional<Template> template, Optional<TemplateContent> templateContent, List<RoadmapTitleResponseDto> connectedRoadmap,SearchTemplateResponseDto searchTemplateResponseDto, RatingResponseDto averageRating, int teamCount, List<ReviewContentResponseDto> reviews, TemplateDetailUserResponseDto user){
+    public static TemplateDetailResponseDto of(Optional<Template> template, Optional<TemplateContent> templateContent, List<RoadmapTitleResponseDto> connectedRoadmap,SearchTemplateResponseDto searchTemplateResponseDto, RatingResponseDto averageRating, int teamCount, List<ReviewContentResponseDto> reviews, TemplateDetailUserResponseDto user, String createdAt){
         return TemplateDetailResponseDto.builder()
                 .templateId(template.get().getId())
                 .estimatedTime(template.get().getEstimatedTime())
                 .connectedRoadmap(connectedRoadmap)
+                .createdAt(createdAt)
                 .content(templateContent.get().getContent())
                 .introduction(templateContent.get().getIntroduction())
                 .relatedTemplate(searchTemplateResponseDto)
