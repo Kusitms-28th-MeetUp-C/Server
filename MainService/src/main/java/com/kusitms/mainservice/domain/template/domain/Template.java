@@ -15,6 +15,7 @@ import java.util.List;
 @Getter
 @Table(name = "template")
 @Entity
+@Setter
 public class Template {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

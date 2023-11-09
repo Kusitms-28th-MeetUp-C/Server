@@ -9,14 +9,13 @@ import com.kusitms.mainservice.domain.team.dto.response.TeamTitleResponseDto;
 import com.kusitms.mainservice.domain.team.repository.TeamRepository;
 import com.kusitms.mainservice.domain.template.domain.*;
 import com.kusitms.mainservice.domain.template.dto.response.*;
-import com.kusitms.mainservice.domain.template.repository.ReviewerRepository;
-import com.kusitms.mainservice.domain.template.repository.TemplateContentRepository;
-import com.kusitms.mainservice.domain.template.repository.TemplateDownloadRepository;
-import com.kusitms.mainservice.domain.template.repository.TemplateRepository;
+import com.kusitms.mainservice.domain.template.repository.*;
 
 import com.kusitms.mainservice.domain.user.domain.User;
+import com.kusitms.mainservice.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.config.annotation.web.oauth2.resourceserver.OpaqueTokenDsl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +36,8 @@ public class TemplateService {
     private final TemplateDownloadRepository templateDownloadRepository;
     private final RoadmapRepository roadmapRepository;
     private final TeamRepository teamRepository;
+    private final UserRepository userRepository;
+    private final CustomTemplateRepository customTemplateRepository;
     public SearchTemplateResponseDto searchTemplatesByCategory(TemplateType templateType) {
         if(TemplateType.ALL.equals(templateType)) {
             List<Template> templateList = templateRepository.findAll();
@@ -79,8 +80,12 @@ public class TemplateService {
         //commit
         return GetTeamForSaveTemplateResponseDto.of(teamTitleResponseDtoList);
     }
-    public void saveTemplateByTeamId(Long id){
-        Optional<Team> team = teamRepository.findById(id);
+    public String saveTemplateByUserId(SaveTemplateResponseDto saveTemplateResponseDto){
+        Optional<Template> template = templateRepository.findById(saveTemplateResponseDto.getTemplateid());
+        Optional<User> user = userRepository.findById(saveTemplateResponseDto.getUserid());
+        TemplateDownload templateDownload = TemplateDownload.createTemplateDownload(user.get(),template.get());
+        templateDownloadRepository.save(templateDownload);
+        return "저장";
 
     }
     private List<Template> getTemplateFromTemplateType(TemplateType templateType) {

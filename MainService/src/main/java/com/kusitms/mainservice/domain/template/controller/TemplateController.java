@@ -3,6 +3,7 @@ package com.kusitms.mainservice.domain.template.controller;
 
 import com.kusitms.mainservice.domain.template.domain.TemplateType;
 import com.kusitms.mainservice.domain.template.dto.response.GetTeamForSaveTemplateResponseDto;
+import com.kusitms.mainservice.domain.template.dto.response.SaveTemplateResponseDto;
 import com.kusitms.mainservice.domain.template.dto.response.SearchTemplateResponseDto;
 import com.kusitms.mainservice.domain.template.dto.response.TemplateDetailResponseDto;
 import com.kusitms.mainservice.domain.template.service.TemplateService;
@@ -40,5 +41,10 @@ public class TemplateController {
     public ResponseEntity<SuccessResponse<?>> saveTemplate(@PathVariable Long userId){
         final GetTeamForSaveTemplateResponseDto getTeamForSaveTemplateResponseDto = templateService.getTeamForSaveTemplateByUserId(userId);
         return SuccessResponse.ok(getTeamForSaveTemplateResponseDto);
+    }
+    @PostMapping("/save/user")
+    public ResponseEntity<SuccessResponse<?>>saveTemplateForUser(@RequestBody SaveTemplateResponseDto saveTemplateResponseDto){
+        final String dd = templateService.saveTemplateByUserId(saveTemplateResponseDto);
+    return SuccessResponse.ok(dd);
     }
 }
