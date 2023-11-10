@@ -44,7 +44,7 @@ public class RoadmapService {
         BaseRoadmapResponseDto baseRoadmapResponseDto = creatBaseRoadmapResponseDto(roadmap);
         DetailUserResponseDto detailUserResponseDto = createDetailUserResponseDto(roadmap.getUser());
         String introduction = "";
-        List<SearchBaseRoadmapResponseDto> searchBaseRoadmapResponseDtoList = createSearchBaseRoadmapResponseDtoList(getRoadmapByRoadmapType(roadmap.getRoadmapType()));
+        List<SearchBaseRoadmapResponseDto> searchBaseRoadmapResponseDtoList = createSearchBaseRoadmapResponseDtoList(getRoadmapListBySameCategoryAndId(Optional.of(roadmap)));
         SearchRoadmapResponseDto searchRoadmapResponseDto = createSearchRoadmapResponseDto(searchBaseRoadmapResponseDtoList);
         int teamCount = getTeamCount(roadmap);
         return RoadmapDetailInfoResponseDto.of(roadmap, baseRoadmapResponseDto,detailUserResponseDto,introduction,searchRoadmapResponseDto,teamCount);
@@ -112,5 +112,10 @@ public class RoadmapService {
     private int getRoadmapStep(Roadmap roadmap){
         List<RoadmapSpace> roadmapSpaceList = roadmapSpaceRepository.findByRoadmapId(roadmap.getId());
         return roadmapSpaceList.size();
+    }
+    private List<Roadmap> getRoadmapListBySameCategoryAndId(Optional<Roadmap> roadmap){
+        List<Roadmap> roadmapList = getRoadmapByRoadmapType(roadmap.get().getRoadmapType());
+        roadmap.ifPresent(t -> roadmapList.removeIf(existingTemplate -> existingTemplate.getId().equals(t.getId())));
+        return roadmapList;
     }
 }
