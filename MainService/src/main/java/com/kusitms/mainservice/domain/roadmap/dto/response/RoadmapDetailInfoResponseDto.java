@@ -16,10 +16,9 @@ public class RoadmapDetailInfoResponseDto {
     private String introduction;
     private SearchRoadmapResponseDto searchRoadmapResponseDto;
     private String date;
-    private int rating;
     private int teamCount;
 
-    public static RoadmapDetailInfoResponseDto of(Roadmap roadmap, BaseRoadmapResponseDto baseRoadmapResponseDto, DetailUserResponseDto detailUserResponseDto, String introduction, SearchRoadmapResponseDto searchRoadmapResponseDto,int rating, int teamCount){
+    public static RoadmapDetailInfoResponseDto of(Roadmap roadmap, BaseRoadmapResponseDto baseRoadmapResponseDto, DetailUserResponseDto detailUserResponseDto, String introduction, SearchRoadmapResponseDto searchRoadmapResponseDto, int teamCount){
         return RoadmapDetailInfoResponseDto.builder()
                 .roadmapType(roadmap.getRoadmapType())
                 .title(roadmap.getTitle())
@@ -27,7 +26,6 @@ public class RoadmapDetailInfoResponseDto {
                 .detailUserResponseDto(detailUserResponseDto)
                 .introduction(introduction)
                 .searchRoadmapResponseDto(searchRoadmapResponseDto)
-                .rating(rating)
                 .teamCount(teamCount)
                 .build();
     }
