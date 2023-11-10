@@ -3,10 +3,10 @@ package com.kusitms.mainservice.domain.template.dto.response;
 import com.kusitms.mainservice.domain.roadmap.dto.response.RoadmapTitleResponseDto;
 import com.kusitms.mainservice.domain.template.domain.Template;
 import com.kusitms.mainservice.domain.template.domain.TemplateContent;
+import com.kusitms.mainservice.domain.user.dto.response.DetailUserResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,9 +23,9 @@ public class TemplateDetailResponseDto {
     private RatingResponseDto averageRating;
     private int teamCount;
     private List<ReviewContentResponseDto> reviews;
-    private TemplateDetailUserResponseDto user;
+    private DetailUserResponseDto user;
 
-    public static TemplateDetailResponseDto of(Optional<Template> template, Optional<TemplateContent> templateContent, List<RoadmapTitleResponseDto> connectedRoadmap,SearchTemplateResponseDto searchTemplateResponseDto, RatingResponseDto averageRating, int teamCount, List<ReviewContentResponseDto> reviews, TemplateDetailUserResponseDto user, String createdAt){
+    public static TemplateDetailResponseDto of(Optional<Template> template, Optional<TemplateContent> templateContent, List<RoadmapTitleResponseDto> connectedRoadmap, SearchTemplateResponseDto searchTemplateResponseDto, RatingResponseDto averageRating, int teamCount, List<ReviewContentResponseDto> reviews, DetailUserResponseDto user, String createdAt){
         return TemplateDetailResponseDto.builder()
                 .templateId(template.get().getId())
                 .estimatedTime(template.get().getEstimatedTime())

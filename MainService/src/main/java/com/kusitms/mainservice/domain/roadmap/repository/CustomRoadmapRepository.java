@@ -7,7 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 
-public interface CustomRoadmapRepository extends JpaRepository<CustomRoadmap, Long> {
+public interface
+CustomRoadmapRepository extends JpaRepository<CustomRoadmap, Long> {
     @Query("SELECT cr FROM CustomRoadmap cr " +
             "JOIN FETCH cr.roadmapDownload rd " +
             "JOIN FETCH rd.user u " +
