@@ -17,7 +17,7 @@ public class RoadmapController {
     private final RoadmapService roadmapService;
 
     @PostMapping("/get")
-    public ResponseEntity<SuccessResponse<?>> getRoadmapByTitleAndRoadmaptype(@RequestBody SearchRoadmapRequestDto searchRoadmapRequestDto){
+    public ResponseEntity<SuccessResponse<?>> getRoadmapByTitleAndRoadmapType(@RequestBody SearchRoadmapRequestDto searchRoadmapRequestDto){
         final SearchRoadmapResponseDto searchRoadmapResponseDto = roadmapService.searchRoadmapByTitleAndRoadmapType(searchRoadmapRequestDto);
         return SuccessResponse.ok(searchRoadmapResponseDto);
     }
