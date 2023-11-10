@@ -10,24 +10,20 @@ import lombok.Getter;
 @Getter
 public class RoadmapDetailInfoResponseDto {
     private RoadmapType roadmapType;
-    private String title;
     private BaseRoadmapResponseDto baseRoadmapResponseDto;
     private DetailUserResponseDto detailUserResponseDto;
     private String introduction;
     private SearchRoadmapResponseDto searchRoadmapResponseDto;
     private String date;
-    private int rating;
     private int teamCount;
 
-    public static RoadmapDetailInfoResponseDto of(Roadmap roadmap, BaseRoadmapResponseDto baseRoadmapResponseDto, DetailUserResponseDto detailUserResponseDto, String introduction, SearchRoadmapResponseDto searchRoadmapResponseDto,int rating, int teamCount){
+    public static RoadmapDetailInfoResponseDto of(Roadmap roadmap, BaseRoadmapResponseDto baseRoadmapResponseDto, DetailUserResponseDto detailUserResponseDto, String introduction, SearchRoadmapResponseDto searchRoadmapResponseDto, int teamCount){
         return RoadmapDetailInfoResponseDto.builder()
                 .roadmapType(roadmap.getRoadmapType())
-                .title(roadmap.getTitle())
                 .baseRoadmapResponseDto(baseRoadmapResponseDto)
                 .detailUserResponseDto(detailUserResponseDto)
                 .introduction(introduction)
                 .searchRoadmapResponseDto(searchRoadmapResponseDto)
-                .rating(rating)
                 .teamCount(teamCount)
                 .build();
     }
