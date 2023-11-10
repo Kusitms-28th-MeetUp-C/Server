@@ -11,6 +11,7 @@ import static com.kusitms.mainservice.global.error.ErrorCode.INVALID_ROADMAP_TYP
 @RequiredArgsConstructor
 @Getter
 public enum RoadmapType {
+    ALL("all"),
     IT("it"),
     SURVEY_DATA_ANALYSIS("survey_data_analysis"),
     CORPORATE_ANALYSIS("corporate_analysis"),
