@@ -45,11 +45,6 @@ public class Template {
     @Builder.Default
     private List<RoadmapTemplate> roadmapTemplates = new ArrayList<>();
 
-//    @PrePersist
-    public void onCreate() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        this.date = dateFormat.format(new Date());
-    }
     public void addReviewer(Reviewer reviewer){
         this.reviewerList.add(reviewer);
     }
