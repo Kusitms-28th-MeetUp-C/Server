@@ -34,10 +34,10 @@ class MainServiceApplicationTests {
         TemplateContent templateContent = new TemplateContent();
 
 
-        templateContent.setAgendaNum(5L);
-        templateContent.setTemplateId(1L);
-        templateContent.setAgenda("기타 논의 안건");
-        templateContent.setContent("내용5");
+        templateContent.setAgendaNum(2L);
+        templateContent.setTemplateId(2L);
+        templateContent.setAgenda("PT 주제 정하기");
+        templateContent.setContent("내용2");
 
         templateContentRepository.save(templateContent);
     }
