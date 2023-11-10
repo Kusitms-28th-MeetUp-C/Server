@@ -22,8 +22,8 @@ import static com.mysql.cj.MysqlType.NULL;
 @Service
 public class RoadmapService {
 
-    private RoadmapRepository roadmapRepository;
-    private RoadmapSpaceRepository roadmapSpaceRepository;
+    private final RoadmapRepository roadmapRepository;
+    private final RoadmapSpaceRepository roadmapSpaceRepository;
     public SearchRoadmapResponseDto searchRoadmapByTitleAndRoadmapType(SearchRoadmapRequestDto searchRoadmapRequestDto){
         List<Roadmap> roadmapList = getRoadmapListByTitleAndRoadmapType(searchRoadmapRequestDto);
         List<SearchBaseRoadmapResponseDto> searchBaseRoadmapResponseDtos = createSearchRoadmapResponseDto(roadmapList);
