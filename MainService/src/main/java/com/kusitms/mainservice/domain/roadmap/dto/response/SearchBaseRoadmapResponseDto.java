@@ -1,5 +1,6 @@
 package com.kusitms.mainservice.domain.roadmap.dto.response;
 
+import com.kusitms.mainservice.domain.roadmap.domain.Roadmap;
 import com.kusitms.mainservice.domain.roadmap.domain.RoadmapType;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,4 +15,13 @@ public class SearchBaseRoadmapResponseDto {
     private int step;
     private int count;
 
+    public static  SearchBaseRoadmapResponseDto of(Roadmap roadmap, int step ){
+        return SearchBaseRoadmapResponseDto.builder()
+                .roadmapId(roadmap.getId())
+                .roadmapType(roadmap.getRoadmapType())
+                .title(roadmap.getTitle())
+                .step(step)
+                .count(roadmap.getCount())
+                .build();
+    }
 }

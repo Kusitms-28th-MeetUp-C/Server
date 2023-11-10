@@ -9,4 +9,10 @@ import java.util.List;
 @Getter
 public class SearchRoadmapResponseDto {
     List<SearchBaseRoadmapResponseDto> roadmapList;
+
+    public static SearchRoadmapResponseDto of(List<SearchBaseRoadmapResponseDto> roadmapList){
+        return SearchRoadmapResponseDto.builder()
+                .roadmapList(roadmapList)
+                .build();
+    }
 }
