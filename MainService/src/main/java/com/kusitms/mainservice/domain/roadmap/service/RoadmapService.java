@@ -30,7 +30,6 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 @Service
 public class RoadmapService {
-    private final TemplateRepository templateRepository;
     private final RoadmapRepository roadmapRepository;
     private final RoadmapSpaceRepository roadmapSpaceRepository;
     private final RoadmapDownloadRepository roadmapDownloadRepository;

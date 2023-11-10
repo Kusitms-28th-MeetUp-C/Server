@@ -1,7 +1,10 @@
 package com.kusitms.mainservice.domain.template.controller;
 
 
+import com.kusitms.mainservice.domain.roadmap.dto.request.SearchRoadmapRequestDto;
+import com.kusitms.mainservice.domain.roadmap.dto.response.SearchRoadmapResponseDto;
 import com.kusitms.mainservice.domain.template.domain.TemplateType;
+import com.kusitms.mainservice.domain.template.dto.request.SearchTemplateRequsetDto;
 import com.kusitms.mainservice.domain.template.dto.response.GetTeamForSaveTemplateResponseDto;
 import com.kusitms.mainservice.domain.template.dto.response.SaveTemplateResponseDto;
 import com.kusitms.mainservice.domain.template.dto.response.SearchTemplateResponseDto;
@@ -19,6 +22,11 @@ import org.springframework.web.bind.annotation.*;
 public class TemplateController {
     private final TemplateService templateService;
 
+    @PostMapping("/get")
+    public ResponseEntity<SuccessResponse<?>> getTemplateByTitleAndTemplateType(@RequestBody SearchTemplateRequsetDto searchTemplateRequsetDto){
+        final SearchTemplateResponseDto searchTemplateResponseDto = templateService.searchTemplateByTitleAndRoadmapType(searchTemplateRequsetDto);
+        return SuccessResponse.ok(searchTemplateResponseDto);
+    }
         @GetMapping("/title/{title}")
     public ResponseEntity<SuccessResponse<?>> getTemplateBytitle(@PathVariable final String title){
         final SearchTemplateResponseDto searchTemplateResponseDtoList = templateService.searchTemplatesByTitle(title);

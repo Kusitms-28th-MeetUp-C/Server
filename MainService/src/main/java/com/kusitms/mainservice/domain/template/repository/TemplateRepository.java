@@ -1,5 +1,7 @@
 package com.kusitms.mainservice.domain.template.repository;
 
+import com.kusitms.mainservice.domain.roadmap.domain.Roadmap;
+import com.kusitms.mainservice.domain.roadmap.domain.RoadmapType;
 import com.kusitms.mainservice.domain.template.domain.Template;
 import com.kusitms.mainservice.domain.template.domain.TemplateType;
 import com.kusitms.mainservice.domain.user.domain.User;
@@ -21,4 +23,12 @@ public interface TemplateRepository extends JpaRepository<Template, Long> {
     int countByUserId(Long userId);
     @Query("SELECT t.user FROM Template t WHERE t.id = :template_id")
     User findUserById(@Param("template_id") Long template_id);
+    @Query("SELECT t FROM Template t " +
+            "WHERE (:templateType = 'ALL' OR t.templateType = :templateType) " +
+            "AND t.title LIKE %:title%")
+    List<Template> findByTitleAndTemplateType(
+            @Param("title") String title,
+            @Param("templateType") TemplateType templateType
+    );
+    List<Template> findByTemplateType(TemplateType templateType);
 }

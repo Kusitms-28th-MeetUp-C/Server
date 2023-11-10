@@ -1,13 +1,19 @@
 package com.kusitms.mainservice.domain.template.service;
 
 
+import com.kusitms.mainservice.domain.roadmap.domain.Roadmap;
 import com.kusitms.mainservice.domain.roadmap.domain.RoadmapTemplate;
+import com.kusitms.mainservice.domain.roadmap.domain.RoadmapType;
+import com.kusitms.mainservice.domain.roadmap.dto.request.SearchRoadmapRequestDto;
 import com.kusitms.mainservice.domain.roadmap.dto.response.RoadmapTitleResponseDto;
+import com.kusitms.mainservice.domain.roadmap.dto.response.SearchBaseRoadmapResponseDto;
+import com.kusitms.mainservice.domain.roadmap.dto.response.SearchRoadmapResponseDto;
 import com.kusitms.mainservice.domain.roadmap.repository.RoadmapRepository;
 import com.kusitms.mainservice.domain.team.domain.Team;
 import com.kusitms.mainservice.domain.team.dto.response.TeamTitleResponseDto;
 import com.kusitms.mainservice.domain.team.repository.TeamRepository;
 import com.kusitms.mainservice.domain.template.domain.*;
+import com.kusitms.mainservice.domain.template.dto.request.SearchTemplateRequsetDto;
 import com.kusitms.mainservice.domain.template.dto.response.*;
 import com.kusitms.mainservice.domain.template.repository.*;
 
@@ -40,6 +46,11 @@ public class TemplateService {
     private final UserRepository userRepository;
     private final AuthService authService;
 
+    public SearchTemplateResponseDto searchTemplateByTitleAndRoadmapType(SearchTemplateRequsetDto searchTemplateRequsetDto){
+        List<Template> templateList = getTemplateListByTitleAndTemplateType(searchTemplateRequsetDto);
+        List<SearchBaseTemplateResponseDto> searchBaseTemplateResponseDtoList = createSearchBaseTemplateResponseDtoList(templateList);
+        return SearchTemplateResponseDto.of(searchBaseTemplateResponseDtoList);
+    }
     public SearchTemplateResponseDto searchTemplatesByCategory(TemplateType templateType) {
         if(TemplateType.ALL.equals(templateType)) {
             List<Template> templateList = templateRepository.findAll();
@@ -91,12 +102,29 @@ public class TemplateService {
         return "저장";
 
     }
+    private List<Template> getTemplateListByTitleAndTemplateType(SearchTemplateRequsetDto searchTemplateRequsetDto){
+        if(searchTemplateRequsetDto.getTemplateType()==null&&!(searchTemplateRequsetDto.getTitle()==null)){
+            return getTemplateByTitle(searchTemplateRequsetDto.getTitle());
+        }
+        if(!(searchTemplateRequsetDto.getTemplateType()==null)&&searchTemplateRequsetDto.getTitle()==null) {
+            return getTemplateFromTemplateType(searchTemplateRequsetDto.getTemplateType());
+        }
+        return getTemplateByTitleAndTemplateType(searchTemplateRequsetDto);
+    }
+    private List<Template> getTemplateByTitleAndTemplateType(SearchTemplateRequsetDto searchTemplateRequsetDto){
+        return templateRepository.findByTitleAndTemplateType(searchTemplateRequsetDto.getTitle(),searchTemplateRequsetDto.getTemplateType());
+    }
     private Template getTemplateByTemplateId(Long templateId){
         Optional<Template> template = templateRepository.findById(templateId);
         return template.get();
     }
     private List<Template> getTemplateFromTemplateType(TemplateType templateType) {
-        return templateRepository.findAllByTemplateType(templateType);
+        if(TemplateType.ALL.equals(templateType)) {
+            return templateRepository.findAll();
+        }
+        else {
+            return templateRepository.findByTemplateType(templateType);
+        }
     }
     private List<SearchBaseTemplateResponseDto> createSearchBaseTemplateResponseDtoList(List<Template> templateList) {
         return templateList.stream()
