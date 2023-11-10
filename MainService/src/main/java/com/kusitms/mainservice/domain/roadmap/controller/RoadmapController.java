@@ -22,4 +22,6 @@ public class RoadmapController {
         return SuccessResponse.ok(searchRoadmapResponseDto);
     }
 
+    @GetMapping
+
 }

@@ -35,7 +35,7 @@ public class RoadmapService {
     private final RoadmapDownloadRepository roadmapDownloadRepository;
     public SearchRoadmapResponseDto searchRoadmapByTitleAndRoadmapType(SearchRoadmapRequestDto searchRoadmapRequestDto){
         List<Roadmap> roadmapList = getRoadmapListByTitleAndRoadmapType(searchRoadmapRequestDto);
-        List<SearchBaseRoadmapResponseDto> searchBaseRoadmapResponseDtos = createSearchRoadmapResponseDto(roadmapList);
+        List<SearchBaseRoadmapResponseDto> searchBaseRoadmapResponseDtos = createSearchBaseRoadmapResponseDtoList(roadmapList);
         return SearchRoadmapResponseDto.of(searchBaseRoadmapResponseDtos);
     }
 
