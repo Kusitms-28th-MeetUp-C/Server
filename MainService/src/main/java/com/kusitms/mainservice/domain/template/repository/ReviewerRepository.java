@@ -8,5 +8,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ReviewerRepository extends JpaRepository<Reviewer, Long> {
-    List<Reviewer> findByTemplate(Optional<Template> template);
+    List<Reviewer> findByTemplate(Template template);
 }

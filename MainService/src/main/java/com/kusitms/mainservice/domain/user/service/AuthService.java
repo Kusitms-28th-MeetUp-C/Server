@@ -1,11 +1,14 @@
 package com.kusitms.mainservice.domain.user.service;
 
+import com.kusitms.mainservice.domain.roadmap.repository.RoadmapRepository;
+import com.kusitms.mainservice.domain.template.repository.TemplateRepository;
 import com.kusitms.mainservice.domain.user.auth.PlatformUserInfo;
 import com.kusitms.mainservice.domain.user.auth.RestTemplateProvider;
 import com.kusitms.mainservice.domain.user.domain.Platform;
 import com.kusitms.mainservice.domain.user.domain.User;
 import com.kusitms.mainservice.domain.user.dto.request.UserSignInRequestDto;
 import com.kusitms.mainservice.domain.user.dto.request.UserSignUpRequestDto;
+import com.kusitms.mainservice.domain.user.dto.response.DetailUserResponseDto;
 import com.kusitms.mainservice.domain.user.dto.response.UserAuthResponseDto;
 import com.kusitms.mainservice.domain.user.repository.RefreshTokenRepository;
 import com.kusitms.mainservice.domain.user.repository.UserRepository;
@@ -33,7 +36,8 @@ public class AuthService {
     private final JwtProvider jwtProvider;
     private final RestTemplateProvider restTemplateProvider;
     private final RefreshTokenRepository refreshTokenRepository;
-
+    private final TemplateRepository templateRepository;
+    private final RoadmapRepository roadmapRepository;
     public UserAuthResponseDto signIn(UserSignInRequestDto userSignInRequestDto, String authToken) {
         Platform platform = getEnumPlatformFromStringPlatform(userSignInRequestDto.getPlatform());
         PlatformUserInfo platformUser = getPlatformUserInfoFromRestTemplate(platform, authToken);
@@ -80,5 +84,17 @@ public class AuthService {
 
     private PlatformUserInfo getPlatformUserInfoFromRestTemplate(Platform platform, String authToken) {
         return restTemplateProvider.getUserInfoUsingRestTemplate(platform, authToken);
+    }
+
+    public DetailUserResponseDto createDetailUserResponseDto(User user){
+        int templateNum = getTemplateCountByUser(user);
+        int roadmapNum = getRoadmapCountByUser(user);
+        return DetailUserResponseDto.of(user, templateNum,roadmapNum);
+    }
+    private int getTemplateCountByUser(User user) {
+        return templateRepository.countByUser(user);
+    }
+    private int getRoadmapCountByUser(User user) {
+        return roadmapRepository.countByUser(user);
     }
 }

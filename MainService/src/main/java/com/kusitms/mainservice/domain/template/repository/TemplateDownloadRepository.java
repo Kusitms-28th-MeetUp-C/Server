@@ -12,5 +12,5 @@ public interface TemplateDownloadRepository extends JpaRepository<TemplateDownlo
     Optional<TemplateDownload> findByUserIdAndTemplateId(Long userId, Long templateId);
 
     @Query("SELECT COUNT(td) FROM TemplateDownload td WHERE td.template = :template")
-    int countDownloadsByTemplate(@Param("template") Optional<Template> template);
+    int countDownloadsByTemplate(@Param("template") Template template);
 }

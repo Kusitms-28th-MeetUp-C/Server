@@ -14,6 +14,7 @@ import com.kusitms.mainservice.domain.template.repository.*;
 import com.kusitms.mainservice.domain.user.domain.User;
 import com.kusitms.mainservice.domain.user.dto.response.DetailUserResponseDto;
 import com.kusitms.mainservice.domain.user.repository.UserRepository;
+import com.kusitms.mainservice.domain.user.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,8 @@ public class TemplateService {
     private final RoadmapRepository roadmapRepository;
     private final TeamRepository teamRepository;
     private final UserRepository userRepository;
-    private final CustomTemplateRepository customTemplateRepository;
+    private final AuthService authService;
+
     public SearchTemplateResponseDto searchTemplatesByCategory(TemplateType templateType) {
         if(TemplateType.ALL.equals(templateType)) {
             List<Template> templateList = templateRepository.findAll();
@@ -56,16 +58,16 @@ public class TemplateService {
         return SearchTemplateResponseDto.of(searchbaseTemplateResponseDtoList);
     }
     public TemplateDetailResponseDto getTemplateDetail(Long templateId){
-        Optional<Template> template = templateRepository.findById(templateId);
+        Template template = getTemplateByTemplateId(templateId);
         Optional<TemplateContent> templateContent = templateContentRepository.findById(templateId.toString());
-        List<Template> templateList = getTemplatesBySameCategoryAndId(template.get().getTemplateType(),template);
+        List<Template> templateList = getTemplatesBySameCategoryAndId(template.getTemplateType(), Optional.of(template));
         List<RoadmapTitleResponseDto> roadmapTitleResponseDto = getRoadmapTitleResponseDto(template);
         List<SearchBaseTemplateResponseDto> relatedTemplate = createSearchBaseTemplateResponseDtoList(templateList);
         RatingResponseDto ratingResponseDto = createRatingResponse(template);
         int teamCount = getTeamCount(template);
         List<ReviewContentResponseDto> reviewContentResponseDtoList = createReviewContentResponseDto(template);
-        DetailUserResponseDto detailUserResponseDto =createTemplateDetailUserResponseDto(templateId);
-        String date = template.get().getDate();
+        DetailUserResponseDto detailUserResponseDto =createDetailUserResponseDto(template.getUser());
+        String date = template.getDate();
         return TemplateDetailResponseDto.of(template, templateContent,roadmapTitleResponseDto,SearchTemplateResponseDto.of(relatedTemplate),ratingResponseDto, teamCount,reviewContentResponseDtoList, detailUserResponseDto, date);
     }
 
@@ -90,6 +92,10 @@ public class TemplateService {
         return "저장";
 
     }
+    private Template getTemplateByTemplateId(Long templateId){
+        Optional<Template> template = templateRepository.findById(templateId);
+        return template.get();
+    }
     private List<Template> getTemplateFromTemplateType(TemplateType templateType) {
         return templateRepository.findAllByTemplateType(templateType);
     }
@@ -98,15 +104,15 @@ public class TemplateService {
                 .map(template ->
                         SearchBaseTemplateResponseDto.of(
                                 template,
-                                getTeamCount(Optional.of(template)),
-                                getRoadmapTitleResponseDto(Optional.of(template))))
+                                getTeamCount(template),
+                                getRoadmapTitleResponseDto(template)))
                 .collect(Collectors.toList());
     }
-    private List<RoadmapTitleResponseDto> getRoadmapTitleResponseDto(Optional<Template> template) {
+    private List<RoadmapTitleResponseDto> getRoadmapTitleResponseDto(Template template) {
 
         List<RoadmapTitleResponseDto> roadmapTitleResponseDtoList = new ArrayList<>();
 
-        List<RoadmapTemplate> roadmapTemplates = template.get().getRoadmapTemplates();
+        List<RoadmapTemplate> roadmapTemplates = template.getRoadmapTemplates();
         for (RoadmapTemplate roadmapTemplate : roadmapTemplates) {
             String title = roadmapTemplate.getRoadmapSpace().getRoadmap().getTitle();
             RoadmapTitleResponseDto titleResponseDto = RoadmapTitleResponseDto.of(title);
@@ -119,7 +125,7 @@ public class TemplateService {
     private List<Template> getTemplateByTitle(String title) {
         return templateRepository.findByTitleContaining(title);
     }
-    private RatingResponseDto createRatingResponse(Optional<Template> template) {
+    private RatingResponseDto createRatingResponse(Template template) {
         List<Reviewer> reviewers = reviewerRepository.findByTemplate(template);
         Double totalRating = 0.0;
         int numRatings = 0;
@@ -137,11 +143,11 @@ public class TemplateService {
             return RatingResponseDto.of(0.0);
         }
     }
-    private int getTeamCount(Optional<Template> template){
+    private int getTeamCount(Template template){
         int tc = templateDownloadRepository.countDownloadsByTemplate(template);
         return tc;
     }
-    private List<ReviewContentResponseDto> createReviewContentResponseDto(Optional<Template> template){
+    private List<ReviewContentResponseDto> createReviewContentResponseDto(Template template){
         List<Reviewer> reviewers = reviewerRepository.findByTemplate(template);
         List<ReviewContentResponseDto> reviewContentResponseDtoList = new ArrayList<>();
         for (Reviewer reviewer : reviewers) {
@@ -152,17 +158,8 @@ public class TemplateService {
         }
         return reviewContentResponseDtoList;
     }
-    private DetailUserResponseDto createTemplateDetailUserResponseDto(Long templateId){
-        User user = templateRepository.findUserById(templateId);
-        int templateNum = getTemplateCountByUser(user);
-        int roadmapNum = getRoadmapCountByUser(user);
-        return DetailUserResponseDto.of(user, templateNum,roadmapNum);
-    }
-    private int getTemplateCountByUser(User user) {
-        return templateRepository.countByUser(user);
-    }
-    private int getRoadmapCountByUser(User user) {
-        return roadmapRepository.countByUser(user);
+    private DetailUserResponseDto createDetailUserResponseDto(User user){
+        return authService.createDetailUserResponseDto(user);
     }
     private List<Template> getTemplatesBySameCategoryAndId(TemplateType templateType, Optional<Template> template){
         List<Template> templates = templateRepository.findAllByTemplateType(templateType);

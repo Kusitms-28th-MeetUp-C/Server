@@ -14,6 +14,7 @@ import java.util.Optional;
 @Getter
 public class TemplateDetailResponseDto {
     private Long templateId;
+    private String title;
     private int estimatedTime;
     private List<RoadmapTitleResponseDto> connectedRoadmap;
     private String createdAt;
@@ -25,10 +26,11 @@ public class TemplateDetailResponseDto {
     private List<ReviewContentResponseDto> reviews;
     private DetailUserResponseDto user;
 
-    public static TemplateDetailResponseDto of(Optional<Template> template, Optional<TemplateContent> templateContent, List<RoadmapTitleResponseDto> connectedRoadmap, SearchTemplateResponseDto searchTemplateResponseDto, RatingResponseDto averageRating, int teamCount, List<ReviewContentResponseDto> reviews, DetailUserResponseDto user, String createdAt){
+    public static TemplateDetailResponseDto of(Template template, Optional<TemplateContent> templateContent, List<RoadmapTitleResponseDto> connectedRoadmap, SearchTemplateResponseDto searchTemplateResponseDto, RatingResponseDto averageRating, int teamCount, List<ReviewContentResponseDto> reviews, DetailUserResponseDto user, String createdAt){
         return TemplateDetailResponseDto.builder()
-                .templateId(template.get().getId())
-                .estimatedTime(template.get().getEstimatedTime())
+                .templateId(template.getId())
+                .title(template.getTitle())
+                .estimatedTime(template.getEstimatedTime())
                 .connectedRoadmap(connectedRoadmap)
                 .createdAt(createdAt)
                 .content(templateContent.get().getContent())

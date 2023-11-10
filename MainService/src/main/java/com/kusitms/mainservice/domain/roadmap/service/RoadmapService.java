@@ -15,6 +15,7 @@ import com.kusitms.mainservice.domain.template.dto.response.SearchTemplateRespon
 import com.kusitms.mainservice.domain.template.repository.TemplateRepository;
 import com.kusitms.mainservice.domain.user.domain.User;
 import com.kusitms.mainservice.domain.user.dto.response.DetailUserResponseDto;
+import com.kusitms.mainservice.domain.user.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,7 @@ public class RoadmapService {
     private final RoadmapRepository roadmapRepository;
     private final RoadmapSpaceRepository roadmapSpaceRepository;
     private final RoadmapDownloadRepository roadmapDownloadRepository;
+    private final AuthService authService;
     public SearchRoadmapResponseDto searchRoadmapByTitleAndRoadmapType(SearchRoadmapRequestDto searchRoadmapRequestDto){
         List<Roadmap> roadmapList = getRoadmapListByTitleAndRoadmapType(searchRoadmapRequestDto);
         List<SearchBaseRoadmapResponseDto> searchBaseRoadmapResponseDtos = createSearchBaseRoadmapResponseDtoList(roadmapList);
@@ -70,15 +72,7 @@ public class RoadmapService {
         return getRoadmapByTitleAndRoadmapType(searchRoadmapRequestDto);
     }
     private DetailUserResponseDto createDetailUserResponseDto(User user){
-        int templateNum = getTemplateCountByUser(user);
-        int roadmapNum = getRoadmapCountByUser(user);
-        return DetailUserResponseDto.of(user, templateNum,roadmapNum);
-    }
-    private int getTemplateCountByUser(User user) {
-        return templateRepository.countByUser(user);
-    }
-    private int getRoadmapCountByUser(User user) {
-        return roadmapRepository.countByUser(user);
+        return authService.createDetailUserResponseDto(user);
     }
     private SearchRoadmapResponseDto createSearchRoadmapResponseDto(List<SearchBaseRoadmapResponseDto> searchBaseRoadmapResponseDtoList) {
         return SearchRoadmapResponseDto.of(searchBaseRoadmapResponseDtoList);
