@@ -32,7 +32,7 @@ public class RoadmapService {
 
     private List<Roadmap> getRoadmapListByTitleAndRoadmapType(SearchRoadmapRequestDto searchRoadmapRequestDto){
         if(searchRoadmapRequestDto.getRoadmapType()==null&&!(searchRoadmapRequestDto.getTitle()==null)){
-            return roadmapRepository.findByTitle(searchRoadmapRequestDto.getTitle());
+            return roadmapRepository.findByTitleContaining(searchRoadmapRequestDto.getTitle());
         }
         if(!(searchRoadmapRequestDto.getRoadmapType()==null)&&searchRoadmapRequestDto.getTitle()==null) {
             return roadmapRepository.findByRoadmapType(searchRoadmapRequestDto.getRoadmapType());
