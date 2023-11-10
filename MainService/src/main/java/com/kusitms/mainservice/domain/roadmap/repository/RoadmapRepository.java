@@ -21,7 +21,7 @@ public interface RoadmapRepository extends JpaRepository<Roadmap, Long> {
     Optional<Roadmap> findRoadmapByMakerIdAndTemplateId(@Param("makerId") Long makerId, @Param("templateId") Long templateId);
 
     @Query("SELECT r FROM Roadmap r " +
-            "WHERE r.title = :title AND r.roadmapType = :roadmapType")
+            "WHERE r.title LIKE %:title% AND r.roadmapType = :roadmapType")
     List<Roadmap> findByTitleAndRoadmapType(
             @Param("title") String title,
             @Param("roadmapType") RoadmapType roadmapType
