@@ -27,17 +27,6 @@ public class TemplateController {
         final SearchTemplateResponseDto searchTemplateResponseDto = templateService.searchTemplateByTitleAndRoadmapType(searchTemplateRequsetDto);
         return SuccessResponse.ok(searchTemplateResponseDto);
     }
-        @GetMapping("/title/{title}")
-    public ResponseEntity<SuccessResponse<?>> getTemplateBytitle(@PathVariable final String title){
-        final SearchTemplateResponseDto searchTemplateResponseDtoList = templateService.searchTemplatesByTitle(title);
-        return SuccessResponse.ok(searchTemplateResponseDtoList);
-    }
-
-    @GetMapping("/templateType/{templateType}")
-    public ResponseEntity<SuccessResponse<?>> getTemplateByCategoty(@PathVariable final TemplateType templateType){
-        final SearchTemplateResponseDto searchTemplateResponseDtoList = templateService.searchTemplatesByCategory(templateType);
-        return SuccessResponse.ok(searchTemplateResponseDtoList);
-    }
 
     @GetMapping("/detail")
     public ResponseEntity<SuccessResponse<?>> getTemplateDetailBytemplateId(@RequestParam Long templateId){

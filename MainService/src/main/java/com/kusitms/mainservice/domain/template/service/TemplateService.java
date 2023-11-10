@@ -51,23 +51,7 @@ public class TemplateService {
         List<SearchBaseTemplateResponseDto> searchBaseTemplateResponseDtoList = createSearchBaseTemplateResponseDtoList(templateList);
         return SearchTemplateResponseDto.of(searchBaseTemplateResponseDtoList);
     }
-    public SearchTemplateResponseDto searchTemplatesByCategory(TemplateType templateType) {
-        if(TemplateType.ALL.equals(templateType)) {
-            List<Template> templateList = templateRepository.findAll();
-            List<SearchBaseTemplateResponseDto> searchbaseTemplateResponseDtoList = createSearchBaseTemplateResponseDtoList(templateList);
-            return SearchTemplateResponseDto.of(searchbaseTemplateResponseDtoList);
-        }
-        else {
-        List<Template> templateList = getTemplateFromTemplateType(templateType);
-        List<SearchBaseTemplateResponseDto> searchbaseTemplateResponseDtoList = createSearchBaseTemplateResponseDtoList(templateList);
-        return SearchTemplateResponseDto.of(searchbaseTemplateResponseDtoList);
-        }
-    }
-    public SearchTemplateResponseDto searchTemplatesByTitle(String title) {
-        List<Template> templateList = getTemplateByTitle(title);
-        List<SearchBaseTemplateResponseDto> searchbaseTemplateResponseDtoList= createSearchBaseTemplateResponseDtoList(templateList);
-        return SearchTemplateResponseDto.of(searchbaseTemplateResponseDtoList);
-    }
+
     public TemplateDetailResponseDto getTemplateDetail(Long templateId){
         Template template = getTemplateByTemplateId(templateId);
         Optional<TemplateContent> templateContent = templateContentRepository.findById(templateId.toString());
