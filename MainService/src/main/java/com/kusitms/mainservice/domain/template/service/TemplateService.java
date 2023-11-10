@@ -12,15 +12,14 @@ import com.kusitms.mainservice.domain.template.dto.response.*;
 import com.kusitms.mainservice.domain.template.repository.*;
 
 import com.kusitms.mainservice.domain.user.domain.User;
+import com.kusitms.mainservice.domain.user.dto.response.DetailUserResponseDto;
 import com.kusitms.mainservice.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.config.annotation.web.oauth2.resourceserver.OpaqueTokenDsl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -65,9 +64,9 @@ public class TemplateService {
         RatingResponseDto ratingResponseDto = createRatingResponse(template);
         int teamCount = getTeamCount(template);
         List<ReviewContentResponseDto> reviewContentResponseDtoList = createReviewContentResponseDto(template);
-        TemplateDetailUserResponseDto templateDetailUserResponseDto =createTemplateDetailUserResponseDto(templateId);
+        DetailUserResponseDto detailUserResponseDto =createTemplateDetailUserResponseDto(templateId);
         String date = template.get().getDate();
-        return TemplateDetailResponseDto.of(template, templateContent,roadmapTitleResponseDto,SearchTemplateResponseDto.of(relatedTemplate),ratingResponseDto, teamCount,reviewContentResponseDtoList, templateDetailUserResponseDto, date);
+        return TemplateDetailResponseDto.of(template, templateContent,roadmapTitleResponseDto,SearchTemplateResponseDto.of(relatedTemplate),ratingResponseDto, teamCount,reviewContentResponseDtoList, detailUserResponseDto, date);
     }
 
     public GetTeamForSaveTemplateResponseDto getTeamForSaveTemplateByUserId(Long id){
@@ -152,11 +151,11 @@ public class TemplateService {
         }
         return reviewContentResponseDtoList;
     }
-    private TemplateDetailUserResponseDto createTemplateDetailUserResponseDto(Long templateId){
+    private DetailUserResponseDto createTemplateDetailUserResponseDto(Long templateId){
         User user = templateRepository.findUserById(templateId);
         int templateNum = getTemplateCountByUser(user);
         int roadmapNum = getRoadmapCountByUser(user);
-        return TemplateDetailUserResponseDto.of(user, templateNum,roadmapNum);
+        return DetailUserResponseDto.of(user, templateNum,roadmapNum);
     }
     private int getTemplateCountByUser(User user) {
         return templateRepository.countByUser(user);
