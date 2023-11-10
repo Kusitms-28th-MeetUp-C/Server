@@ -26,6 +26,8 @@ public interface RoadmapRepository extends JpaRepository<Roadmap, Long> {
             @Param("roadmapType") RoadmapType roadmapType
     );
 
+    List<Roadmap> findByTitle(String title);
+    List<Roadmap> findByRoadmapType(RoadmapType roadmapType);
     List<Roadmap> findTop3ByRoadmapType(RoadmapType roadmapType);
 
     int countByUser(User user);

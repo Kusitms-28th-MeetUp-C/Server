@@ -11,6 +11,8 @@ import com.kusitms.mainservice.domain.roadmap.repository.RoadmapSpaceRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.mysql.cj.MysqlType.NULL;
+
 public class RoadmapService {
 
     private RoadmapRepository roadmapRepository;
@@ -18,12 +20,17 @@ public class RoadmapService {
     public SearchRoadmapResponseDto searchRoadmapByTitleAndRoadmapType(SearchRoadmapRequestDto searchRoadmapRequestDto){
         List<Roadmap> roadmapList = getRoadmapListByTitleAndRoadmapType(searchRoadmapRequestDto);
         List<SearchBaseRoadmapResponseDto> searchBaseRoadmapResponseDtos = createSearchRoadmapResponseDto(roadmapList);
-        return SearchRoadmapResponseDto.of(searchBaseRoadmapResponseDtos)
+        return SearchRoadmapResponseDto.of(searchBaseRoadmapResponseDtos);
     }
 
     private List<Roadmap> getRoadmapListByTitleAndRoadmapType(SearchRoadmapRequestDto searchRoadmapRequestDto){
-        List<Roadmap> roadmapList = roadmapRepository.findByTitleAndRoadmapType(searchRoadmapRequestDto.getTitle(),searchRoadmapRequestDto.getRoadmapType());
-        return roadmapList;
+        if(searchRoadmapRequestDto.getRoadmapType()==null&&!(searchRoadmapRequestDto.getTitle()==null)){
+            return roadmapRepository.findByTitle(searchRoadmapRequestDto.getTitle());
+        }
+        if(!(searchRoadmapRequestDto.getRoadmapType()==null)&&searchRoadmapRequestDto.getTitle()==null) {
+            return roadmapRepository.findByRoadmapType(searchRoadmapRequestDto.getRoadmapType());
+        }
+        return roadmapRepository.findByTitleAndRoadmapType(searchRoadmapRequestDto.getTitle(),searchRoadmapRequestDto.getRoadmapType());
     }
     private List<SearchBaseRoadmapResponseDto> createSearchRoadmapResponseDto(List<Roadmap> roadmapList){
         return roadmapList.stream()
