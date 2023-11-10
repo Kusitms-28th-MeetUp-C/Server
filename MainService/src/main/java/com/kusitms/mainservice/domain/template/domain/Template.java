@@ -30,7 +30,7 @@ public class Template {
     @Builder.Default
     private int count = 0;
     private int estimatedTime;
-
+    private String introduction;
     private String date;
     @ManyToOne
     @JoinColumn(name = "maker_id")

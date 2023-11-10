@@ -1,13 +1,8 @@
 package com.kusitms.mainservice.domain.template.service;
 
 
-import com.kusitms.mainservice.domain.roadmap.domain.Roadmap;
 import com.kusitms.mainservice.domain.roadmap.domain.RoadmapTemplate;
-import com.kusitms.mainservice.domain.roadmap.domain.RoadmapType;
-import com.kusitms.mainservice.domain.roadmap.dto.request.SearchRoadmapRequestDto;
 import com.kusitms.mainservice.domain.roadmap.dto.response.RoadmapTitleResponseDto;
-import com.kusitms.mainservice.domain.roadmap.dto.response.SearchBaseRoadmapResponseDto;
-import com.kusitms.mainservice.domain.roadmap.dto.response.SearchRoadmapResponseDto;
 import com.kusitms.mainservice.domain.roadmap.repository.RoadmapRepository;
 import com.kusitms.mainservice.domain.team.domain.Team;
 import com.kusitms.mainservice.domain.team.dto.response.TeamTitleResponseDto;
@@ -26,9 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -54,15 +47,14 @@ public class TemplateService {
 
     public TemplateDetailResponseDto getTemplateDetail(Long templateId){
         Template template = getTemplateByTemplateId(templateId);
-        Optional<TemplateContent> templateContent = templateContentRepository.findById(templateId.toString());
+        TemplateContentListResponseDto templateContentListResponseDto = getTemplateContentListByTemplateId(template);
         List<Template> templateList = getTemplatesBySameCategoryAndId(Optional.of(template));
         List<RoadmapTitleResponseDto> roadmapTitleResponseDto = getRoadmapTitleResponseDto(template);
         List<SearchBaseTemplateResponseDto> relatedTemplate = createSearchBaseTemplateResponseDtoList(templateList);
-        RatingResponseDto ratingResponseDto = createRatingResponse(template);
-        int teamCount = getTeamCount(template);
-        List<ReviewContentResponseDto> reviewContentResponseDtoList = createReviewContentResponseDto(template);
+        TemplateReviewResponseDto templateReviewResponseDto = createReviewContentResponseDto(template, createReviewContentResponseDto(template));
+        //int teamCount = getTeamCount(template);
         DetailUserResponseDto detailUserResponseDto =createDetailUserResponseDto(template.getUser());
-        return TemplateDetailResponseDto.of(template, templateContent,roadmapTitleResponseDto,SearchTemplateResponseDto.of(relatedTemplate),ratingResponseDto, teamCount,reviewContentResponseDtoList, detailUserResponseDto);
+        return TemplateDetailResponseDto.of(template, templateContentListResponseDto,roadmapTitleResponseDto,SearchTemplateResponseDto.of(relatedTemplate), template.getCount(),templateReviewResponseDto, detailUserResponseDto);
     }
 
     public GetTeamForSaveTemplateResponseDto getTeamForSaveTemplateByUserId(Long id){
@@ -86,6 +78,34 @@ public class TemplateService {
         return "저장";
 
     }
+
+public TemplateContentListResponseDto getTemplateContentListByTemplateId(Template template) {
+    List<TemplateContent> templateContentList = templateContentRepository.findAllByTemplateId(template.getId());
+
+    List<TemplateContent> filteredList = templateContentList.stream()
+            .filter(tc -> tc.getAgendaNum() != null)
+            .collect(Collectors.toList());
+
+
+    filteredList.sort(Comparator.comparing(TemplateContent::getAgendaNum));
+
+    Map<Long, List<Map<String, String>>> result = new LinkedHashMap<>();
+    List<Map<String, String>> contentList = new ArrayList<>();
+
+    for (TemplateContent templateContent : filteredList) {
+        Map<String, String> contentMap = new LinkedHashMap<>();
+        contentMap.put("agendaNum", String.valueOf(templateContent.getAgendaNum()));
+        contentMap.put("agenda", templateContent.getAgenda());
+        contentMap.put("content", templateContent.getContent());
+        contentList.add(contentMap);
+    }
+
+    result.put(template.getId(), contentList);
+
+    return TemplateContentListResponseDto.of(template, result);
+}
+
+
     private List<Template> getTemplateListByTitleAndTemplateType(SearchTemplateRequsetDto searchTemplateRequsetDto){
         if(searchTemplateRequsetDto.getTemplateType()==null&&!(searchTemplateRequsetDto.getTitle()==null)){
             return getTemplateByTitle(searchTemplateRequsetDto.getTitle());
@@ -136,7 +156,7 @@ public class TemplateService {
     private List<Template> getTemplateByTitle(String title) {
         return templateRepository.findByTitleContaining(title);
     }
-    private RatingResponseDto createRatingResponse(Template template) {
+    private TemplateReviewResponseDto createReviewContentResponseDto(Template template,List<ReviewContentResponseDto> reviewContentResponseDtoList) {
         List<Reviewer> reviewers = reviewerRepository.findByTemplate(template);
         Double totalRating = 0.0;
         int numRatings = 0;
@@ -149,9 +169,9 @@ public class TemplateService {
         }
 
         if (numRatings > 0) {
-            return RatingResponseDto.of(totalRating / numRatings);
+            return TemplateReviewResponseDto.of(totalRating / numRatings, reviewContentResponseDtoList);
         } else {
-            return RatingResponseDto.of(0.0);
+            return TemplateReviewResponseDto.of(0.0,reviewContentResponseDtoList);
         }
     }
     private int getTeamCount(Template template){

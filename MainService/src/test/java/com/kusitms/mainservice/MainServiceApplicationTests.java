@@ -31,12 +31,15 @@ class MainServiceApplicationTests {
 //            System.out.println("MongoDB Port: " + port);
 //            System.out.println("Database Name: " + databaseName);
 
-//        TemplateContent templateContent = new TemplateContent();
-//
-//        templateContent.setId("1");
-//        templateContent.setContent("테스트");
-//        templateContent.setIntroduction("테스트");
-//        templateContentRepository.save(templateContent);
+        TemplateContent templateContent = new TemplateContent();
+
+
+        templateContent.setAgendaNum(5L);
+        templateContent.setTemplateId(1L);
+        templateContent.setAgenda("기타 논의 안건");
+        templateContent.setContent("내용5");
+
+        templateContentRepository.save(templateContent);
     }
 
 }
