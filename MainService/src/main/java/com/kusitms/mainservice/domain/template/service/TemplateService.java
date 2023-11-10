@@ -98,6 +98,7 @@ public class TemplateService {
                 .map(template ->
                         SearchBaseTemplateResponseDto.of(
                                 template,
+                                getTeamCount(Optional.of(template)),
                                 getRoadmapTitleResponseDto(Optional.of(template))))
                 .collect(Collectors.toList());
     }

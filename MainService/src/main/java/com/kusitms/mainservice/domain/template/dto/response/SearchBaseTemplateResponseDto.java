@@ -17,12 +17,12 @@ public class SearchBaseTemplateResponseDto {
     private int estimatedTime;
     private List<RoadmapTitleResponseDto> connectedRoadmap;
 
-    public static SearchBaseTemplateResponseDto of(Template template, List<RoadmapTitleResponseDto> connectedRoadmap){
+    public static SearchBaseTemplateResponseDto of(Template template, int count,List<RoadmapTitleResponseDto> connectedRoadmap){
         return SearchBaseTemplateResponseDto.builder()
                 .templateId(template.getId())
                 .title(template.getTitle())
                 .templateType(template.getTemplateType())
-                .count(template.getCount())
+                .count(count)
                 .estimatedTime(template.getEstimatedTime())
                 .connectedRoadmap(connectedRoadmap)
                 .build();
