@@ -33,12 +33,6 @@ public class TemplateController {
         final TemplateDetailResponseDto templateDetailResponseDto = templateService.getTemplateDetail(templateId);
         return SuccessResponse.ok(templateDetailResponseDto);
     }
-
-    @GetMapping("/save/{userId}")
-    public ResponseEntity<SuccessResponse<?>> saveTemplate(@PathVariable Long userId){
-        final GetTeamForSaveTemplateResponseDto getTeamForSaveTemplateResponseDto = templateService.getTeamForSaveTemplateByUserId(userId);
-        return SuccessResponse.ok(getTeamForSaveTemplateResponseDto);
-    }
     @PostMapping("/save/user")
     public ResponseEntity<SuccessResponse<?>>saveTemplateForUser(@RequestBody SaveTemplateResponseDto saveTemplateResponseDto){
         final String dd = templateService.saveTemplateByUserId(saveTemplateResponseDto);
