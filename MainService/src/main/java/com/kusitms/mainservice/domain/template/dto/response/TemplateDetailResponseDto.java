@@ -17,7 +17,7 @@ public class TemplateDetailResponseDto {
     private String title;
     private int estimatedTime;
     private List<RoadmapTitleResponseDto> connectedRoadmap;
-    private String createdAt;
+    private String date;
     private String content;
     private String introduction;
     private SearchTemplateResponseDto relatedTemplate;
@@ -26,13 +26,13 @@ public class TemplateDetailResponseDto {
     private List<ReviewContentResponseDto> reviews;
     private DetailUserResponseDto user;
 
-    public static TemplateDetailResponseDto of(Template template, Optional<TemplateContent> templateContent, List<RoadmapTitleResponseDto> connectedRoadmap, SearchTemplateResponseDto searchTemplateResponseDto, RatingResponseDto averageRating, int teamCount, List<ReviewContentResponseDto> reviews, DetailUserResponseDto user, String createdAt){
+    public static TemplateDetailResponseDto of(Template template, Optional<TemplateContent> templateContent, List<RoadmapTitleResponseDto> connectedRoadmap, SearchTemplateResponseDto searchTemplateResponseDto, RatingResponseDto averageRating, int teamCount, List<ReviewContentResponseDto> reviews, DetailUserResponseDto user){
         return TemplateDetailResponseDto.builder()
                 .templateId(template.getId())
                 .title(template.getTitle())
                 .estimatedTime(template.getEstimatedTime())
                 .connectedRoadmap(connectedRoadmap)
-                .createdAt(createdAt)
+                .date(template.getDate())
                 .content(templateContent.get().getContent())
                 .introduction(templateContent.get().getIntroduction())
                 .relatedTemplate(searchTemplateResponseDto)

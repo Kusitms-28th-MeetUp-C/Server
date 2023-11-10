@@ -60,15 +60,14 @@ public class TemplateService {
     public TemplateDetailResponseDto getTemplateDetail(Long templateId){
         Template template = getTemplateByTemplateId(templateId);
         Optional<TemplateContent> templateContent = templateContentRepository.findById(templateId.toString());
-        List<Template> templateList = getTemplatesBySameCategoryAndId(template.getTemplateType(), Optional.of(template));
+        List<Template> templateList = getTemplatesBySameCategoryAndId(Optional.of(template));
         List<RoadmapTitleResponseDto> roadmapTitleResponseDto = getRoadmapTitleResponseDto(template);
         List<SearchBaseTemplateResponseDto> relatedTemplate = createSearchBaseTemplateResponseDtoList(templateList);
         RatingResponseDto ratingResponseDto = createRatingResponse(template);
         int teamCount = getTeamCount(template);
         List<ReviewContentResponseDto> reviewContentResponseDtoList = createReviewContentResponseDto(template);
         DetailUserResponseDto detailUserResponseDto =createDetailUserResponseDto(template.getUser());
-        String date = template.getDate();
-        return TemplateDetailResponseDto.of(template, templateContent,roadmapTitleResponseDto,SearchTemplateResponseDto.of(relatedTemplate),ratingResponseDto, teamCount,reviewContentResponseDtoList, detailUserResponseDto, date);
+        return TemplateDetailResponseDto.of(template, templateContent,roadmapTitleResponseDto,SearchTemplateResponseDto.of(relatedTemplate),ratingResponseDto, teamCount,reviewContentResponseDtoList, detailUserResponseDto);
     }
 
     public GetTeamForSaveTemplateResponseDto getTeamForSaveTemplateByUserId(Long id){
@@ -161,8 +160,8 @@ public class TemplateService {
     private DetailUserResponseDto createDetailUserResponseDto(User user){
         return authService.createDetailUserResponseDto(user);
     }
-    private List<Template> getTemplatesBySameCategoryAndId(TemplateType templateType, Optional<Template> template){
-        List<Template> templates = templateRepository.findAllByTemplateType(templateType);
+    private List<Template> getTemplatesBySameCategoryAndId(Optional<Template> template){
+        List<Template> templates = templateRepository.findAllByTemplateType(template.get().getTemplateType());
         template.ifPresent(t -> templates.removeIf(existingTemplate -> existingTemplate.getId().equals(t.getId())));
         return templates;
     }
