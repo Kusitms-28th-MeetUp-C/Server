@@ -7,12 +7,19 @@ import com.kusitms.mainservice.domain.roadmap.dto.response.SearchBaseRoadmapResp
 import com.kusitms.mainservice.domain.roadmap.dto.response.SearchRoadmapResponseDto;
 import com.kusitms.mainservice.domain.roadmap.repository.RoadmapRepository;
 import com.kusitms.mainservice.domain.roadmap.repository.RoadmapSpaceRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.mysql.cj.MysqlType.NULL;
-
+@Slf4j
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+@Service
 public class RoadmapService {
 
     private RoadmapRepository roadmapRepository;
