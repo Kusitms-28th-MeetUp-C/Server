@@ -21,7 +21,7 @@ public class TemplateDetailResponseDto {
     private List<RoadmapTitleResponseDto> connectedRoadmap;
     private String date;
     private TemplateContentListResponseDto templateContentListResponseDto;
-    private String introduction;
+
     private SearchTemplateResponseDto relatedTemplate;
     private TemplateReviewResponseDto ratingAndReviews;
     private int teamCount;
