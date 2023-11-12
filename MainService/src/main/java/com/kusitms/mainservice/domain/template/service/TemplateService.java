@@ -73,13 +73,13 @@ public class TemplateService {
         //commit
         return GetTeamForSaveTemplateResponseDto.of(teamTitleResponseDtoList);
     }
+    @Transactional
     public String saveTemplateByUserId(SaveTemplateResponseDto saveTemplateResponseDto){
-        Optional<Template> template = templateRepository.findById(saveTemplateResponseDto.getTemplateid());
+        Template template = getTemplateByTemplateId(saveTemplateResponseDto.getTemplateid());
         Optional<User> user = userRepository.findById(saveTemplateResponseDto.getUserid());
-        TemplateDownload templateDownload = TemplateDownload.createTemplateDownload(user.get(),template.get());
+        TemplateDownload templateDownload = TemplateDownload.createTemplateDownload(user.get(),template);
         templateDownloadRepository.save(templateDownload);
         return "저장";
-
     }
     private List<TemplateDetailBaseRelateDto> createTemplateDetailRelateTemplateDto(Template template){
         List<Template> templateList = getTemplatesBySameCategoryAndId(template);
