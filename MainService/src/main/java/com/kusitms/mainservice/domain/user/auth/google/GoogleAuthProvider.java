@@ -56,7 +56,6 @@ public class GoogleAuthProvider {
 
     public String getGoogleOAuthToken(String code) {
         ResponseEntity<String> stringGoogleOAuthToken = createPostGoogleRequest(code);
-        System.out.println(stringGoogleOAuthToken);
         GoogleOAuthToken googleOAuthToken;
         try {
             googleOAuthToken = objectMapper.readValue(stringGoogleOAuthToken.getBody(), GoogleOAuthToken.class);
