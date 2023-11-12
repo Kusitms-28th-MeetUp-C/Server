@@ -1,24 +1,29 @@
 package com.kusitms.mainservice.domain.user.auth.kakao;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class KakaoUserInfo {
-    private long id;
+    private Long id;
     private KakaoAccount kakaoAccount;
-    private String picture;
-
+    private Properties properties;
     @Getter
+    @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
     public static class KakaoAccount {
-        private KakaoProfile profile;
+        private boolean hasEmail;
         private String email;
-
     }
-
     @Getter
-    public static class KakaoProfile {
+    @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
+    public static class Properties {
         private String nickname;
+        private String profileImage;
     }
 }

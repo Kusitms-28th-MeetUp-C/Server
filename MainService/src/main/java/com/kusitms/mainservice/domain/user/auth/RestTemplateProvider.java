@@ -16,8 +16,15 @@ public class RestTemplateProvider {
     private final KakaoAuthProvider kakaoAuthProvider;
 
     public PlatformUserInfo getUserInfoUsingRestTemplate(Platform platform, String accessToken) {
-        ResponseEntity<String> platformResponse = getUserInfoFromPlatform(platform, accessToken);
+        ResponseEntity<String> platformResponse = getPlatformResponseFromPlatform(platform, accessToken);
         return getUserInfoFromPlatformInfo(platform, platformResponse.getBody());
+    }
+
+    private ResponseEntity<String> getPlatformResponseFromPlatform(Platform platform, String accessToken){
+        if (platform.equals(Platform.KAKAO))
+            return getUserInfoFromPlatform(platform, accessToken);
+        String googleAccessToken = googleAuthProvider.getGoogleOAuthToken(accessToken);
+        return getUserInfoFromPlatform(platform, googleAccessToken);
     }
 
     private ResponseEntity<String> getUserInfoFromPlatform(Platform platform, String accessToken) {
@@ -32,13 +39,12 @@ public class RestTemplateProvider {
             return PlatformUserInfo.createPlatformUserInfo(
                     Long.toString(kakaoUserInfo.getId()),
                     kakaoUserInfo.getKakaoAccount().getEmail(),
-                    kakaoUserInfo.getKakaoAccount().getProfile().getNickname(),
-                    kakaoUserInfo.getPicture());
+                    kakaoUserInfo.getProperties().getNickname(),
+                    kakaoUserInfo.getProperties().getProfileImage());
         } else {
             GoogleUserInfo googleUserInfo = googleAuthProvider.getGoogleUserInfoFromPlatformInfo(platformInfo);
             return PlatformUserInfo.createPlatformUserInfo(
                     googleUserInfo.getId(),
-//                    Long.toString(googleUserInfo.getId()),
                     googleUserInfo.getEmail(),
                     googleUserInfo.getName(),
                     googleUserInfo.getPicture());
