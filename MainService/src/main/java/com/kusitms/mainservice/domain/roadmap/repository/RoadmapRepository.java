@@ -2,8 +2,12 @@ package com.kusitms.mainservice.domain.roadmap.repository;
 
 import com.kusitms.mainservice.domain.roadmap.domain.Roadmap;
 import com.kusitms.mainservice.domain.roadmap.domain.RoadmapType;
+import com.kusitms.mainservice.domain.template.domain.Template;
+import com.kusitms.mainservice.domain.template.domain.TemplateType;
 import com.kusitms.mainservice.domain.user.domain.User;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -27,10 +31,13 @@ public interface RoadmapRepository extends JpaRepository<Roadmap, Long> {
             @Param("title") String title,
             @Param("roadmapType") RoadmapType roadmapType
     );
+    Page<Roadmap> findByTitleContainingAndRoadmapType(String title, RoadmapType roadmapType, Pageable pageable);
 
-    List<Roadmap> findByTitleContaining(String title);
-    List<Roadmap> findByRoadmapType(RoadmapType roadmapType);
-    List<Roadmap> findTop3ByRoadmapType(RoadmapType roadmapType);
+    Page<Roadmap> findByTitleContaining(String title, Pageable pageable);
+    Page<Roadmap> findByRoadmapType(RoadmapType roadmapType, Pageable pageable);
+    Page<Roadmap> findAll(Pageable pageable);
+    List<Roadmap> findTop6ByRoadmapType(RoadmapType roadmapType);
+    List<Roadmap> findFirst6ByRoadmapTypeAndIdNotIn(RoadmapType roadmapType,List<Long> list);
 
     int countByUser(User user);
 

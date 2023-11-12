@@ -10,6 +10,7 @@ import com.kusitms.mainservice.domain.template.dto.response.GetTeamForSaveTempla
 import com.kusitms.mainservice.domain.template.dto.response.TemplateDetailResponseDto;
 import com.kusitms.mainservice.global.common.SuccessResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,8 +21,8 @@ public class RoadmapController {
     private final RoadmapService roadmapService;
 
     @PostMapping("/get")
-    public ResponseEntity<SuccessResponse<?>> getRoadmapByTitleAndRoadmapType(@RequestBody SearchRoadmapRequestDto searchRoadmapRequestDto){
-        final SearchRoadmapResponseDto searchRoadmapResponseDto = roadmapService.searchRoadmapByTitleAndRoadmapType(searchRoadmapRequestDto);
+    public ResponseEntity<SuccessResponse<?>> getRoadmapByTitleAndRoadmapType(@RequestBody SearchRoadmapRequestDto searchRoadmapRequestDto, Pageable pageable){
+        final SearchRoadmapResponseDto searchRoadmapResponseDto = roadmapService.searchRoadmapByTitleAndRoadmapType(searchRoadmapRequestDto, pageable);
         return SuccessResponse.ok(searchRoadmapResponseDto);
     }
 

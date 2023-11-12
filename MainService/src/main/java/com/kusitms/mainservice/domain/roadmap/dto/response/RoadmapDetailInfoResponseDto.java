@@ -6,25 +6,25 @@ import com.kusitms.mainservice.domain.user.dto.response.DetailUserResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.List;
+
 @Builder
 @Getter
 public class RoadmapDetailInfoResponseDto {
     private RoadmapType roadmapType;
     private BaseRoadmapResponseDto baseRoadmapResponseDto;
     private DetailUserResponseDto detailUserResponseDto;
-    private String introduction;
-    private SearchRoadmapResponseDto searchRoadmapResponseDto;
-    private String date;
-    private int teamCount;
+    private RoadmapDetailIntro roadmapDetailIntro;
+    private RoadmapDetailRelateRoadmapDto roadmapDetailRelateRoadmapDto;
 
-    public static RoadmapDetailInfoResponseDto of(Roadmap roadmap, BaseRoadmapResponseDto baseRoadmapResponseDto, DetailUserResponseDto detailUserResponseDto, String introduction, SearchRoadmapResponseDto searchRoadmapResponseDto, int teamCount){
+
+    public static RoadmapDetailInfoResponseDto of(Roadmap roadmap, BaseRoadmapResponseDto baseRoadmapResponseDto, DetailUserResponseDto detailUserResponseDto, RoadmapDetailIntro roadmapDetailIntro, RoadmapDetailRelateRoadmapDto roadmapDetailRelateRoadmapDto){
         return RoadmapDetailInfoResponseDto.builder()
                 .roadmapType(roadmap.getRoadmapType())
                 .baseRoadmapResponseDto(baseRoadmapResponseDto)
                 .detailUserResponseDto(detailUserResponseDto)
-                .introduction(introduction)
-                .searchRoadmapResponseDto(searchRoadmapResponseDto)
-                .teamCount(teamCount)
+                .roadmapDetailIntro(roadmapDetailIntro)
+                .roadmapDetailRelateRoadmapDto(roadmapDetailRelateRoadmapDto)
                 .build();
     }
 
