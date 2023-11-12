@@ -19,6 +19,8 @@ import com.kusitms.mainservice.domain.template.dto.response.BaseCustomTemplateRe
 import com.kusitms.mainservice.domain.template.dto.response.CustomTemplateDetailResponseDto;
 import com.kusitms.mainservice.domain.template.dto.response.OriginalTemplateResponseDto;
 import com.kusitms.mainservice.domain.template.dto.response.TemplateDownloadDetailResponseDto;
+import com.kusitms.mainservice.domain.template.mongoRepository.CustomTemplateContentRepository;
+import com.kusitms.mainservice.domain.template.mongoRepository.TemplateContentRepository;
 import com.kusitms.mainservice.domain.template.repository.*;
 import com.kusitms.mainservice.domain.user.domain.User;
 import com.kusitms.mainservice.domain.user.dto.response.MakerResponseDto;
@@ -37,11 +39,12 @@ import static com.kusitms.mainservice.global.error.ErrorCode.*;
 
 @Slf4j
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 @Service
 public class TemplateManageService {
     private final TemplateRepository templateRepository;
     private final TemplateContentRepository teamContentRepository;
+    private final CustomTemplateContentRepository customTemplateContentRepository;
     private final CustomTemplateRepository customTemplateRepository;
     private final CustomRoadmapRepository customRoadmapRepository;
     private final UserRepository userRepository;
@@ -51,7 +54,7 @@ public class TemplateManageService {
     private final RoadmapRepository roadmapRepository;
     private final ReviewerRepository reviewerRepository;
 
-    public OriginalTemplateResponseDto getOriginalTemplateInfo(Long userId, Long templateId){
+    public OriginalTemplateResponseDto getOriginalTemplateInfo(Long userId, Long templateId) {
         Template template = getTemplateFromTemplateId(templateId);
         TemplateContent templateContent = getTemplateContentFromTemplateId(templateId);
         Roadmap roadmap = getRoadmapFromUserIdAndTemplateId(userId, templateId);
@@ -62,7 +65,7 @@ public class TemplateManageService {
 
     public CustomTemplateDetailResponseDto getTeamTemplateDetailInfo(Long userId, String roadmapTitle, String teamTitle, Long templateId) {
         CustomTemplate customTemplate = getCustomTemplateFromTemplateId(templateId);
-        TemplateContent templateContent = getTemplateContentFromTemplateId(templateId);
+        CustomTemplateContent templateContent = getCustomTemplateContentFromTemplateId(templateId);
         CustomRoadmap relatedRoadmap = getCustomRoadmapFromUserIdAndTitle(userId, roadmapTitle);
         CustomRoadmapDetailResponseDto baseRoadmapResponseDto = createCustomRoadmapDetailResponseDto(relatedRoadmap);
         Team team = getTeamFromTitleAndUserId(userId, teamTitle);
@@ -79,12 +82,12 @@ public class TemplateManageService {
 
     public TemplateDownloadDetailResponseDto getDownloadCustomTemplateDetailInfo(Long templateId) {
         CustomTemplate customTemplate = getCustomTemplateFromTemplateId(templateId);
-        TemplateContent templateContent = getTemplateContentFromTemplateId(templateId);
+        CustomTemplateContent templateContent = getCustomTemplateContentFromTemplateId(templateId);
         Long relatedTemplateId = customTemplate.getTemplateDownload().getId();
         return TemplateDownloadDetailResponseDto.ofCustomTemplate(customTemplate, relatedTemplateId, templateContent.getContent());
     }
 
-    public void createTemplateReview(Long userId, TemplateReviewRequestDto templateReviewRequestDto){
+    public void createTemplateReview(Long userId, TemplateReviewRequestDto templateReviewRequestDto) {
         User user = getUserFromUserId(userId);
         Template template = getTemplateFromTemplateId(templateReviewRequestDto.getMeetingId());
         TemplateReview createdTemplateReview = TemplateReview.createTemplateReview(templateReviewRequestDto.getContent(), templateReviewRequestDto.getRating());
@@ -93,8 +96,7 @@ public class TemplateManageService {
         saveTemplateReview(createdTemplateReview);
     }
 
-
-    private MakerResponseDto createMakerResponseDto(Template template, Long sessionId){
+    private MakerResponseDto createMakerResponseDto(Template template, Long sessionId) {
         User maker = template.getUser();
         int templateCount = getCreatedTemplateCount(maker.getId());
         int roadmapCount = getCreatedRoadmapCount(maker.getId());
@@ -102,7 +104,7 @@ public class TemplateManageService {
     }
 
     private BaseRoadmapResponseDto createBaseRoadmapResponseDto(Roadmap roadmap) {
-        if(Objects.isNull(roadmap)) return null;
+        if (Objects.isNull(roadmap)) return null;
         List<RoadmapDetailResponseDto> roadmapDetailResponseDtoList = RoadmapDetailResponseDto.listOf(roadmap);
         return BaseRoadmapResponseDto.of(roadmap, roadmapDetailResponseDtoList);
     }
@@ -125,20 +127,20 @@ public class TemplateManageService {
                 .collect(Collectors.toList());
     }
 
-    private int getCreatedTemplateCount(Long userId){
+    private int getCreatedTemplateCount(Long userId) {
         return templateRepository.countByUserId(userId);
     }
 
-    private int getCreatedRoadmapCount(Long userId){
+    private int getCreatedRoadmapCount(Long userId) {
         return roadmapRepository.countByUserId(userId);
     }
 
-    private Roadmap getRoadmapFromUserIdAndTemplateId(Long userId, Long templateId){
+    private Roadmap getRoadmapFromUserIdAndTemplateId(Long userId, Long templateId) {
         return roadmapRepository.findRoadmapByMakerIdAndTemplateId(userId, templateId)
                 .orElse(null);
     }
 
-    private TemplateDownload getTemplateDownloadFromUserIdAndTemplateId(Long userId, Long templateId){
+    private TemplateDownload getTemplateDownloadFromUserIdAndTemplateId(Long userId, Long templateId) {
         return templateDownloadRepository.findByUserIdAndTemplateId(userId, templateId)
                 .orElseThrow(() -> new EntityNotFoundException(TEMPLATE_NOT_FOUND));
     }
@@ -146,6 +148,11 @@ public class TemplateManageService {
     private Team getTeamFromTitleAndUserId(Long userId, String title) {
         return teamRepository.findByUserIdAndTitle(userId, title)
                 .orElseThrow(() -> new EntityNotFoundException(TEAM_NOT_FOUND));
+    }
+
+    private CustomTemplateContent getCustomTemplateContentFromTemplateId(Long templateId) {
+        return customTemplateContentRepository.findByTemplateId(templateId)
+                .orElseThrow(() -> new EntityNotFoundException(TEMPLATE_CONTENT_NOT_FOUND));
     }
 
     private CustomRoadmap getCustomRoadmapFromUserIdAndTitle(Long userId, String title) {
@@ -168,16 +175,16 @@ public class TemplateManageService {
                 .orElseThrow(() -> new EntityNotFoundException(TEMPLATE_NOT_FOUND));
     }
 
-    private User getUserFromUserId(Long userId){
+    private User getUserFromUserId(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND));
     }
 
-    private void saveReviewer(Reviewer reviewer){
+    private void saveReviewer(Reviewer reviewer) {
         reviewerRepository.save(reviewer);
     }
 
-    private void saveTemplateReview(TemplateReview templateReview){
+    private void saveTemplateReview(TemplateReview templateReview) {
         templateReviewRepository.save(templateReview);
     }
 }
