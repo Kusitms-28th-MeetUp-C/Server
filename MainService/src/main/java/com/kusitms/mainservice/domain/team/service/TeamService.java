@@ -1,9 +1,12 @@
 package com.kusitms.mainservice.domain.team.service;
 
+import com.kusitms.mainservice.domain.roadmap.domain.CustomRoadmap;
 import com.kusitms.mainservice.domain.roadmap.domain.Roadmap;
 import com.kusitms.mainservice.domain.roadmap.domain.RoadmapSpace;
 import com.kusitms.mainservice.domain.roadmap.domain.RoadmapTemplate;
 import com.kusitms.mainservice.domain.roadmap.dto.response.BaseRoadmapResponseDto;
+import com.kusitms.mainservice.domain.roadmap.dto.response.CustomRoadmapDetailResponseDto;
+import com.kusitms.mainservice.domain.roadmap.dto.response.CustomRoadmapSpaceDetailResponseDto;
 import com.kusitms.mainservice.domain.roadmap.dto.response.RoadmapDetailResponseDto;
 import com.kusitms.mainservice.domain.team.domain.Team;
 import com.kusitms.mainservice.domain.team.domain.TeamSpace;
@@ -76,7 +79,7 @@ public class TeamService {
                 .map(team ->
                         TeamListElementsResponseDto.of(
                                 createTeamResponseDto(team),
-                                createBaseRoadmapResponseDto(team.getRoadmapDownload().getRoadmap())))
+                                customRoadmapDetailResponseDto(team.getRoadmapDownload().getCustomRoadmap())))
                 .collect(Collectors.toList());
     }
 
@@ -85,9 +88,10 @@ public class TeamService {
         return TeamResponseDto.of(team, teamSpaceResponseDtoList);
     }
 
-    private BaseRoadmapResponseDto createBaseRoadmapResponseDto(Roadmap roadmap) {
-        List<RoadmapDetailResponseDto> roadmapDetailResponseDtoList = RoadmapDetailResponseDto.listOf(roadmap);
-        return BaseRoadmapResponseDto.of(roadmap, roadmapDetailResponseDtoList);
+    private CustomRoadmapDetailResponseDto customRoadmapDetailResponseDto(CustomRoadmap roadmap) {
+        List<CustomRoadmapSpaceDetailResponseDto> customRoadmapSpaceDetailResponseDtoList
+                = CustomRoadmapSpaceDetailResponseDto.listOf(roadmap);
+        return CustomRoadmapDetailResponseDto.of(roadmap, customRoadmapSpaceDetailResponseDtoList);
     }
 
     private List<TeamSpaceResponseDto> createTeamSpaceResponseDtoList(List<TeamSpace> teamSpaceList) {
