@@ -124,11 +124,6 @@ public class TemplateManageService {
         return roadmapRepository.countByUserId(userId);
     }
 
-    private Roadmap getRoadmapFromUserIdAndTemplateId(Long userId, Long templateId) {
-        return roadmapRepository.findRoadmapByMakerIdAndTemplateId(userId, templateId)
-                .orElse(null);
-    }
-
     private TemplateDownload getTemplateDownloadFromUserIdAndTemplateId(Long userId, Long templateId) {
         return templateDownloadRepository.findByUserIdAndTemplateId(userId, templateId)
                 .orElseThrow(() -> new EntityNotFoundException(TEMPLATE_NOT_FOUND));
