@@ -82,7 +82,7 @@ public class TemplateService {
 
     }
     private List<TemplateDetailBaseRelateDto> createTemplateDetailRelateTemplateDto(Template template){
-        List<Template> templateList = getTemplatesBySameCategoryAndId(Optional.of(template));
+        List<Template> templateList = getTemplatesBySameCategoryAndId(template);
         List<TemplateDetailBaseRelateDto> templateDetailBaseRelateDtoList = createTemplateDetailRelateTemplateDtoList(templateList);
         return templateDetailBaseRelateDtoList;
     }
@@ -239,17 +239,9 @@ private TemplateContentListResponseDto getTemplateContentListByTemplateId(Templa
     private DetailUserResponseDto createDetailUserResponseDto(User user){
         return authService.createDetailUserResponseDto(user);
     }
-    private List<Template> getTemplatesBySameCategoryAndId(Optional<Template> template){
-        List<Template> templates = templateRepository.findTop4ByTemplateType(template.get().getTemplateType());
-//        template.ifPresent(t -> templates.removeIf(existingTemplate -> existingTemplate.getId().equals(t.getId())));
-        int templatesToFetch = 4 - templates.size();
-        if (templatesToFetch > 0) {
-            List<Template> additionalTemplates = templateRepository.findFirst4ByTemplateTypeAndIdNotIn(
-                    template.get().getTemplateType(),
-                    templates.stream().map(Template::getId).collect(Collectors.toList())
-            );
-            templates.addAll(additionalTemplates.subList(0, Math.min(templatesToFetch, additionalTemplates.size())));
-        }
+    private List<Template> getTemplatesBySameCategoryAndId(Template template){
+//
+        List<Template> templates = templateRepository.findTop4ByTemplateTypeAndIdNot(template.getTemplateType(), template.getId());
         return templates;
     }
 }

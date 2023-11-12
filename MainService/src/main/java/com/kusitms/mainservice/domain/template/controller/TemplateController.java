@@ -1,9 +1,5 @@
 package com.kusitms.mainservice.domain.template.controller;
 
-
-import com.kusitms.mainservice.domain.roadmap.dto.request.SearchRoadmapRequestDto;
-import com.kusitms.mainservice.domain.roadmap.dto.response.SearchRoadmapResponseDto;
-import com.kusitms.mainservice.domain.template.domain.TemplateType;
 import com.kusitms.mainservice.domain.template.dto.request.SearchTemplateRequsetDto;
 import com.kusitms.mainservice.domain.template.dto.response.*;
 import com.kusitms.mainservice.domain.template.service.TemplateService;
@@ -14,8 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import static com.kusitms.mainservice.domain.template.domain.TemplateType.getEnumTemplateTypeFromStringTemplateType;
 
 
 @RequiredArgsConstructor
