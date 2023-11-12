@@ -1,9 +1,9 @@
-package com.kusitms.mainservice.domain.user.domain;
+package com.kusitms.mainservice.domain.user.auth.google;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class OAuthToken {
+public class GoogleOAuthToken {
 
     private String accessToken;
     private String expiresIn;
@@ -12,10 +12,10 @@ public class OAuthToken {
     private String scope;
     private String tokenType;
 
-    public OAuthToken() {
+    public GoogleOAuthToken() {
     }
 
-    public OAuthToken(String accessToken, String expiresIn, String idToken, String refreshToken, String scope, String tokenType) {
+    public GoogleOAuthToken(String accessToken, String expiresIn, String idToken, String refreshToken, String scope, String tokenType) {
         this.accessToken = accessToken;
         this.expiresIn = expiresIn;
         this.idToken = idToken;
