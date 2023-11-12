@@ -16,7 +16,10 @@ import java.util.Optional;
 @Repository
 public interface TemplateRepository extends JpaRepository<Template, Long> {
     List<Template> findTop3ByTemplateType(TemplateType templateType);
-    List<Template> findAllByTemplateType(TemplateType templateType);
+    List<Template> findTop4ByTemplateType(TemplateType templateType);
+    List<Template> findFirst4ByTemplateTypeAndIdNotIn(TemplateType templateType,List<Long> list);
+    List<Template> findTop5ByTemplateType(TemplateType templateType);
+
     List<Template> findByTitleContaining(String keyword);
     Optional<Template> findById(Long Id);
     int countByUser(User user);
@@ -30,5 +33,6 @@ public interface TemplateRepository extends JpaRepository<Template, Long> {
             @Param("title") String title,
             @Param("templateType") TemplateType templateType
     );
+
     List<Template> findByTemplateType(TemplateType templateType);
 }

@@ -9,11 +9,11 @@ import java.util.List;
 @Getter
 public class TemplateReviewResponseDto {
     private double ratingAverage;
-    private List<ReviewContentResponseDto> reviews;
-    public static TemplateReviewResponseDto of(double ratingAverage, List<ReviewContentResponseDto> reviews){
+    private int reviewCount;
+    public static TemplateReviewResponseDto of(double ratingAverage, int reviewCount){
         return TemplateReviewResponseDto.builder()
                 .ratingAverage(ratingAverage)
-                .reviews(reviews)
+                .reviewCount(reviewCount)
                 .build();
     }
 }

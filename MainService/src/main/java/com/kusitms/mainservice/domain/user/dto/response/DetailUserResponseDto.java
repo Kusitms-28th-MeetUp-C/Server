@@ -10,6 +10,7 @@ public class DetailUserResponseDto {
     private Long id;
     private String profile;
     private String name;
+    private String email;
     private int templateNum;
     private int roadmapNum;
 
@@ -18,6 +19,7 @@ public class DetailUserResponseDto {
                 .id(user.getId())
                 .profile(user.getProfile())
                 .name(user.getName())
+                .email(user.getEmail())
                 .templateNum(templateNum)
                 .roadmapNum(roadmapNum)
                 .build();
