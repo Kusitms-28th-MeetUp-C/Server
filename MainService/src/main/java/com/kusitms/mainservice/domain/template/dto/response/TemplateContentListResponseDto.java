@@ -12,13 +12,11 @@ import java.util.Optional;
 @Builder
 @Getter
 public class TemplateContentListResponseDto {
-    private String introduction;
-    private Map<Long, List<Map<String, String>>> templateContentResponseDtoList;
+    private List<TemplateContent> templateContentList;
 
-    public static TemplateContentListResponseDto of(Template template,Map<Long, List<Map<String, String>>> templateContentResponseDtoList){
+    public static TemplateContentListResponseDto of(List<TemplateContent> templateContentList){
         return TemplateContentListResponseDto.builder()
-                .introduction(template.getIntroduction())
-                .templateContentResponseDtoList(templateContentResponseDtoList)
+                .templateContentList(templateContentList)
                 .build();
     }
 }

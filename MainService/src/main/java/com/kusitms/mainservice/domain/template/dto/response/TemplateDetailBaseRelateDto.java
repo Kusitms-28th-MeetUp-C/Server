@@ -6,25 +6,23 @@ import com.kusitms.mainservice.domain.template.domain.TemplateType;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.List;
-@Builder
 @Getter
-public class SearchBaseTemplateResponseDto {
+@Builder
+public class TemplateDetailBaseRelateDto {
     private Long templateId;
     private String title;
-    private TemplateType templateType;
-    private int count;
+    private int teamCount;
     private int estimatedTime;
-    private String connectedRoadmap;
-
-    public static SearchBaseTemplateResponseDto of(Template template, int count,String connectedRoadmap){
-        return SearchBaseTemplateResponseDto.builder()
+    private double rating;
+    private RoadmapTitleResponseDto connectedRoadmap;
+    public static TemplateDetailBaseRelateDto of(Template template, int teamCount, double rating){
+        return TemplateDetailBaseRelateDto.builder()
                 .templateId(template.getId())
                 .title(template.getTitle())
-                .templateType(template.getTemplateType())
-                .count(count)
                 .estimatedTime(template.getEstimatedTime())
-                .connectedRoadmap(connectedRoadmap)
+                .teamCount(teamCount)
+                .rating(rating)
                 .build();
+
     }
 }

@@ -21,6 +21,7 @@ public class Roadmap {
     private String title;
     @Builder.Default
     private int count = 0;
+    private String introduction;
     @Enumerated(value = EnumType.STRING)
     private RoadmapType roadmapType;
     @OneToMany(mappedBy = "roadmap")

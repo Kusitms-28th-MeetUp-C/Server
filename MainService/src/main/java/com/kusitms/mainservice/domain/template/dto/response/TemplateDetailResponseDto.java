@@ -1,44 +1,34 @@
 package com.kusitms.mainservice.domain.template.dto.response;
 
-import com.kusitms.mainservice.domain.roadmap.dto.response.RoadmapTitleResponseDto;
 import com.kusitms.mainservice.domain.template.domain.Template;
-import com.kusitms.mainservice.domain.template.domain.TemplateContent;
-import com.kusitms.mainservice.domain.template.domain.TemplateType;
 import com.kusitms.mainservice.domain.user.dto.response.DetailUserResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @Builder
 @Getter
 public class TemplateDetailResponseDto {
     private Long templateId;
-    private TemplateType templateType;
+    private String templateType;
     private String title;
-    private int estimatedTime;
-    private List<RoadmapTitleResponseDto> connectedRoadmap;
-    private String date;
+    private TemplateDetailIntroResponseDto templateIntro;
     private TemplateContentListResponseDto templateContentListResponseDto;
-
-    private SearchTemplateResponseDto relatedTemplate;
-    private TemplateReviewResponseDto ratingAndReviews;
-    private int teamCount;
+    private List<TemplateDetailBaseRelateDto> relatedTemplate;
+    private String connectedRoadmap;
     private DetailUserResponseDto user;
 
-    public static TemplateDetailResponseDto of(Template template, TemplateContentListResponseDto templateContentListResponseDto, List<RoadmapTitleResponseDto> connectedRoadmap, SearchTemplateResponseDto searchTemplateResponseDto, int teamCount, TemplateReviewResponseDto ratingAndReviews, DetailUserResponseDto user){
+    public static TemplateDetailResponseDto of(Template template, TemplateDetailIntroResponseDto templateIntro,TemplateContentListResponseDto templateContentListResponseDto, String connectedRoadmap, List<TemplateDetailBaseRelateDto> relatedTemplate, DetailUserResponseDto user){
         return TemplateDetailResponseDto.builder()
                 .templateId(template.getId())
-                .templateType(template.getTemplateType())
+                .templateType(template.getTemplateType().toString())
                 .title(template.getTitle())
-                .estimatedTime(template.getEstimatedTime())
+                .templateIntro(templateIntro)
                 .connectedRoadmap(connectedRoadmap)
-                .date(template.getDate())
                 .templateContentListResponseDto(templateContentListResponseDto)
-                .relatedTemplate(searchTemplateResponseDto)
-                .ratingAndReviews(ratingAndReviews)
-                .teamCount(teamCount)
+                .relatedTemplate(relatedTemplate)
                 .user(user)
                 .build();
     }

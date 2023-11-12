@@ -12,8 +12,12 @@ import com.kusitms.mainservice.domain.template.dto.response.TemplateDetailRespon
 import com.kusitms.mainservice.domain.template.service.TemplateService;
 import com.kusitms.mainservice.global.common.SuccessResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import static com.kusitms.mainservice.domain.template.domain.TemplateType.getEnumTemplateTypeFromStringTemplateType;
 
 
 @RequiredArgsConstructor
@@ -23,8 +27,8 @@ public class TemplateController {
     private final TemplateService templateService;
 
     @PostMapping("/get")
-    public ResponseEntity<SuccessResponse<?>> getTemplateByTitleAndTemplateType(@RequestBody SearchTemplateRequsetDto searchTemplateRequsetDto){
-        final SearchTemplateResponseDto searchTemplateResponseDto = templateService.searchTemplateByTitleAndRoadmapType(searchTemplateRequsetDto);
+    public ResponseEntity<SuccessResponse<?>> getTemplateByTitleAndTemplateType(@RequestBody SearchTemplateRequsetDto searchTemplateRequsetDto,@PageableDefault(size=12) Pageable pageable){
+        final SearchTemplateResponseDto searchTemplateResponseDto = templateService.searchTemplateByTitleAndRoadmapType(searchTemplateRequsetDto, pageable);
         return SuccessResponse.ok(searchTemplateResponseDto);
     }
 
