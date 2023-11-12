@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @Getter
 public class SearchRoadmapRequestDto {
     private String title;
-    private RoadmapType roadmapType;
+    private String roadmapType;
 }

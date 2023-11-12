@@ -24,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.kusitms.mainservice.domain.template.domain.TemplateType.getEnumTemplateTypeFromStringTemplateType;
+
 
 @Slf4j
 @RequiredArgsConstructor
@@ -137,13 +139,23 @@ private TemplateContentListResponseDto getTemplateContentListByTemplateId(Templa
         return getTemplateByTitleAndTemplateType(searchTemplateRequsetDto);
     }
     private List<Template> getTemplateByTitleAndTemplateType(SearchTemplateRequsetDto searchTemplateRequsetDto){
-        return templateRepository.findByTitleAndTemplateType(searchTemplateRequsetDto.getTitle(),searchTemplateRequsetDto.getTemplateType());
+        String title = searchTemplateRequsetDto.getTitle();
+        TemplateType templateType =getEnumTemplateTypeFromStringTemplateType(searchTemplateRequsetDto.getTemplateType());
+        if(TemplateType.ALL.equals(templateType)) {
+            return templateRepository.findByTitleContaining(searchTemplateRequsetDto.getTitle());
+        }
+        else {
+            List<Template> templateList = templateRepository.findByTitleContainingAndTemplateType(title, templateType);
+            return templateList;
+        }
     }
     private Template getTemplateByTemplateId(Long templateId){
         Optional<Template> template = templateRepository.findById(templateId);
         return template.get();
     }
-    private List<Template> getTemplateFromTemplateType(TemplateType templateType) {
+    private List<Template> getTemplateFromTemplateType(String stringTemplateType) {
+        TemplateType templateType = getEnumTemplateTypeFromStringTemplateType(stringTemplateType);
+
         if(TemplateType.ALL.equals(templateType)) {
             return templateRepository.findAll();
         }
@@ -161,10 +173,12 @@ private TemplateContentListResponseDto getTemplateContentListByTemplateId(Templa
                 .collect(Collectors.toList());
     }
     private String getRoadmapTitleResponseDto(Template template) {
+        String title = null;
         List<RoadmapTemplate> roadmapTemplates = template.getRoadmapTemplates();
-//
-        String title = roadmapTemplates.get(0).getRoadmapSpace().getRoadmap().getTitle();
-//        List<RoadmapTitleResponseDto> roadmapTitleResponseDtoList = new ArrayList<>();
+        if(roadmapTemplates.size()!=0) {
+            title = roadmapTemplates.get(0).getRoadmapSpace().getRoadmap().getTitle();
+        }
+        //        List<RoadmapTitleResponseDto> roadmapTitleResponseDtoList = new ArrayList<>();
 //
 //        List<RoadmapTemplate> roadmapTemplates = template.getRoadmapTemplates();
 //        for (RoadmapTemplate roadmapTemplate : roadmapTemplates) {

@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.kusitms.mainservice.domain.roadmap.domain.RoadmapType.getEnumRoadmapTypeFromStringRoadmapType;
+
 @Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -83,7 +85,8 @@ public class RoadmapService {
     private List<Roadmap> getRoadmapByTitle(String title){
         return roadmapRepository.findByTitleContaining(title);
     }
-    private List<Roadmap> getRoadmapByRoadmapType(RoadmapType roadmapType){
+    private List<Roadmap> getRoadmapByRoadmapType(String stringRoadmapType){
+        RoadmapType roadmapType = getEnumRoadmapTypeFromStringRoadmapType(stringRoadmapType);
         if(RoadmapType.ALL.equals(roadmapType)) {
              return roadmapRepository.findAll();
         }
@@ -92,7 +95,16 @@ public class RoadmapService {
         }
     }
     private List<Roadmap> getRoadmapByTitleAndRoadmapType(SearchRoadmapRequestDto searchRoadmapRequestDto){
-        return roadmapRepository.findByTitleAndRoadmapType(searchRoadmapRequestDto.getTitle(),searchRoadmapRequestDto.getRoadmapType());
+        String title = searchRoadmapRequestDto.getTitle();
+        RoadmapType roadmapType = getEnumRoadmapTypeFromStringRoadmapType(searchRoadmapRequestDto.getRoadmapType());
+        if(RoadmapType.ALL.equals(roadmapType)) {
+            return roadmapRepository.findByTitleContaining(title);
+        }
+        else {
+            List<Roadmap> roadmapList = roadmapRepository.findByTitleContainingAndRoadmapType(title,roadmapType);
+            return  roadmapList;
+
+        }
     }
     private List<SearchBaseRoadmapResponseDto> createSearchBaseRoadmapResponseDtoList(List<Roadmap> roadmapList){
         return roadmapList.stream()
@@ -107,8 +119,17 @@ public class RoadmapService {
         return roadmapSpaceList.size();
     }
     private List<Roadmap> getRoadmapListBySameCategoryAndId(Optional<Roadmap> roadmap){
-        List<Roadmap> roadmapList = getRoadmapByRoadmapType(roadmap.get().getRoadmapType());
-        roadmap.ifPresent(t -> roadmapList.removeIf(existingTemplate -> existingTemplate.getId().equals(t.getId())));
+        List<Roadmap> roadmapList = roadmapRepository.findTop4ByRoadmapType(roadmap.get().getRoadmapType());
+       int roadmapListToFetch = 4 - roadmapList.size();
+        if (roadmapListToFetch > 0) {
+            List<Roadmap> additionalRoadmapList = roadmapRepository.findFirst4ByRoadmapTypeAndIdNotIn(
+                    roadmap.get().getRoadmapType(),
+                    roadmapList.stream().map(Roadmap::getId).collect(Collectors.toList())
+            );
+            roadmapList.addAll(additionalRoadmapList.subList(0, Math.min(roadmapListToFetch, additionalRoadmapList.size())));
+        }
+//        List<Roadmap> roadmapList = getRoadmapByRoadmapType(roadmap.get().getRoadmapType());
+//        roadmap.ifPresent(t -> roadmapList.removeIf(existingTemplate -> existingTemplate.getId().equals(t.getId())));
         return roadmapList;
     }
 }

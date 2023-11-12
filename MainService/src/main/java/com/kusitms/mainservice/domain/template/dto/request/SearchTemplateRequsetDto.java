@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @Getter
 public class SearchTemplateRequsetDto {
     private String title;
-    private TemplateType templateType;
+    private String templateType;
 }

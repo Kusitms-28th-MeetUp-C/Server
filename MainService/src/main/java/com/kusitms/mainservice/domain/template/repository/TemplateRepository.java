@@ -33,6 +33,8 @@ public interface TemplateRepository extends JpaRepository<Template, Long> {
             @Param("title") String title,
             @Param("templateType") TemplateType templateType
     );
+    List<Template> findByTitleContainingAndTemplateType(String title, TemplateType templateType);
+
 
     List<Template> findByTemplateType(TemplateType templateType);
 }
