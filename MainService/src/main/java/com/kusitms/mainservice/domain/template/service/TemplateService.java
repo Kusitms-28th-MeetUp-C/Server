@@ -56,7 +56,7 @@ public class TemplateService {
         List<TemplateDetailBaseRelateDto> templateDetailBaseRelateDtoList = createTemplateDetailRelateTemplateDto(template);
         String title = getRoadmapTitleResponseDto(template);
         DetailUserResponseDto detailUserResponseDto =createDetailUserResponseDto(template.getUser());
-        return TemplateDetailResponseDto.of(template,templateDetailIntroResponseDto ,templateContentListResponseDto,title, templateDetailRelateTemplateDto,detailUserResponseDto);
+        return TemplateDetailResponseDto.of(template,templateDetailIntroResponseDto ,templateContentListResponseDto,title, templateDetailBaseRelateDtoList,detailUserResponseDto);
     }
 
     public GetTeamForSaveTemplateResponseDto getTeamForSaveTemplateByUserId(Long id){
