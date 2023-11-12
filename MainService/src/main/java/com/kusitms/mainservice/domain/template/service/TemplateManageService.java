@@ -3,10 +3,8 @@ package com.kusitms.mainservice.domain.template.service;
 import com.kusitms.mainservice.domain.roadmap.domain.CustomRoadmap;
 import com.kusitms.mainservice.domain.roadmap.domain.CustomRoadmapSpace;
 import com.kusitms.mainservice.domain.roadmap.domain.Roadmap;
-import com.kusitms.mainservice.domain.roadmap.dto.response.BaseRoadmapResponseDto;
 import com.kusitms.mainservice.domain.roadmap.dto.response.CustomRoadmapDetailResponseDto;
 import com.kusitms.mainservice.domain.roadmap.dto.response.CustomRoadmapSpaceDetailResponseDto;
-import com.kusitms.mainservice.domain.roadmap.dto.response.RoadmapDetailResponseDto;
 import com.kusitms.mainservice.domain.roadmap.repository.CustomRoadmapRepository;
 import com.kusitms.mainservice.domain.roadmap.repository.RoadmapRepository;
 import com.kusitms.mainservice.domain.team.domain.Team;
@@ -32,7 +30,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.kusitms.mainservice.global.error.ErrorCode.*;
@@ -57,10 +54,8 @@ public class TemplateManageService {
     public OriginalTemplateResponseDto getOriginalTemplateInfo(Long userId, Long templateId) {
         Template template = getTemplateFromTemplateId(templateId);
         TemplateContent templateContent = getTemplateContentFromTemplateId(templateId);
-        Roadmap roadmap = getRoadmapFromUserIdAndTemplateId(userId, templateId);
-        BaseRoadmapResponseDto baseRoadmapResponseDto = createBaseRoadmapResponseDto(roadmap);
         MakerResponseDto makerResponseDto = createMakerResponseDto(template, userId);
-        return OriginalTemplateResponseDto.of(template, templateContent.getContent(), baseRoadmapResponseDto, makerResponseDto);
+        return OriginalTemplateResponseDto.of(template, templateContent.getContent(), makerResponseDto);
     }
 
     public CustomTemplateDetailResponseDto getTeamTemplateDetailInfo(Long userId, String roadmapTitle, String teamTitle, Long templateId) {
@@ -101,12 +96,6 @@ public class TemplateManageService {
         int templateCount = getCreatedTemplateCount(maker.getId());
         int roadmapCount = getCreatedRoadmapCount(maker.getId());
         return MakerResponseDto.of(maker.getName(), templateCount, roadmapCount, sessionId);
-    }
-
-    private BaseRoadmapResponseDto createBaseRoadmapResponseDto(Roadmap roadmap) {
-        if (Objects.isNull(roadmap)) return null;
-        List<RoadmapDetailResponseDto> roadmapDetailResponseDtoList = RoadmapDetailResponseDto.listOf(roadmap);
-        return BaseRoadmapResponseDto.of(roadmap, roadmapDetailResponseDtoList);
     }
 
     private TeamResponseDto createTeamResponseDto(Team team) {

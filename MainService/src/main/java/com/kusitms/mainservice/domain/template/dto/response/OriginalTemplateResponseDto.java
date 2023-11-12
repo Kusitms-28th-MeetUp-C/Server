@@ -14,18 +14,14 @@ public class OriginalTemplateResponseDto {
     private String templateName;
     private TemplateType templateType;
     private String content;
-    private BaseRoadmapResponseDto roadmapInfo;
     private MakerResponseDto makerInfo;
 
-    public static OriginalTemplateResponseDto of(Template template, String content,
-                                                 BaseRoadmapResponseDto roadmapInfo,
-                                                 MakerResponseDto makerResponseDto) {
+    public static OriginalTemplateResponseDto of(Template template, String content, MakerResponseDto makerResponseDto) {
         return OriginalTemplateResponseDto.builder()
                 .templateId(template.getId())
                 .templateName(template.getTitle())
                 .templateType(template.getTemplateType())
                 .content(content)
-                .roadmapInfo(roadmapInfo)
                 .makerInfo(makerResponseDto)
                 .build();
     }
