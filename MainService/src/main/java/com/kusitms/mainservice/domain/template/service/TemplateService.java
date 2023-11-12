@@ -43,10 +43,11 @@ public class TemplateService {
     private final UserRepository userRepository;
     private final AuthService authService;
 
-    public SearchTemplateResponseDto searchTemplateByTitleAndRoadmapType(SearchTemplateRequsetDto searchTemplateRequsetDto,Pageable pageable){
+    public Page<SearchBaseTemplateResponseDto> searchTemplateByTitleAndRoadmapType(SearchTemplateRequsetDto searchTemplateRequsetDto,Pageable pageable){
         Page<Template> templateList = getTemplateListByTitleAndTemplateType(searchTemplateRequsetDto, pageable);
         Page<SearchBaseTemplateResponseDto> searchBaseTemplateResponseDtoList = getTemplatesWithPaging(templateList,pageable);
-        return SearchTemplateResponseDto.of(searchBaseTemplateResponseDtoList);
+//        return SearchTemplateResponseDto.of(searchBaseTemplateResponseDtoList);
+        return searchBaseTemplateResponseDtoList;
     }
 
     public TemplateDetailResponseDto getTemplateDetail(Long templateId){
