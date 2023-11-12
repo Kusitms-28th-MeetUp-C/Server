@@ -16,8 +16,12 @@ import com.kusitms.mainservice.domain.user.domain.User;
 import com.kusitms.mainservice.domain.user.dto.response.DetailUserResponseDto;
 import com.kusitms.mainservice.domain.user.repository.UserRepository;
 import com.kusitms.mainservice.domain.user.service.AuthService;
+import com.kusitms.mainservice.global.pagination.dto.PagingResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,9 +45,9 @@ public class TemplateService {
     private final UserRepository userRepository;
     private final AuthService authService;
 
-    public SearchTemplateResponseDto searchTemplateByTitleAndRoadmapType(SearchTemplateRequsetDto searchTemplateRequsetDto){
-        List<Template> templateList = getTemplateListByTitleAndTemplateType(searchTemplateRequsetDto);
-        List<SearchBaseTemplateResponseDto> searchBaseTemplateResponseDtoList = createSearchBaseTemplateResponseDtoList(templateList);
+    public SearchTemplateResponseDto searchTemplateByTitleAndRoadmapType(SearchTemplateRequsetDto searchTemplateRequsetDto,Pageable pageable){
+        Page<Template> templateList = getTemplateListByTitleAndTemplateType(searchTemplateRequsetDto, pageable);
+        Page<SearchBaseTemplateResponseDto> searchBaseTemplateResponseDtoList = getTemplatesWithPaging(templateList,pageable);
         return SearchTemplateResponseDto.of(searchBaseTemplateResponseDtoList);
     }
 
@@ -129,23 +133,28 @@ private TemplateContentListResponseDto getTemplateContentListByTemplateId(Templa
 }
 
 
-    private List<Template> getTemplateListByTitleAndTemplateType(SearchTemplateRequsetDto searchTemplateRequsetDto){
+    private Page<Template> getTemplateListByTitleAndTemplateType(SearchTemplateRequsetDto searchTemplateRequsetDto,Pageable pageable){
+
         if(searchTemplateRequsetDto.getTemplateType()==null&&!(searchTemplateRequsetDto.getTitle()==null)){
-            return getTemplateByTitle(searchTemplateRequsetDto.getTitle());
+            return getTemplateByTitle(searchTemplateRequsetDto.getTitle(), pageable);
         }
         if(!(searchTemplateRequsetDto.getTemplateType()==null)&&searchTemplateRequsetDto.getTitle()==null) {
-            return getTemplateFromTemplateType(searchTemplateRequsetDto.getTemplateType());
+            return getTemplateFromTemplateType(searchTemplateRequsetDto.getTemplateType(), pageable);
         }
-        return getTemplateByTitleAndTemplateType(searchTemplateRequsetDto);
+        return getTemplateByTitleAndTemplateType(searchTemplateRequsetDto,pageable);
     }
-    private List<Template> getTemplateByTitleAndTemplateType(SearchTemplateRequsetDto searchTemplateRequsetDto){
+//    private PageResponse getTemplate(List<Template> templateList){
+//
+//        return PageResponse.of()
+//    }
+    private Page<Template> getTemplateByTitleAndTemplateType(SearchTemplateRequsetDto searchTemplateRequsetDto, Pageable pageable){
         String title = searchTemplateRequsetDto.getTitle();
         TemplateType templateType =getEnumTemplateTypeFromStringTemplateType(searchTemplateRequsetDto.getTemplateType());
         if(TemplateType.ALL.equals(templateType)) {
-            return templateRepository.findByTitleContaining(searchTemplateRequsetDto.getTitle());
+            return templateRepository.findByTitleContaining(searchTemplateRequsetDto.getTitle(), pageable);
         }
         else {
-            List<Template> templateList = templateRepository.findByTitleContainingAndTemplateType(title, templateType);
+            Page<Template> templateList = templateRepository.findByTitleContainingAndTemplateType(title, templateType,pageable);
             return templateList;
         }
     }
@@ -153,24 +162,25 @@ private TemplateContentListResponseDto getTemplateContentListByTemplateId(Templa
         Optional<Template> template = templateRepository.findById(templateId);
         return template.get();
     }
-    private List<Template> getTemplateFromTemplateType(String stringTemplateType) {
+    private Page<Template> getTemplateFromTemplateType(String stringTemplateType, Pageable pageable) {
         TemplateType templateType = getEnumTemplateTypeFromStringTemplateType(stringTemplateType);
 
         if(TemplateType.ALL.equals(templateType)) {
-            return templateRepository.findAll();
+            return templateRepository.findAll(pageable);
         }
         else {
-            return templateRepository.findByTemplateType(templateType);
+            return templateRepository.findByTemplateType(templateType, pageable);
         }
     }
-    private List<SearchBaseTemplateResponseDto> createSearchBaseTemplateResponseDtoList(List<Template> templateList) {
-        return templateList.stream()
-                .map(template ->
-                        SearchBaseTemplateResponseDto.of(
-                                template,
-                                template.getCount(),//getTeamCount(template),
-                                getRoadmapTitleResponseDto(template)))
-                .collect(Collectors.toList());
+    public Page<SearchBaseTemplateResponseDto> getTemplatesWithPaging(Page<Template> templatePage, Pageable pageable) {
+
+        return templatePage.map(template ->
+                SearchBaseTemplateResponseDto.of(
+                        template,
+                        template.getCount(),
+                        getRoadmapTitleResponseDto(template)
+                )
+        );
     }
     private String getRoadmapTitleResponseDto(Template template) {
         String title = null;
@@ -190,8 +200,8 @@ private TemplateContentListResponseDto getTemplateContentListByTemplateId(Templa
 //        }
         return title;
     }
-    private List<Template> getTemplateByTitle(String title) {
-        return templateRepository.findByTitleContaining(title);
+    private Page<Template> getTemplateByTitle(String title, Pageable pageable) {
+        return templateRepository.findByTitleContaining(title, pageable);
     }
 
     private TemplateReviewResponseDto getRatingAndReviewCount(Template template){
