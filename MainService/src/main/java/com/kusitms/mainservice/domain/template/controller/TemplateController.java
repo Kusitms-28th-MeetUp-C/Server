@@ -26,11 +26,6 @@ import static com.kusitms.mainservice.domain.template.domain.TemplateType.getEnu
 public class TemplateController {
     private final TemplateService templateService;
 
-//    @GetMapping("/get/page")
-//    public ResponseEntity<SuccessResponse<?>> find(Pageable pageable){
-//
-//        return SuccessResponse.ok(templateService.getTemplate(pageable, getEnumTemplateTypeFromStringTemplateType("it")));
-//    }
     @PostMapping("/get")
     public ResponseEntity<SuccessResponse<?>> getTemplateByTitleAndTemplateType(@RequestBody SearchTemplateRequsetDto searchTemplateRequsetDto,@PageableDefault(size=12) Pageable pageable){
         final SearchTemplateResponseDto searchTemplateResponseDto = templateService.searchTemplateByTitleAndRoadmapType(searchTemplateRequsetDto, pageable);
