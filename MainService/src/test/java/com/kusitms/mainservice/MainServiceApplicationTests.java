@@ -1,12 +1,11 @@
 package com.kusitms.mainservice;
 
 import com.kusitms.mainservice.domain.template.domain.TemplateContent;
-import com.kusitms.mainservice.domain.template.repository.TemplateContentRepository;
+import com.kusitms.mainservice.domain.template.mongoRepository.TemplateContentRepository;
 import com.mongodb.client.MongoClient;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.boot.test.context.SpringBootTest;
 
 @DataMongoTest
 class MainServiceApplicationTests {

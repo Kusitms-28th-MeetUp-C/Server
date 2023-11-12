@@ -12,16 +12,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
-@RequestMapping("/api/template/manage")
+@RequestMapping("/api/manage/template")
 @RestController
 public class TemplateManageController {
     private final TemplateManageService templateManageService;
 
     @GetMapping("/team")
     public ResponseEntity<SuccessResponse<?>> getTeamTemplateDetailInfo(@UserId final Long userId,
-                                                                          @RequestParam final Long templateId,
-                                                                          @RequestParam final String roadmapTitle,
-                                                                          @RequestParam final String teamTitle) {
+                                                                        @RequestParam final Long templateId,
+                                                                        @RequestParam final String roadmapTitle,
+                                                                        @RequestParam final String teamTitle) {
         final CustomTemplateDetailResponseDto responseDto = templateManageService.getTeamTemplateDetailInfo(userId, roadmapTitle, teamTitle, templateId);
         return SuccessResponse.ok(responseDto);
     }

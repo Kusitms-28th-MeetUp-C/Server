@@ -10,6 +10,7 @@ import com.kusitms.mainservice.domain.team.repository.TeamRepository;
 import com.kusitms.mainservice.domain.template.domain.*;
 import com.kusitms.mainservice.domain.template.dto.request.SearchTemplateRequsetDto;
 import com.kusitms.mainservice.domain.template.dto.response.*;
+import com.kusitms.mainservice.domain.template.mongoRepository.TemplateContentRepository;
 import com.kusitms.mainservice.domain.template.repository.*;
 
 import com.kusitms.mainservice.domain.user.domain.User;
