@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 @Builder
 @Getter
 public class TeamSpaceResponseDto {
-    private Long spaceId;
     private TeamSpaceType spaceType;
     private String url;
 
@@ -24,7 +23,6 @@ public class TeamSpaceResponseDto {
 
     public static TeamSpaceResponseDto of(TeamSpace teamSpace) {
         return TeamSpaceResponseDto.builder()
-                .spaceId(teamSpace.getId())
                 .spaceType(teamSpace.getTeamSpaceType())
                 .url(teamSpace.getUrl())
                 .build();

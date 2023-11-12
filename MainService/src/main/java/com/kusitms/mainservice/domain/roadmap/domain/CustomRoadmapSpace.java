@@ -22,6 +22,8 @@ public class CustomRoadmapSpace {
     private int step;
     private LocalDate startDate;
     private LocalDate endDate;
+    private boolean isCompleted;
+    private String introduction;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "custom_roadmap_id")
     private CustomRoadmap customRoadmap;

@@ -7,6 +7,7 @@ import com.kusitms.mainservice.domain.template.dto.response.TemplateTitleRespons
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,6 +17,9 @@ public class CustomRoadmapSpaceDetailResponseDto {
     private Long stepId;
     private int step;
     private String title;
+    private LocalDate startTime;
+    private LocalDate endTime;
+    private String introduction;
     private List<BaseCustomTemplateResponseDto> templateList;
 
     public static List<CustomRoadmapSpaceDetailResponseDto> listOf(CustomRoadmap customRoadmap){
@@ -32,6 +36,9 @@ public class CustomRoadmapSpaceDetailResponseDto {
                 .stepId(roadmapSpace.getId())
                 .step(roadmapSpace.getStep())
                 .title(roadmapSpace.getTitle())
+                .startTime(roadmapSpace.getStartDate())
+                .endTime(roadmapSpace.getEndDate())
+                .introduction(roadmapSpace.getIntroduction())
                 .templateList(templateList)
                 .build();
     }
