@@ -2,17 +2,18 @@ package com.kusitms.mainservice.domain.roadmap.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 @Builder
 @Getter
 public class SearchRoadmapResponseDto {
-    List<SearchBaseRoadmapResponseDto> roadmapList;
+    Page<SearchBaseRoadmapResponseDto> roadmapPage;
 
-    public static SearchRoadmapResponseDto of(List<SearchBaseRoadmapResponseDto> roadmapList){
+    public static SearchRoadmapResponseDto of(Page<SearchBaseRoadmapResponseDto> roadmapPage){
         return SearchRoadmapResponseDto.builder()
-                .roadmapList(roadmapList)
+                .roadmapPage(roadmapPage)
                 .build();
     }
 }

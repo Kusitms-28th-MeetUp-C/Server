@@ -8,16 +8,13 @@ import com.kusitms.mainservice.domain.roadmap.dto.response.*;
 import com.kusitms.mainservice.domain.roadmap.repository.RoadmapDownloadRepository;
 import com.kusitms.mainservice.domain.roadmap.repository.RoadmapRepository;
 import com.kusitms.mainservice.domain.roadmap.repository.RoadmapSpaceRepository;
-import com.kusitms.mainservice.domain.template.domain.Template;
-import com.kusitms.mainservice.domain.template.domain.TemplateType;
-import com.kusitms.mainservice.domain.template.dto.response.SearchBaseTemplateResponseDto;
-import com.kusitms.mainservice.domain.template.dto.response.SearchTemplateResponseDto;
-import com.kusitms.mainservice.domain.template.repository.TemplateRepository;
 import com.kusitms.mainservice.domain.user.domain.User;
 import com.kusitms.mainservice.domain.user.dto.response.DetailUserResponseDto;
 import com.kusitms.mainservice.domain.user.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,9 +33,9 @@ public class RoadmapService {
     private final RoadmapSpaceRepository roadmapSpaceRepository;
     private final RoadmapDownloadRepository roadmapDownloadRepository;
     private final AuthService authService;
-    public SearchRoadmapResponseDto searchRoadmapByTitleAndRoadmapType(SearchRoadmapRequestDto searchRoadmapRequestDto){
-        List<Roadmap> roadmapList = getRoadmapListByTitleAndRoadmapType(searchRoadmapRequestDto);
-        List<SearchBaseRoadmapResponseDto> searchBaseRoadmapResponseDtos = createSearchBaseRoadmapResponseDtoList(roadmapList);
+    public SearchRoadmapResponseDto searchRoadmapByTitleAndRoadmapType(SearchRoadmapRequestDto searchRoadmapRequestDto, Pageable pageable){
+        Page<Roadmap> roadmapList = getRoadmapListByTitleAndRoadmapType(searchRoadmapRequestDto, pageable);
+        Page<SearchBaseRoadmapResponseDto> searchBaseRoadmapResponseDtos = createSearchBaseRoadmapResponseDtoPage(roadmapList,pageable);
         return SearchRoadmapResponseDto.of(searchBaseRoadmapResponseDtos);
     }
 
@@ -46,11 +43,18 @@ public class RoadmapService {
         Roadmap roadmap = getRoadmapByRoadmapId(roadmapId);
         BaseRoadmapResponseDto baseRoadmapResponseDto = creatBaseRoadmapResponseDto(roadmap);
         DetailUserResponseDto detailUserResponseDto = createDetailUserResponseDto(roadmap.getUser());
-        String introduction = "";
-        List<SearchBaseRoadmapResponseDto> searchBaseRoadmapResponseDtoList = createSearchBaseRoadmapResponseDtoList(getRoadmapListBySameCategoryAndId(Optional.of(roadmap)));
-        SearchRoadmapResponseDto searchRoadmapResponseDto = createSearchRoadmapResponseDto(searchBaseRoadmapResponseDtoList);
+        RoadmapDetailIntro roadmapDetailIntro = createRoadmapDetailIntro(roadmap);
+        RoadmapDetailRelateRoadmapDto roadmapDetailRelateRoadmapDto = createRoadmapDetailRelateRoadmapDto(roadmap);
+        return RoadmapDetailInfoResponseDto.of(roadmap, baseRoadmapResponseDto,detailUserResponseDto,roadmapDetailIntro,roadmapDetailRelateRoadmapDto);
+    }
+    private RoadmapDetailIntro createRoadmapDetailIntro(Roadmap roadmap){
+        RoadmapDetailBaseIntro roadmapDetailBaseIntro = createRoadmapDetailBaseIntro(roadmap);
+        String introduction = roadmap.getIntroduction();
+        return RoadmapDetailIntro.of(roadmapDetailBaseIntro,introduction );
+    }
+    private RoadmapDetailBaseIntro createRoadmapDetailBaseIntro(Roadmap roadmap){
         int teamCount = getTeamCount(roadmap);
-        return RoadmapDetailInfoResponseDto.of(roadmap, baseRoadmapResponseDto,detailUserResponseDto,introduction,searchRoadmapResponseDto,teamCount);
+        return RoadmapDetailBaseIntro.of(roadmap, teamCount);
     }
     private Roadmap getRoadmapByRoadmapId(Long roadmapId){
         Optional<Roadmap> roadmap = roadmapRepository.findById(roadmapId);
@@ -63,66 +67,77 @@ public class RoadmapService {
     private  List<RoadmapDetailResponseDto> creatRoadmapDetailResponseDtoList(Roadmap roadmap){
         return  RoadmapDetailResponseDto.listOf(roadmap);
     }
-    private List<Roadmap> getRoadmapListByTitleAndRoadmapType(SearchRoadmapRequestDto searchRoadmapRequestDto){
+    private Page<Roadmap> getRoadmapListByTitleAndRoadmapType(SearchRoadmapRequestDto searchRoadmapRequestDto, Pageable pageable){
         if(searchRoadmapRequestDto.getRoadmapType()==null&&!(searchRoadmapRequestDto.getTitle()==null)){
-            return getRoadmapByTitle(searchRoadmapRequestDto.getTitle());
+            return getRoadmapByTitle(searchRoadmapRequestDto.getTitle(),pageable);
         }
         if(!(searchRoadmapRequestDto.getRoadmapType()==null)&&searchRoadmapRequestDto.getTitle()==null) {
-            return getRoadmapByRoadmapType(searchRoadmapRequestDto.getRoadmapType());
+            return getRoadmapByRoadmapType(searchRoadmapRequestDto.getRoadmapType(), pageable);
         }
-        return getRoadmapByTitleAndRoadmapType(searchRoadmapRequestDto);
+        return getRoadmapByTitleAndRoadmapType(searchRoadmapRequestDto,pageable);
     }
     private DetailUserResponseDto createDetailUserResponseDto(User user){
         return authService.createDetailUserResponseDto(user);
     }
-    private SearchRoadmapResponseDto createSearchRoadmapResponseDto(List<SearchBaseRoadmapResponseDto> searchBaseRoadmapResponseDtoList) {
-        return SearchRoadmapResponseDto.of(searchBaseRoadmapResponseDtoList);
+    private RoadmapDetailRelateRoadmapDto createRoadmapDetailRelateRoadmapDto(Roadmap roadmap) {
+        List<Roadmap> roadmapList = getRoadmapListBySameCategoryAndId(Optional.ofNullable(roadmap));
+        List<RoadmapDetailBaseRelateRoadmapDto> roadmapDetailBaseRelateRoadmapDtoList = createRoadmapDetailBaseRelateRoadmapDtoList(roadmapList);
+        return RoadmapDetailRelateRoadmapDto.of(roadmapDetailBaseRelateRoadmapDtoList);
+    }
+    private List<RoadmapDetailBaseRelateRoadmapDto> createRoadmapDetailBaseRelateRoadmapDtoList(List<Roadmap> roadmapList){
+        return roadmapList.stream()
+                .map(roadmap ->
+                        RoadmapDetailBaseRelateRoadmapDto.of(
+                                roadmap,
+                                roadmap.getCount()//getTeamCount(roadmap)
+                        ))
+                .collect(Collectors.toList());
     }
     private int getTeamCount(Roadmap roadmap){
         int rc = roadmapDownloadRepository.countDownloadsByRoadmap(roadmap);
         return rc;
     }
-    private List<Roadmap> getRoadmapByTitle(String title){
-        return roadmapRepository.findByTitleContaining(title);
+    private Page<Roadmap> getRoadmapByTitle(String title, Pageable pageable){
+        return roadmapRepository.findByTitleContaining(title,pageable);
     }
-    private List<Roadmap> getRoadmapByRoadmapType(String stringRoadmapType){
+    private Page<Roadmap> getRoadmapByRoadmapType(String stringRoadmapType,Pageable pageable){
         RoadmapType roadmapType = getEnumRoadmapTypeFromStringRoadmapType(stringRoadmapType);
         if(RoadmapType.ALL.equals(roadmapType)) {
-             return roadmapRepository.findAll();
+             return roadmapRepository.findAll(pageable);
         }
         else {
-            return roadmapRepository.findByRoadmapType(roadmapType);
+            return roadmapRepository.findByRoadmapType(roadmapType,pageable);
         }
     }
-    private List<Roadmap> getRoadmapByTitleAndRoadmapType(SearchRoadmapRequestDto searchRoadmapRequestDto){
+    private Page<Roadmap> getRoadmapByTitleAndRoadmapType(SearchRoadmapRequestDto searchRoadmapRequestDto,Pageable pageable){
         String title = searchRoadmapRequestDto.getTitle();
         RoadmapType roadmapType = getEnumRoadmapTypeFromStringRoadmapType(searchRoadmapRequestDto.getRoadmapType());
         if(RoadmapType.ALL.equals(roadmapType)) {
-            return roadmapRepository.findByTitleContaining(title);
+            return roadmapRepository.findByTitleContaining(title, pageable);
         }
         else {
-            List<Roadmap> roadmapList = roadmapRepository.findByTitleContainingAndRoadmapType(title,roadmapType);
+            Page<Roadmap> roadmapList = roadmapRepository.findByTitleContainingAndRoadmapType(title,roadmapType,pageable);
             return  roadmapList;
 
         }
     }
-    private List<SearchBaseRoadmapResponseDto> createSearchBaseRoadmapResponseDtoList(List<Roadmap> roadmapList){
-        return roadmapList.stream()
-                .map(roadmap ->
+    private Page<SearchBaseRoadmapResponseDto> createSearchBaseRoadmapResponseDtoPage(Page<Roadmap> roadmapPage,Pageable pageable){
+        return roadmapPage.map(roadmap ->
                         SearchBaseRoadmapResponseDto.of(
                                 roadmap,
-                                getRoadmapStep(roadmap)))
-                .collect(Collectors.toList());
+                                getRoadmapStep(roadmap)
+                        )
+                );
     }
     private int getRoadmapStep(Roadmap roadmap){
         List<RoadmapSpace> roadmapSpaceList = roadmapSpaceRepository.findByRoadmapId(roadmap.getId());
         return roadmapSpaceList.size();
     }
     private List<Roadmap> getRoadmapListBySameCategoryAndId(Optional<Roadmap> roadmap){
-        List<Roadmap> roadmapList = roadmapRepository.findTop4ByRoadmapType(roadmap.get().getRoadmapType());
-       int roadmapListToFetch = 4 - roadmapList.size();
+        List<Roadmap> roadmapList = roadmapRepository.findTop6ByRoadmapType(roadmap.get().getRoadmapType());
+       int roadmapListToFetch = 6 - roadmapList.size();
         if (roadmapListToFetch > 0) {
-            List<Roadmap> additionalRoadmapList = roadmapRepository.findFirst4ByRoadmapTypeAndIdNotIn(
+            List<Roadmap> additionalRoadmapList = roadmapRepository.findFirst6ByRoadmapTypeAndIdNotIn(
                     roadmap.get().getRoadmapType(),
                     roadmapList.stream().map(Roadmap::getId).collect(Collectors.toList())
             );
