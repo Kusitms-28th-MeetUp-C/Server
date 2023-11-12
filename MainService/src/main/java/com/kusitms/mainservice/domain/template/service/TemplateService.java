@@ -53,7 +53,7 @@ public class TemplateService {
         Template template = getTemplateByTemplateId(templateId);
         TemplateDetailIntroResponseDto templateDetailIntroResponseDto = createTemplateDetailIntroResponseDto(template);
         TemplateContentListResponseDto templateContentListResponseDto = getTemplateContentListByTemplateId(template);
-        TemplateDetailRelateTemplateDto templateDetailRelateTemplateDto = createTemplateDetailRelateTemplateDto(template);
+        List<TemplateDetailBaseRelateDto> templateDetailBaseRelateDtoList = createTemplateDetailRelateTemplateDto(template);
         String title = getRoadmapTitleResponseDto(template);
         DetailUserResponseDto detailUserResponseDto =createDetailUserResponseDto(template.getUser());
         return TemplateDetailResponseDto.of(template,templateDetailIntroResponseDto ,templateContentListResponseDto,title, templateDetailRelateTemplateDto,detailUserResponseDto);
@@ -80,10 +80,10 @@ public class TemplateService {
         return "저장";
 
     }
-    private TemplateDetailRelateTemplateDto createTemplateDetailRelateTemplateDto(Template template){
+    private List<TemplateDetailBaseRelateDto> createTemplateDetailRelateTemplateDto(Template template){
         List<Template> templateList = getTemplatesBySameCategoryAndId(Optional.of(template));
         List<TemplateDetailBaseRelateDto> templateDetailBaseRelateDtoList = createTemplateDetailRelateTemplateDtoList(templateList);
-        return TemplateDetailRelateTemplateDto.of(templateDetailBaseRelateDtoList);
+        return templateDetailBaseRelateDtoList;
     }
     private List<TemplateDetailBaseRelateDto> createTemplateDetailRelateTemplateDtoList(List<Template> templateList) {
         return templateList.stream()
