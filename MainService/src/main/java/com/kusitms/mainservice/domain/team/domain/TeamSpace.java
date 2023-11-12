@@ -29,4 +29,8 @@ public class TeamSpace {
         team.addTeamSpaceList(teamSpace);
         return teamSpace;
     }
+
+    public void addTeam(Team team){
+        this.team = team;
+    }
 }

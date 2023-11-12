@@ -46,6 +46,7 @@ public class TeamRoadmapService {
     public void addTeamRoadmap(Long userId, TeamRoadmapRequestDto teamRoadmapRequestDto) {
         Team team = getTeamFromTeamId(teamRoadmapRequestDto.getTeamId());
         RoadmapDownload roadmapDownload = getRoadmapDownloadFromRoadmapId(teamRoadmapRequestDto.getRoadmapId(), userId);
+
         team.addRoadmapDownload(roadmapDownload);
     }
 

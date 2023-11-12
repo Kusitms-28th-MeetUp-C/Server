@@ -1,13 +1,8 @@
 package com.kusitms.mainservice.domain.team.service;
 
 import com.kusitms.mainservice.domain.roadmap.domain.CustomRoadmap;
-import com.kusitms.mainservice.domain.roadmap.domain.Roadmap;
-import com.kusitms.mainservice.domain.roadmap.domain.RoadmapSpace;
-import com.kusitms.mainservice.domain.roadmap.domain.RoadmapTemplate;
-import com.kusitms.mainservice.domain.roadmap.dto.response.BaseRoadmapResponseDto;
 import com.kusitms.mainservice.domain.roadmap.dto.response.CustomRoadmapDetailResponseDto;
 import com.kusitms.mainservice.domain.roadmap.dto.response.CustomRoadmapSpaceDetailResponseDto;
-import com.kusitms.mainservice.domain.roadmap.dto.response.RoadmapDetailResponseDto;
 import com.kusitms.mainservice.domain.team.domain.Team;
 import com.kusitms.mainservice.domain.team.domain.TeamSpace;
 import com.kusitms.mainservice.domain.team.domain.TeamType;
@@ -19,8 +14,7 @@ import com.kusitms.mainservice.domain.team.dto.response.TeamListResponseDto;
 import com.kusitms.mainservice.domain.team.dto.response.TeamResponseDto;
 import com.kusitms.mainservice.domain.team.dto.response.TeamSpaceResponseDto;
 import com.kusitms.mainservice.domain.team.repository.TeamRepository;
-import com.kusitms.mainservice.domain.template.domain.Template;
-import com.kusitms.mainservice.domain.template.dto.response.TemplateTitleResponseDto;
+import com.kusitms.mainservice.domain.team.repository.TeamSpaceRepository;
 import com.kusitms.mainservice.domain.user.domain.User;
 import com.kusitms.mainservice.domain.user.repository.UserRepository;
 import com.kusitms.mainservice.global.error.exception.ConflictException;
@@ -46,6 +40,7 @@ import static com.kusitms.mainservice.global.error.ErrorCode.*;
 public class TeamService {
     private final UserRepository userRepository;
     private final TeamRepository teamRepository;
+    private final TeamSpaceRepository teamSpaceRepository;
     private final static int MAX_SPACE_SIZE = 3;
 
     public TeamListResponseDto getAllTeamList(Long userId) {
@@ -61,6 +56,7 @@ public class TeamService {
         Team createTeam = createTeamFromRequestDto(teamRequestDto, user);
         List<TeamSpace> createTeamSpace = createTeamSpaceFromRequestDto(teamRequestDto.getSpaceList(), createTeam);
         List<TeamSpaceResponseDto> teamSpaceResponseDtoList = createTeamSpaceResponseDtoList(createTeamSpace);
+        saveTeam(createTeam);
         return TeamResponseDto.of(createTeam, teamSpaceResponseDtoList);
     }
 
@@ -76,10 +72,9 @@ public class TeamService {
 
     private List<TeamListElementsResponseDto> createBaseTeamResponseDtoList(List<Team> teamList) {
         return teamList.stream()
-                .map(team ->
-                        TeamListElementsResponseDto.of(
-                                createTeamResponseDto(team),
-                                customRoadmapDetailResponseDto(team.getRoadmapDownload().getCustomRoadmap())))
+                .map(team -> TeamListElementsResponseDto.of(
+                        createTeamResponseDto(team),
+                        customRoadmapDetailResponseDto(team.getRoadmapDownload().getCustomRoadmap())))
                 .collect(Collectors.toList());
     }
 
@@ -102,22 +97,35 @@ public class TeamService {
 
     private List<TeamSpace> createTeamSpaceFromRequestDto(List<TeamSpaceRequestDto> requestDtoList, Team createTeam) {
         return requestDtoList.stream()
-                .map(teamSpaceRequestDto ->
-                        TeamSpace.createTeamSpace(
-                                teamSpaceRequestDto.getUrl(),
-                                getEnumSpaceTypeFromStringSpaceType(teamSpaceRequestDto.getSpaceType()),
-                                createTeam))
+                .map(teamSpaceRequestDto -> createTeamSpace(teamSpaceRequestDto, createTeam))
                 .collect(Collectors.toList());
+    }
+
+    private TeamSpace createTeamSpace(TeamSpaceRequestDto teamSpaceRequestDto, Team createTeam) {
+        TeamSpace createdTeamSpace = TeamSpace.createTeamSpace(
+                teamSpaceRequestDto.getUrl(),
+                getEnumSpaceTypeFromStringSpaceType(teamSpaceRequestDto.getSpaceType()),
+                createTeam);
+        saveTeamSpace(createdTeamSpace);
+        createdTeamSpace.addTeam(createTeam);
+        return createdTeamSpace;
     }
 
     private List<TeamSpace> updateTeamSpace(List<TeamSpaceRequestDto> spaceList, Team team) {
         team.resetTeamSpaceList();
+        deleteTeamSpaceList(spaceList);
         return createTeamSpaceFromRequestDto(spaceList, team);
     }
 
     private Team createTeamFromRequestDto(TeamRequestDto teamRequestDto, User user) {
         TeamType teamType = getEnumTeamTypeFromStringTeamType(teamRequestDto.getTeamType());
         return Team.createTeam(teamRequestDto.getTitle(), teamType, teamRequestDto.getIntroduction(), user);
+    }
+
+    private void deleteTeamSpaceList(List<TeamSpaceRequestDto> spaceList) {
+        spaceList.forEach(space -> {
+            if (!Objects.isNull(space.getTeamSpaceId())) deleteTeamSpace(space.getTeamSpaceId());
+        });
     }
 
     private List<Team> getTeamListFromUserId(Long userId) {
@@ -132,6 +140,18 @@ public class TeamService {
     private User getUserFromUserId(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND));
+    }
+
+    private void saveTeam(Team team) {
+        teamRepository.save(team);
+    }
+
+    private void saveTeamSpace(TeamSpace teamSpace) {
+        teamSpaceRepository.save(teamSpace);
+    }
+
+    private void deleteTeamSpace(Long teamSpaceId) {
+        teamSpaceRepository.deleteById(teamSpaceId);
     }
 
     private void validateTeamSpaceSize(List<TeamSpaceRequestDto> requestDtoList) {
