@@ -32,13 +32,12 @@ public class RestTemplateProvider {
             return PlatformUserInfo.createPlatformUserInfo(
                     Long.toString(kakaoUserInfo.getId()),
                     kakaoUserInfo.getKakaoAccount().getEmail(),
-                    kakaoUserInfo.getKakaoAccount().getProfile().getNickname(),
-                    kakaoUserInfo.getPicture());
+                    kakaoUserInfo.getProperties().getNickname(),
+                    kakaoUserInfo.getProperties().getProfileImage());
         } else {
             GoogleUserInfo googleUserInfo = googleAuthProvider.getGoogleUserInfoFromPlatformInfo(platformInfo);
             return PlatformUserInfo.createPlatformUserInfo(
                     googleUserInfo.getId(),
-//                    Long.toString(googleUserInfo.getId()),
                     googleUserInfo.getEmail(),
                     googleUserInfo.getName(),
                     googleUserInfo.getPicture());

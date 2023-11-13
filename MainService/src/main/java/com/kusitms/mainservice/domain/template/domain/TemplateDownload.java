@@ -33,5 +33,9 @@ public class TemplateDownload {
                 .template(template)
                 .build();
     }
+
+    public void addCustomTemplate(CustomTemplate customTemplate){
+        this.customTemplate = customTemplate;
+    }
 }
 

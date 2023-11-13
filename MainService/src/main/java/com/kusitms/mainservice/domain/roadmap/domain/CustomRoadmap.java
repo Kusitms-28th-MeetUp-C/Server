@@ -3,6 +3,7 @@ package com.kusitms.mainservice.domain.roadmap.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,8 @@ public class CustomRoadmap {
     private Long id;
     private String title;
     private String goal;
+    private LocalDate startDate;
+    private LocalDate endDate;
     @Enumerated(value = EnumType.STRING)
     private RoadmapType roadmapType;
     @OneToOne
@@ -26,4 +29,20 @@ public class CustomRoadmap {
     @OneToMany(mappedBy = "customRoadmap")
     @Builder.Default
     private List<CustomRoadmapSpace> customRoadmapSpaceList = new ArrayList<>();
+
+    public static CustomRoadmap createCustomRoadmap(Roadmap roadmap, RoadmapDownload roadmapDownload){
+        CustomRoadmap customRoadmap = CustomRoadmap.builder()
+                .title(roadmap.getTitle())
+                .startDate(LocalDate.now())
+                .endDate(null)
+                .roadmapType(roadmap.getRoadmapType())
+                .roadmapDownload(roadmapDownload)
+                .build();
+        roadmapDownload.addCustomRoadmap(customRoadmap);
+        return customRoadmap;
+    }
+
+    public void addCustomRoadmapSpace(CustomRoadmapSpace customRoadmapSpace){
+        this.customRoadmapSpaceList.add(customRoadmapSpace);
+    }
 }

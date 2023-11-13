@@ -34,4 +34,8 @@ public class Roadmap {
     @OneToMany(mappedBy = "roadmap")
     @Builder.Default
     private List<RoadmapSpace> roadmapSpaceList = new ArrayList<>();
+
+    public void addRoadmapDownload(RoadmapDownload roadmapDownload){
+        this.roadmapDownloadList.add(roadmapDownload);
+    }
 }

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class TeamSpaceRequestDto {
+    private Long teamSpaceId;
     private String spaceType;
     private String url;
 }
