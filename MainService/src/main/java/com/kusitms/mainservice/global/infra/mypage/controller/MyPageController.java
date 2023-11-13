@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MyPageController {
     private final MyPageService myPageService;
-    @GetMapping
-    public ResponseEntity<SuccessResponse<?>> getMyPageResponse(@RequestParam Long userId, @PageableDefault Pageable pageable){
+    @GetMapping("/get")
+    public ResponseEntity<SuccessResponse<?>> getMyPageResponse(@RequestParam Long userId, @PageableDefault(size=6) Pageable pageable){
         final MyPageResponseDto myPageResponseDto = myPageService.getMyPageResponse(userId,pageable);
         return SuccessResponse.ok(myPageResponseDto);
     }

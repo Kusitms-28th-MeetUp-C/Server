@@ -16,12 +16,16 @@ import com.kusitms.mainservice.global.infra.mypage.dto.MySharedContentDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.kusitms.mainservice.global.infra.mypage.domain.SharedType.getEnumSharedTypeFromStringSharedType;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -42,22 +46,35 @@ public class MyPageService {
         Page<MySharedContentDto> mySharedContentDtoList = createmySharedContentDtoList(userId, pageable);
         return MyPageResponseDto.of(myPageUserResponseDto,mySharedContentDtoList);
     }
-    private Page<MySharedContentDto> createmySharedContentDtoList(Long userId, Pageable pageable){
-        Page<Template> templatePage = templateRepository.findAllByMaker_Id(userId, pageable);
-        Page<Roadmap> roadmapPage = roadmapRepository.findAllByMaker_Id(userId,pageable);
-        Page<MySharedContentDto> resultPage = Page.empty(pageable);
+    private Page<MySharedContentDto> createmySharedContentDtoList(Long userId, Pageable pageable) {
+        List<Template> templateList = templateRepository.findAllByUserId(userId);
+        List<Roadmap> roadmapList = roadmapRepository.findAllByUserId(userId);
+        List<MySharedContentDto> contentList = new ArrayList<>();
 
-        for (Template template : templatePage.getContent()) {
-            MySharedContentDto dto = MySharedContentDto.of(SharedType.getEnumSharedTypeFromStringSharedType("template"), template.getTitle(), template.getTemplateType().toString());
-            resultPage.getContent().add(dto);
+        // Template 리스트와 Roadmap 리스트를 합침
+        for (Template template : templateList) {
+            MySharedContentDto dto = MySharedContentDto.of(template.getId(),SharedType.Template, template.getTitle(), template.getTemplateType().toString());
+            contentList.add(dto);
         }
 
-        for (Roadmap roadmap : roadmapPage.getContent()) {
-            MySharedContentDto dto = MySharedContentDto.of(SharedType.getEnumSharedTypeFromStringSharedType("roadmap"), roadmap.getTitle(), roadmap.getRoadmapType().toString());
-            resultPage.getContent().add(dto);
+        for (Roadmap roadmap : roadmapList) {
+            MySharedContentDto dto = MySharedContentDto.of(roadmap.getId(),SharedType.Roadmap, roadmap.getTitle(), roadmap.getRoadmapType().toString());
+            contentList.add(dto);
         }
 
-        resultPage = new PageImpl<>(resultPage.getContent(), pageable, resultPage.getTotalElements());
+        // 페이지 번호와 페이지 크기를 이용하여 필요한 범위의 데이터 추출
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), contentList.size());
+
+        // 추출한 데이터로 Page 객체 생성
+        List<MySharedContentDto> pagedContentList = contentList.subList(start, end);
+
+        // pagesize를 2배로 설정
+        int pageSize = pageable.getPageSize() * 2;
+
+        Pageable adjustedPageable = PageRequest.of(pageable.getPageNumber(), pageSize);
+
+        Page<MySharedContentDto> resultPage = new PageImpl<>(pagedContentList, adjustedPageable, contentList.size());
 
         return resultPage;
     }
