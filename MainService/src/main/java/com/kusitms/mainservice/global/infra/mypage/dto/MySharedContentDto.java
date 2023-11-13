@@ -1,5 +1,6 @@
 package com.kusitms.mainservice.global.infra.mypage.dto;
 
+import com.kusitms.mainservice.global.infra.mypage.domain.SharedType;
 import lombok.Builder;
 import lombok.Getter;
 
