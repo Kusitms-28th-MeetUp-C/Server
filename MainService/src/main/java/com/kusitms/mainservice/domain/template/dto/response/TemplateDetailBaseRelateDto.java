@@ -14,14 +14,15 @@ public class TemplateDetailBaseRelateDto {
     private int teamCount;
     private int estimatedTime;
     private double rating;
-    private RoadmapTitleResponseDto connectedRoadmap;
-    public static TemplateDetailBaseRelateDto of(Template template, int teamCount, double rating){
+    private String connectedRoadmap;
+    public static TemplateDetailBaseRelateDto of(Template template, int teamCount, double rating,String connectedRoadmap){
         return TemplateDetailBaseRelateDto.builder()
                 .templateId(template.getId())
                 .title(template.getTitle())
                 .estimatedTime(template.getEstimatedTime())
                 .teamCount(teamCount)
                 .rating(rating)
+                .connectedRoadmap(connectedRoadmap)
                 .build();
 
     }

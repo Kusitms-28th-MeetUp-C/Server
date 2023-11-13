@@ -1,6 +1,7 @@
 package com.kusitms.mainservice.domain.template.service;
 
 
+import com.kusitms.mainservice.domain.roadmap.domain.Roadmap;
 import com.kusitms.mainservice.domain.roadmap.domain.RoadmapTemplate;
 import com.kusitms.mainservice.domain.roadmap.repository.RoadmapRepository;
 import com.kusitms.mainservice.domain.team.domain.Team;
@@ -100,7 +101,8 @@ public class TemplateService {
                         TemplateDetailBaseRelateDto.of(
                                 template,
                                 template.getCount(),//getTeamCount(template),
-                                getRatingAndReviewCount(template).getRatingAverage()))
+                                getRatingAndReviewCount(template).getRatingAverage(),
+                                getRoadmapTitleResponseDto(template).getConnectedRoadmap()))
                 .collect(Collectors.toList());
     }
 
@@ -199,23 +201,20 @@ private List<TemplateContent> getTemplateContentListByTemplateId(Template templa
     }
 
     private TemplateDetailConnectRoadmapDto getRoadmapTitleResponseDto(Template template) {
-
         String title = null;
+        Long roadmapId = null;
+
         List<RoadmapTemplate> roadmapTemplates = template.getRoadmapTemplates();
-        if (roadmapTemplates.size() != 0) {
-            title = roadmapTemplates.get(0).getRoadmapSpace().getRoadmap().getTitle();
+
+        if (!roadmapTemplates.isEmpty()) {
+            Roadmap roadmap = roadmapTemplates.get(0).getRoadmapSpace().getRoadmap();
+            if (roadmap != null) {
+                title = roadmap.getTitle();
+                roadmapId = roadmap.getId();
+            }
         }
-        //        List<RoadmapTitleResponseDto> roadmapTitleResponseDtoList = new ArrayList<>();
-//
-//        List<RoadmapTemplate> roadmapTemplates = template.getRoadmapTemplates();
-//        for (RoadmapTemplate roadmapTemplate : roadmapTemplates) {
-//            String title = roadmapTemplate.getRoadmapSpace().getRoadmap().getTitle();
-//            RoadmapTitleResponseDto titleResponseDto = RoadmapTitleResponseDto.of(title);
-//            roadmapTitleResponseDtoList.add(titleResponseDto);
-//
-//
-//        }
-        return TemplateDetailConnectRoadmapDto.of(title,roadmapTemplates.get(0).getRoadmapSpace().getRoadmap().getId());
+
+        return TemplateDetailConnectRoadmapDto.of(title, roadmapId);
     }
 
     private Page<Template> getTemplateByTitle(String title, Pageable pageable) {
