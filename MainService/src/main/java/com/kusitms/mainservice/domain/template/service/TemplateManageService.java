@@ -2,7 +2,6 @@ package com.kusitms.mainservice.domain.template.service;
 
 import com.kusitms.mainservice.domain.roadmap.domain.CustomRoadmap;
 import com.kusitms.mainservice.domain.roadmap.domain.CustomRoadmapSpace;
-import com.kusitms.mainservice.domain.roadmap.domain.Roadmap;
 import com.kusitms.mainservice.domain.roadmap.dto.response.CustomRoadmapDetailResponseDto;
 import com.kusitms.mainservice.domain.roadmap.dto.response.CustomRoadmapSpaceDetailResponseDto;
 import com.kusitms.mainservice.domain.roadmap.repository.CustomRoadmapRepository;
@@ -84,7 +83,7 @@ public class TemplateManageService {
 
     public void createTemplateReview(Long userId, TemplateReviewRequestDto templateReviewRequestDto) {
         User user = getUserFromUserId(userId);
-        Template template = getTemplateFromTemplateId(templateReviewRequestDto.getMeetingId());
+        Template template = getTemplateFromTemplateId(templateReviewRequestDto.getTemplateId());
         TemplateReview createdTemplateReview = TemplateReview.createTemplateReview(templateReviewRequestDto.getContent(), templateReviewRequestDto.getRating());
         Reviewer createdReviewer = Reviewer.createReviewer(user, createdTemplateReview, template);
         saveReviewer(createdReviewer);
