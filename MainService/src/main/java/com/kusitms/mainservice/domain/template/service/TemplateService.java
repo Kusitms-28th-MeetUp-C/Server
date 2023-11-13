@@ -16,6 +16,7 @@ import com.kusitms.mainservice.domain.user.domain.User;
 import com.kusitms.mainservice.domain.user.dto.response.DetailUserResponseDto;
 import com.kusitms.mainservice.domain.user.repository.UserRepository;
 import com.kusitms.mainservice.domain.user.service.AuthService;
+import com.kusitms.mainservice.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -41,7 +42,7 @@ public class TemplateService {
     private final RoadmapRepository roadmapRepository;
     private final TeamRepository teamRepository;
     private final UserRepository userRepository;
-    private final AuthService authService;
+    private final UserService userService;
 
     public Page<SearchBaseTemplateResponseDto> searchTemplateByTitleAndRoadmapType(SearchTemplateRequsetDto searchTemplateRequsetDto,Pageable pageable){
         Page<Template> templateList = getTemplateListByTitleAndTemplateType(searchTemplateRequsetDto, pageable);
@@ -237,7 +238,7 @@ private TemplateContentListResponseDto getTemplateContentListByTemplateId(Templa
         return reviewContentResponseDtoList;
     }
     private DetailUserResponseDto createDetailUserResponseDto(User user){
-        return authService.createDetailUserResponseDto(user);
+        return userService.createDetailUserResponseDto(user);
     }
     private List<Template> getTemplatesBySameCategoryAndId(Template template){
 //

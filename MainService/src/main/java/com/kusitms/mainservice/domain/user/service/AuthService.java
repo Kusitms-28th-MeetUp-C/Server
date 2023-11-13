@@ -86,15 +86,4 @@ public class AuthService {
         return restTemplateProvider.getUserInfoUsingRestTemplate(platform, authToken);
     }
 
-    public DetailUserResponseDto createDetailUserResponseDto(User user){
-        int templateNum = getTemplateCountByUser(user);
-        int roadmapNum = getRoadmapCountByUser(user);
-        return DetailUserResponseDto.of(user, templateNum,roadmapNum);
-    }
-    private int getTemplateCountByUser(User user) {
-        return templateRepository.countByUser(user);
-    }
-    private int getRoadmapCountByUser(User user) {
-        return roadmapRepository.countByUser(user);
-    }
 }

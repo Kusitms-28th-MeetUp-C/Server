@@ -11,6 +11,7 @@ import com.kusitms.mainservice.domain.roadmap.repository.RoadmapSpaceRepository;
 import com.kusitms.mainservice.domain.user.domain.User;
 import com.kusitms.mainservice.domain.user.dto.response.DetailUserResponseDto;
 import com.kusitms.mainservice.domain.user.service.AuthService;
+import com.kusitms.mainservice.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -32,7 +33,7 @@ public class RoadmapService {
     private final RoadmapRepository roadmapRepository;
     private final RoadmapSpaceRepository roadmapSpaceRepository;
     private final RoadmapDownloadRepository roadmapDownloadRepository;
-    private final AuthService authService;
+    private final UserService userService;
     public Page<SearchBaseRoadmapResponseDto> searchRoadmapByTitleAndRoadmapType(SearchRoadmapRequestDto searchRoadmapRequestDto, Pageable pageable){
         Page<Roadmap> roadmapList = getRoadmapListByTitleAndRoadmapType(searchRoadmapRequestDto, pageable);
         Page<SearchBaseRoadmapResponseDto> searchBaseRoadmapResponseDtos = createSearchBaseRoadmapResponseDtoPage(roadmapList,pageable);
@@ -77,7 +78,7 @@ public class RoadmapService {
         return getRoadmapByTitleAndRoadmapType(searchRoadmapRequestDto,pageable);
     }
     private DetailUserResponseDto createDetailUserResponseDto(User user){
-        return authService.createDetailUserResponseDto(user);
+        return userService.createDetailUserResponseDto(user);
     }
     private List<RoadmapDetailBaseRelateRoadmapDto> createRoadmapDetailRelateRoadmapDto(Roadmap roadmap) {
         List<Roadmap> roadmapList = getRoadmapListBySameCategoryAndId(roadmap);
