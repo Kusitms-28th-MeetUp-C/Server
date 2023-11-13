@@ -17,6 +17,7 @@ import com.kusitms.mainservice.domain.user.domain.User;
 import com.kusitms.mainservice.domain.user.dto.response.DetailUserResponseDto;
 import com.kusitms.mainservice.domain.user.repository.UserRepository;
 import com.kusitms.mainservice.domain.user.service.AuthService;
+import com.kusitms.mainservice.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -44,7 +45,7 @@ public class TemplateService {
     private final RoadmapRepository roadmapRepository;
     private final TeamRepository teamRepository;
     private final UserRepository userRepository;
-    private final AuthService authService;
+    private final UserService userService;
 
     public Page<SearchBaseTemplateResponseDto> searchTemplateByTitleAndRoadmapType(SearchTemplateRequsetDto searchTemplateRequsetDto,Pageable pageable){
         Page<Template> templateList = getTemplateListByTitleAndTemplateType(searchTemplateRequsetDto, pageable);
@@ -56,11 +57,12 @@ public class TemplateService {
     public TemplateDetailResponseDto getTemplateDetail(Long templateId) {
         Template template = getTemplateByTemplateId(templateId);
         TemplateDetailIntroResponseDto templateDetailIntroResponseDto = createTemplateDetailIntroResponseDto(template);
-        TemplateContentListResponseDto templateContentListResponseDto = getTemplateContentListByTemplateId(template);
+        List<TemplateContent> templateContentList = getTemplateContentListByTemplateId(template);
         List<TemplateDetailBaseRelateDto> templateDetailBaseRelateDtoList = createTemplateDetailRelateTemplateDto(template);
-        String title = getRoadmapTitleResponseDto(template);
-        DetailUserResponseDto detailUserResponseDto = createDetailUserResponseDto(template.getUser());
-        return TemplateDetailResponseDto.of(template, templateDetailIntroResponseDto, templateContentListResponseDto, title, templateDetailBaseRelateDtoList, detailUserResponseDto);
+        TemplateDetailConnectRoadmapDto roadmapIdAndConnectRoadmap = getRoadmapTitleResponseDto(template);
+        DetailUserResponseDto detailUserResponseDto =createDetailUserResponseDto(template.getUser());
+        return TemplateDetailResponseDto.of(template,templateDetailIntroResponseDto ,templateContentList,roadmapIdAndConnectRoadmap, templateDetailBaseRelateDtoList,detailUserResponseDto);
+
     }
 
     public GetTeamForSaveTemplateResponseDto getTeamForSaveTemplateByUserId(Long id) {
@@ -114,8 +116,9 @@ public class TemplateService {
         return TemplateDetailIntroBaseResponseDto.of(templateReviewResponseDto.getRatingAverage(), template.getEstimatedTime(), teamCount, templateReviewResponseDto.getReviewCount());
     }
 
-    private TemplateContentListResponseDto getTemplateContentListByTemplateId(Template template) {
-        List<TemplateContent> templateContentList = templateContentRepository.findAllByTemplateId(template.getId());
+private List<TemplateContent> getTemplateContentListByTemplateId(Template template) {
+    List<TemplateContent> templateContentList = templateContentRepository.findAllByTemplateId(template.getId());
+
 
 //    List<TemplateContent> filteredList = templateContentList.stream()
 //            .filter(tc -> tc.getAgendaNum() != null)
@@ -137,8 +140,10 @@ public class TemplateService {
 //
 //    result.put(template.getId(), contentList);
 
-        return TemplateContentListResponseDto.of(templateContentList);
-    }
+
+    return templateContentList;
+}
+
 
 
     private Page<Template> getTemplateListByTitleAndTemplateType(SearchTemplateRequsetDto searchTemplateRequsetDto, Pageable pageable) {
@@ -188,12 +193,13 @@ public class TemplateService {
                 SearchBaseTemplateResponseDto.of(
                         template,
                         template.getCount(),
-                        getRoadmapTitleResponseDto(template)
+                        getRoadmapTitleResponseDto(template).getConnectedRoadmap()
                 )
         );
     }
 
-    private String getRoadmapTitleResponseDto(Template template) {
+    private TemplateDetailConnectRoadmapDto getRoadmapTitleResponseDto(Template template) {
+
         String title = null;
         List<RoadmapTemplate> roadmapTemplates = template.getRoadmapTemplates();
         if (roadmapTemplates.size() != 0) {
@@ -209,7 +215,7 @@ public class TemplateService {
 //
 //
 //        }
-        return title;
+        return TemplateDetailConnectRoadmapDto.of(title,roadmapTemplates.get(0).getRoadmapSpace().getRoadmap().getId());
     }
 
     private Page<Template> getTemplateByTitle(String title, Pageable pageable) {
@@ -252,8 +258,9 @@ public class TemplateService {
         return reviewContentResponseDtoList;
     }
 
-    private DetailUserResponseDto createDetailUserResponseDto(User user) {
-        return authService.createDetailUserResponseDto(user);
+    private DetailUserResponseDto createDetailUserResponseDto(User user){
+        return userService.createDetailUserResponseDto(user);
+
     }
 
     private List<Template> getTemplatesBySameCategoryAndId(Template template){

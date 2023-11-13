@@ -9,14 +9,14 @@ import java.util.List;
 @Builder
 public class TemplateDetailIntroResponseDto {
     private String date;
-    private TemplateDetailIntroBaseResponseDto simpleinfo;
+    private TemplateDetailIntroBaseResponseDto simpleInfo;
     private String introduction;
     private List<ReviewContentResponseDto> reviews;
 
     public static TemplateDetailIntroResponseDto of(Template template, TemplateDetailIntroBaseResponseDto templateIntro, List<ReviewContentResponseDto> reviews){
         return TemplateDetailIntroResponseDto.builder()
                 .date(template.getDate())
-                .simpleinfo(templateIntro)
+                .simpleInfo(templateIntro)
                 .introduction(template.getIntroduction())
                 .reviews(reviews)
                 .build();

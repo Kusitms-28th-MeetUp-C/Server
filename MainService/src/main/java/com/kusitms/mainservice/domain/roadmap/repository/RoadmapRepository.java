@@ -30,4 +30,8 @@ public interface RoadmapRepository extends JpaRepository<Roadmap, Long> {
 
     int countByUserId(Long userId);
 
+    Page<Roadmap> findAllByUserId(Long id, Pageable pageable);
+    List<Roadmap> findAllByUserId(Long id);
+
+
 }

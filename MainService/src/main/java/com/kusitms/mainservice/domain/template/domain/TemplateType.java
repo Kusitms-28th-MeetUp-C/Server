@@ -18,7 +18,10 @@ public enum TemplateType {
     PT("pt"),
     DESIGN("design"),
     MARKETING("marketing"),
-    ETC("etc");
+    ETC("etc"),
+    TEAM("team"),
+    CLUB("club"),
+    VIDEO("video");
 
     private final String stringTemplateType;
 

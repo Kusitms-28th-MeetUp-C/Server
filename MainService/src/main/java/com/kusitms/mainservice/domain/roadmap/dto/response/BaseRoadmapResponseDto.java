@@ -11,13 +11,13 @@ import java.util.List;
 public class BaseRoadmapResponseDto {
     private Long roadmapId;
     private String title;
-    private List<RoadmapDetailResponseDto> roadmapDetailList;
+    private List<RoadmapDetailResponseDto> roadmapList;
 
     public static BaseRoadmapResponseDto of(Roadmap roadmap, List<RoadmapDetailResponseDto> roadmapDetailList) {
         return BaseRoadmapResponseDto.builder()
                 .roadmapId(roadmap.getId())
                 .title(roadmap.getTitle())
-                .roadmapDetailList(roadmapDetailList)
+                .roadmapList(roadmapDetailList)
                 .build();
     }
 }
