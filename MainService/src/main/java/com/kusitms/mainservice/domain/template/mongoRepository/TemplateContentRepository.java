@@ -1,4 +1,4 @@
-package com.kusitms.mainservice.domain.template.repository;
+package com.kusitms.mainservice.domain.template.mongoRepository;
 
 
 import com.kusitms.mainservice.domain.template.domain.TemplateContent;

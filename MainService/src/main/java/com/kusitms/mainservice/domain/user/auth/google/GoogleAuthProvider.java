@@ -2,6 +2,7 @@ package com.kusitms.mainservice.domain.user.auth.google;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kusitms.mainservice.global.common.SuccessResponse;
 import com.kusitms.mainservice.global.error.exception.InternalServerException;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.kusitms.mainservice.domain.user.auth.google.GoogleToken.createGoogleToken;
 import static com.kusitms.mainservice.global.error.ErrorCode.JSON_PARSING_ERROR;
@@ -47,6 +51,4 @@ public class GoogleAuthProvider {
         headers.add(HEADER_TYPE, googleAccessToken);
         return new HttpEntity<>(headers);
     }
-
-
 }

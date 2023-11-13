@@ -1,22 +1,24 @@
 package com.kusitms.mainservice.domain.template.domain;
 
 import jakarta.persistence.Id;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 @Getter
-@Setter
-@Document(collection = "template_contents")
-public class TemplateContent {
+@Builder
+@Document(collection = "custom_template_contents")
+public class CustomTemplateContent {
     @Id
+    @Field(name = "_id")
     private String id;
-    @Indexed(unique = true)
+
     @Field(name = "template_id")
+    @Indexed(unique = true)
     private Long templateId;
-    private Long agendaNum;
-    private String agenda;
+
+    @Field(name = "content")
     private String content;
 }

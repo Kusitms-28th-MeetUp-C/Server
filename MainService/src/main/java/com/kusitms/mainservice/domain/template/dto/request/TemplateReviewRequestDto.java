@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class TemplateReviewRequestDto {
-    private Long meetingId;
+    private Long templateId;
     private int rating;
     private String content;
 }

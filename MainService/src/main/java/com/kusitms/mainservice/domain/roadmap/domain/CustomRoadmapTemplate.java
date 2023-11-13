@@ -22,4 +22,15 @@ public class CustomRoadmapTemplate {
     @ManyToOne
     @JoinColumn(name = "custom_template_id")
     private CustomTemplate customTemplate;
+
+    public static CustomRoadmapTemplate createCustomRoadmapTemplate(CustomRoadmapSpace customRoadmapSpace,
+                                                                    CustomTemplate customTemplate){
+        CustomRoadmapTemplate customRoadmapTemplate = CustomRoadmapTemplate.builder()
+                .customRoadmapSpace(customRoadmapSpace)
+                .customTemplate(customTemplate)
+                .build();
+        customRoadmapSpace.addCustomRoadmapTemplate(customRoadmapTemplate);
+        customTemplate.addCustomRoadmapTemplate(customRoadmapTemplate);
+        return customRoadmapTemplate;
+    }
 }
