@@ -26,7 +26,6 @@ public class JwtProvider {
     @Value("${jwt.refresh-token-expire-time}")
     private long REFRESH_TOKEN_EXPIRE_TIME;
 
-
     public void validateAccessToken(String accessToken) {
         try {
             getJwtParser().parseClaimsJws(accessToken);

@@ -24,9 +24,8 @@ public class RedisSubscriber implements MessageListener {
     public void onMessage(Message message, byte[] pattern) {
         String publishMessage = getPublishMessage(message);
         ChatMessageResponseDto messageResponseDto = getChatMessageFromObjectMapper(publishMessage);
-        SendMessageResponseDto sendMessageResponseDto = SendMessageResponseDto.of(messageResponseDto.getChatName(), messageResponseDto.getChatMessageList());
-        System.out.println(publishMessage);
-        messageResponseDto.getUserList().forEach(sessionId -> sendChatMessage(sessionId, sendMessageResponseDto));
+        SendMessageResponseDto sendMessageResponseDto = SendMessageResponseDto.of(messageResponseDto.getChatMessageList());
+        messageResponseDto.getSessionList().forEach(sessionId -> sendChatMessage(sessionId, sendMessageResponseDto));
     }
 
     private ChatMessageResponseDto getChatMessageFromObjectMapper(String publishMessage){
