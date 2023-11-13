@@ -26,6 +26,10 @@ public class Chat {
         return chat;
     }
 
+    public void addChatContent(ChatContent content){
+        this.chatContentList.add(content);
+    }
+
     public void addSession(Long sessionId){
         this.sessionList.add(sessionId);
     }
