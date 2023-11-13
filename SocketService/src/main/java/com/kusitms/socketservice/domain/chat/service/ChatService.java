@@ -2,6 +2,7 @@ package com.kusitms.socketservice.domain.chat.service;
 
 import com.kusitms.socketservice.domain.chat.domain.Chat;
 import com.kusitms.socketservice.domain.chat.domain.ChatContent;
+import com.kusitms.socketservice.domain.chat.domain.ChatType;
 import com.kusitms.socketservice.domain.chat.dto.request.ChatMessageListRequestDto;
 import com.kusitms.socketservice.domain.chat.dto.request.ChatMessageRequestDto;
 import com.kusitms.socketservice.domain.chat.dto.response.ChatMessageElementResponseDto;
@@ -37,7 +38,7 @@ public class ChatService {
     public ChatMessageListResponseDto getMessageList(Long sessionId, ChatMessageListRequestDto chatMessageListRequestDto){
         Chat chat = findFirstChatBySessions(sessionId, chatMessageListRequestDto.getChatSession());
         List<ChatMessageElementResponseDto> chatMessageList = ChatMessageElementResponseDto.listOf(chat.getChatContentList());
-        return ChatMessageListResponseDto.of(chatMessageList);
+        return ChatMessageListResponseDto.of(ChatType.ALL, chatMessageList);
     }
 
     private Chat findFirstChatBySessions(Long firstSessionId, Long secondSessionId) {
