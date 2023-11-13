@@ -11,6 +11,7 @@ import static com.kusitms.mainservice.global.error.ErrorCode.INVALID_TEMPLATE_TY
 @RequiredArgsConstructor
 @Getter
 public enum SharedType {
+    ALL("all"),
     Template("template"),
     Roadmap("roadmap");
 

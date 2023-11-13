@@ -36,4 +36,5 @@ public interface RoadmapRepository extends JpaRepository<Roadmap, Long> {
     int countByUser(User user);
 
     int countByUserId(Long userId);
+    Page<Roadmap> findAllByMaker_Id(Long id, Pageable pageable);
 }
