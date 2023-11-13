@@ -33,12 +33,14 @@ public class MyPageService {
     private final TemplateRepository templateRepository;
     private final RoadmapRepository roadmapRepository;
     private final UserService userService;
-    public MyPageResponseDto getMyPageResponse(){
-        MyPageResponseDto myPageResponseDto = createMyPageResponseDto();
+    public MyPageResponseDto getMyPageResponse(Long userId,Pageable pageable ){
+        MyPageResponseDto myPageResponseDto = createMyPageResponseDto(userId, pageable);
+    return myPageResponseDto;
     }
     private MyPageResponseDto createMyPageResponseDto(Long userId,Pageable pageable){
         MyPageUserResponseDto myPageUserResponseDto = createMyPageUserResponseDto(userId);
         Page<MySharedContentDto> mySharedContentDtoList = createmySharedContentDtoList(userId, pageable);
+        return MyPageResponseDto.of(myPageUserResponseDto,mySharedContentDtoList);
     }
     private Page<MySharedContentDto> createmySharedContentDtoList(Long userId, Pageable pageable){
         Page<Template> templatePage = templateRepository.findAllByMaker_Id(userId, pageable);

@@ -2,6 +2,7 @@ package com.kusitms.mainservice.global.infra.mypage.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -9,6 +10,13 @@ import java.util.List;
 @Getter
 public class MyPageResponseDto {
     private MyPageUserResponseDto myPageUserResponseDto;
-    private List<MySharedContentDto> mySharedContentDtoList;
+    private Page<MySharedContentDto> mySharedContentDtoList;
+
+    public static MyPageResponseDto of(MyPageUserResponseDto myPageUserResponseDto,Page<MySharedContentDto> mySharedContentDtoList){
+        return MyPageResponseDto.builder()
+                .myPageUserResponseDto(myPageUserResponseDto)
+                .mySharedContentDtoList(mySharedContentDtoList)
+                .build();
+    }
 
 }
