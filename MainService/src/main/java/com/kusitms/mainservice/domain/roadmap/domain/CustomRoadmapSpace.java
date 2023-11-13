@@ -30,4 +30,22 @@ public class CustomRoadmapSpace {
     @OneToMany(mappedBy = "customRoadmapSpace")
     @Builder.Default
     private List<CustomRoadmapTemplate> customRoadmapTemplateList = new ArrayList<>();
+
+    public static CustomRoadmapSpace createCustomRoadmapSpace(RoadmapSpace roadmapSpace, CustomRoadmap customRoadmap){
+        CustomRoadmapSpace customRoadmapSpace =  CustomRoadmapSpace.builder()
+                .title(roadmapSpace.getTitle())
+                .step(roadmapSpace.getStep())
+                .startDate(LocalDate.now())
+                .endDate(null)
+                .isCompleted(false)
+                .introduction(null)
+                .customRoadmap(customRoadmap)
+                .build();
+        customRoadmap.addCustomRoadmapSpace(customRoadmapSpace);
+        return customRoadmapSpace;
+    }
+
+    public void addCustomRoadmapTemplate(CustomRoadmapTemplate customRoadmapTemplate){
+        this.customRoadmapTemplateList.add(customRoadmapTemplate);
+    }
 }
