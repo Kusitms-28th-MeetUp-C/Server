@@ -26,4 +26,18 @@ public class CustomTemplate {
     List<CustomRoadmapTemplate> customRoadmapTemplateList = new ArrayList<>();
     @OneToOne
     private TemplateDownload templateDownload;
+
+    public static CustomTemplate createCustomTemplate(Template template, TemplateDownload templateDownload){
+        CustomTemplate customTemplate = CustomTemplate.builder()
+                .title(template.getTitle())
+                .templateType(template.getTemplateType())
+                .templateDownload(templateDownload)
+                .build();
+        templateDownload.addCustomTemplate(customTemplate);
+        return customTemplate;
+    }
+
+    public void addCustomRoadmapTemplate(CustomRoadmapTemplate customRoadmapTemplate){
+        this.customRoadmapTemplateList.add(customRoadmapTemplate);
+    }
 }
