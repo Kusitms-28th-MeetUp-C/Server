@@ -33,10 +33,10 @@ public class RoadmapService {
     private final RoadmapSpaceRepository roadmapSpaceRepository;
     private final RoadmapDownloadRepository roadmapDownloadRepository;
     private final AuthService authService;
-    public SearchRoadmapResponseDto searchRoadmapByTitleAndRoadmapType(SearchRoadmapRequestDto searchRoadmapRequestDto, Pageable pageable){
+    public Page<SearchBaseRoadmapResponseDto> searchRoadmapByTitleAndRoadmapType(SearchRoadmapRequestDto searchRoadmapRequestDto, Pageable pageable){
         Page<Roadmap> roadmapList = getRoadmapListByTitleAndRoadmapType(searchRoadmapRequestDto, pageable);
         Page<SearchBaseRoadmapResponseDto> searchBaseRoadmapResponseDtos = createSearchBaseRoadmapResponseDtoPage(roadmapList,pageable);
-        return SearchRoadmapResponseDto.of(searchBaseRoadmapResponseDtos);
+        return searchBaseRoadmapResponseDtos;
     }
 
     public RoadmapDetailInfoResponseDto getRoadmapDetail(Long roadmapId){
@@ -44,7 +44,7 @@ public class RoadmapService {
         BaseRoadmapResponseDto baseRoadmapResponseDto = creatBaseRoadmapResponseDto(roadmap);
         DetailUserResponseDto detailUserResponseDto = createDetailUserResponseDto(roadmap.getUser());
         RoadmapDetailIntro roadmapDetailIntro = createRoadmapDetailIntro(roadmap);
-        RoadmapDetailRelateRoadmapDto roadmapDetailRelateRoadmapDto = createRoadmapDetailRelateRoadmapDto(roadmap);
+        List<RoadmapDetailBaseRelateRoadmapDto> roadmapDetailRelateRoadmapDto = createRoadmapDetailRelateRoadmapDto(roadmap);
         return RoadmapDetailInfoResponseDto.of(roadmap, baseRoadmapResponseDto,detailUserResponseDto,roadmapDetailIntro,roadmapDetailRelateRoadmapDto);
     }
     private RoadmapDetailIntro createRoadmapDetailIntro(Roadmap roadmap){
@@ -79,10 +79,10 @@ public class RoadmapService {
     private DetailUserResponseDto createDetailUserResponseDto(User user){
         return authService.createDetailUserResponseDto(user);
     }
-    private RoadmapDetailRelateRoadmapDto createRoadmapDetailRelateRoadmapDto(Roadmap roadmap) {
-        List<Roadmap> roadmapList = getRoadmapListBySameCategoryAndId(Optional.ofNullable(roadmap));
+    private List<RoadmapDetailBaseRelateRoadmapDto> createRoadmapDetailRelateRoadmapDto(Roadmap roadmap) {
+        List<Roadmap> roadmapList = getRoadmapListBySameCategoryAndId(roadmap);
         List<RoadmapDetailBaseRelateRoadmapDto> roadmapDetailBaseRelateRoadmapDtoList = createRoadmapDetailBaseRelateRoadmapDtoList(roadmapList);
-        return RoadmapDetailRelateRoadmapDto.of(roadmapDetailBaseRelateRoadmapDtoList);
+        return roadmapDetailBaseRelateRoadmapDtoList;
     }
     private List<RoadmapDetailBaseRelateRoadmapDto> createRoadmapDetailBaseRelateRoadmapDtoList(List<Roadmap> roadmapList){
         return roadmapList.stream()
@@ -133,18 +133,8 @@ public class RoadmapService {
         List<RoadmapSpace> roadmapSpaceList = roadmapSpaceRepository.findByRoadmapId(roadmap.getId());
         return roadmapSpaceList.size();
     }
-    private List<Roadmap> getRoadmapListBySameCategoryAndId(Optional<Roadmap> roadmap){
-        List<Roadmap> roadmapList = roadmapRepository.findTop6ByRoadmapType(roadmap.get().getRoadmapType());
-       int roadmapListToFetch = 6 - roadmapList.size();
-        if (roadmapListToFetch > 0) {
-            List<Roadmap> additionalRoadmapList = roadmapRepository.findFirst6ByRoadmapTypeAndIdNotIn(
-                    roadmap.get().getRoadmapType(),
-                    roadmapList.stream().map(Roadmap::getId).collect(Collectors.toList())
-            );
-            roadmapList.addAll(additionalRoadmapList.subList(0, Math.min(roadmapListToFetch, additionalRoadmapList.size())));
-        }
-//        List<Roadmap> roadmapList = getRoadmapByRoadmapType(roadmap.get().getRoadmapType());
-//        roadmap.ifPresent(t -> roadmapList.removeIf(existingTemplate -> existingTemplate.getId().equals(t.getId())));
-        return roadmapList;
+    private List<Roadmap> getRoadmapListBySameCategoryAndId(Roadmap roadmap){
+        List<Roadmap> roadmapList = roadmapRepository.findTop6ByRoadmapTypeAndIdNot(roadmap.getRoadmapType(), roadmap.getId());
+       return roadmapList;
     }
 }

@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @Repository
 public interface TemplateRepository extends JpaRepository<Template, Long> {
-    List<Template> findTop3ByTemplateType(TemplateType templateType);
+    List<Template> findTop4ByTemplateTypeAndIdNot(TemplateType templateType, Long Id);
     List<Template> findTop4ByTemplateType(TemplateType templateType);
     List<Template> findFirst4ByTemplateTypeAndIdNotIn(TemplateType templateType,List<Long> list);
     List<Template> findTop5ByTemplateType(TemplateType templateType);
@@ -26,15 +26,7 @@ public interface TemplateRepository extends JpaRepository<Template, Long> {
     Optional<Template> findById(Long Id);
     int countByUser(User user);
     int countByUserId(Long userId);
-    @Query("SELECT t.user FROM Template t WHERE t.id = :template_id")
-    User findUserById(@Param("template_id") Long template_id);
-    @Query("SELECT t FROM Template t " +
-            "WHERE (:templateType = 'ALL' OR t.templateType = :templateType) " +
-            "AND t.title LIKE %:title%")
-    List<Template> findByTitleAndTemplateType(
-            @Param("title") String title,
-            @Param("templateType") TemplateType templateType
-    );
+
     Page<Template> findByTitleContainingAndTemplateType(String title, TemplateType templateType,Pageable pageable);
 
 

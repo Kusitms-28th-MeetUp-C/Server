@@ -2,7 +2,10 @@ package com.kusitms.mainservice.domain.roadmap.repository;
 
 import com.kusitms.mainservice.domain.roadmap.domain.Roadmap;
 import com.kusitms.mainservice.domain.roadmap.domain.RoadmapType;
+import com.kusitms.mainservice.domain.template.domain.Template;
+import com.kusitms.mainservice.domain.template.domain.TemplateType;
 import com.kusitms.mainservice.domain.user.domain.User;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -29,6 +32,7 @@ public interface RoadmapRepository extends JpaRepository<Roadmap, Long> {
             @Param("roadmapType") RoadmapType roadmapType
     );
 
+    List<Roadmap> findTop6ByRoadmapTypeAndIdNot(RoadmapType roadmapType, Long Id);
     Page<Roadmap> findByTitleContainingAndRoadmapType(String title, RoadmapType roadmapType, Pageable pageable);
 
     Page<Roadmap> findByTitleContaining(String title, Pageable pageable);

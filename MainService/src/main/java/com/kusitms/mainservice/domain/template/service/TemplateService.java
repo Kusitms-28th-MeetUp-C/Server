@@ -46,10 +46,11 @@ public class TemplateService {
     private final UserRepository userRepository;
     private final AuthService authService;
 
-    public SearchTemplateResponseDto searchTemplateByTitleAndRoadmapType(SearchTemplateRequsetDto searchTemplateRequsetDto, Pageable pageable) {
+    public Page<SearchBaseTemplateResponseDto> searchTemplateByTitleAndRoadmapType(SearchTemplateRequsetDto searchTemplateRequsetDto,Pageable pageable){
         Page<Template> templateList = getTemplateListByTitleAndTemplateType(searchTemplateRequsetDto, pageable);
-        Page<SearchBaseTemplateResponseDto> searchBaseTemplateResponseDtoList = getTemplatesWithPaging(templateList, pageable);
-        return SearchTemplateResponseDto.of(searchBaseTemplateResponseDtoList);
+        Page<SearchBaseTemplateResponseDto> searchBaseTemplateResponseDtoList = getTemplatesWithPaging(templateList,pageable);
+//        return SearchTemplateResponseDto.of(searchBaseTemplateResponseDtoList);
+        return searchBaseTemplateResponseDtoList;
     }
 
     public TemplateDetailResponseDto getTemplateDetail(Long templateId) {
@@ -76,17 +77,17 @@ public class TemplateService {
         return GetTeamForSaveTemplateResponseDto.of(teamTitleResponseDtoList);
     }
 
-    public String saveTemplateByUserId(SaveTemplateResponseDto saveTemplateResponseDto) {
-        Optional<Template> template = templateRepository.findById(saveTemplateResponseDto.getTemplateid());
+    @Transactional
+    public String saveTemplateByUserId(SaveTemplateResponseDto saveTemplateResponseDto){
+        Template template = getTemplateByTemplateId(saveTemplateResponseDto.getTemplateid());
         Optional<User> user = userRepository.findById(saveTemplateResponseDto.getUserid());
-        TemplateDownload templateDownload = TemplateDownload.createTemplateDownload(user.get(), template.get());
+        TemplateDownload templateDownload = TemplateDownload.createTemplateDownload(user.get(),template);
         templateDownloadRepository.save(templateDownload);
         return "저장";
-
     }
 
-    private List<TemplateDetailBaseRelateDto> createTemplateDetailRelateTemplateDto(Template template) {
-        List<Template> templateList = getTemplatesBySameCategoryAndId(Optional.of(template));
+    private List<TemplateDetailBaseRelateDto> createTemplateDetailRelateTemplateDto(Template template){
+        List<Template> templateList = getTemplatesBySameCategoryAndId(template);
         List<TemplateDetailBaseRelateDto> templateDetailBaseRelateDtoList = createTemplateDetailRelateTemplateDtoList(templateList);
         return templateDetailBaseRelateDtoList;
     }
@@ -255,17 +256,9 @@ public class TemplateService {
         return authService.createDetailUserResponseDto(user);
     }
 
-    private List<Template> getTemplatesBySameCategoryAndId(Optional<Template> template) {
-        List<Template> templates = templateRepository.findTop4ByTemplateType(template.get().getTemplateType());
-//        template.ifPresent(t -> templates.removeIf(existingTemplate -> existingTemplate.getId().equals(t.getId())));
-        int templatesToFetch = 4 - templates.size();
-        if (templatesToFetch > 0) {
-            List<Template> additionalTemplates = templateRepository.findFirst4ByTemplateTypeAndIdNotIn(
-                    template.get().getTemplateType(),
-                    templates.stream().map(Template::getId).collect(Collectors.toList())
-            );
-            templates.addAll(additionalTemplates.subList(0, Math.min(templatesToFetch, additionalTemplates.size())));
-        }
+    private List<Template> getTemplatesBySameCategoryAndId(Template template){
+//
+        List<Template> templates = templateRepository.findTop4ByTemplateTypeAndIdNot(template.getTemplateType(), template.getId());
         return templates;
     }
 }

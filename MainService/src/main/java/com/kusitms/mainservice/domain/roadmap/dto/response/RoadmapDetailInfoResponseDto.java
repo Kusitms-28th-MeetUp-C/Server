@@ -15,10 +15,10 @@ public class RoadmapDetailInfoResponseDto {
     private BaseRoadmapResponseDto baseRoadmapResponseDto;
     private DetailUserResponseDto detailUserResponseDto;
     private RoadmapDetailIntro roadmapDetailIntro;
-    private RoadmapDetailRelateRoadmapDto roadmapDetailRelateRoadmapDto;
+    private List<RoadmapDetailBaseRelateRoadmapDto> roadmapDetailRelateRoadmapDto;
 
 
-    public static RoadmapDetailInfoResponseDto of(Roadmap roadmap, BaseRoadmapResponseDto baseRoadmapResponseDto, DetailUserResponseDto detailUserResponseDto, RoadmapDetailIntro roadmapDetailIntro, RoadmapDetailRelateRoadmapDto roadmapDetailRelateRoadmapDto){
+    public static RoadmapDetailInfoResponseDto of(Roadmap roadmap, BaseRoadmapResponseDto baseRoadmapResponseDto, DetailUserResponseDto detailUserResponseDto, RoadmapDetailIntro roadmapDetailIntro, List<RoadmapDetailBaseRelateRoadmapDto> roadmapDetailRelateRoadmapDto){
         return RoadmapDetailInfoResponseDto.builder()
                 .roadmapType(roadmap.getRoadmapType())
                 .baseRoadmapResponseDto(baseRoadmapResponseDto)

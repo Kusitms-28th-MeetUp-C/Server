@@ -1,13 +1,13 @@
 package com.kusitms.mainservice.domain.template.dto.response;
 
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Builder
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class SaveTemplateResponseDto {
     private Long templateid;
     private Long userid;
