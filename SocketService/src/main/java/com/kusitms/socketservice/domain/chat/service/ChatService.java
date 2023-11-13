@@ -22,39 +22,23 @@ import static com.kusitms.socketservice.global.error.ErrorCode.CHATTING_NOT_FOUN
 @Service
 public class ChatService {
     private final ChatRepository chatRepository;
-    public ChatMessageResponseDto createSendMessageContent(Long userId, ChatMessageRequestDto chatMessageRequestDto){
-        Chat chat = getChatFromChatName(chatMessageRequestDto.getChatName());
-        addUserId(chat, userId);
+    public ChatMessageResponseDto createSendMessageContent(Long sessionId, ChatMessageRequestDto chatMessageRequestDto){
+        Chat chat = getChatFromSessions(sessionId, chatMessageRequestDto.getChatSession());
         List<ChatMessageElementResponseDto> chatMessageList = chatMessageElementList(chat, chatMessageRequestDto);
         return ChatMessageResponseDto.of(chat, chatMessageList);
     }
 
-    private void addUserId(Chat chat, Long userId){
-        if(chat.getUserList().contains(userId)) return;
-        chat.addUser(userId);
-    }
-
     private List<ChatMessageElementResponseDto> chatMessageElementList(Chat chat, ChatMessageRequestDto chatMessageRequestDto){
-        List<ChatMessageElementResponseDto> chatMessageList = chat.getChatContentList().stream()
-                .map(this::createChatMessageElementResponseDtoFromContent)
-                .collect(Collectors.toList());
-        ChatMessageElementResponseDto newChat = createChatMessageElementResponseDto(chatMessageRequestDto);
+        List<ChatMessageElementResponseDto> chatMessageList
+                = ChatMessageElementResponseDto.listOf(chat.getChatContentList());
+        ChatMessageElementResponseDto newChat
+                = ChatMessageElementResponseDto.of(chatMessageRequestDto.getUserName(), chatMessageRequestDto.getContent(), LocalDateTime.now().toString());
         chatMessageList.add(newChat);
         return chatMessageList;
     }
 
-    private ChatMessageElementResponseDto createChatMessageElementResponseDtoFromContent(ChatContent chatContent){
-        return ChatMessageElementResponseDto.of(chatContent.getFomUserName(), chatContent.getToUserName(),
-                chatContent.getContent(), chatContent.getTime().toString());
-    }
-
-    private ChatMessageElementResponseDto createChatMessageElementResponseDto(ChatMessageRequestDto chatMessageRequestDto){
-        return ChatMessageElementResponseDto.of(chatMessageRequestDto.getFromUserName(), chatMessageRequestDto.getToUserName(),
-                chatMessageRequestDto.getContent(), LocalDateTime.now().toString());
-    }
-
-    private Chat getChatFromChatName(String chatName){
-        return chatRepository.findByChatName(chatName)
-                .orElseThrow(() -> new EntityNotFoundException(CHATTING_NOT_FOUND));
+    private Chat getChatFromSessions(Long firstSessionId, Long secondSessionId){
+        return chatRepository.findFirstBySessionListContainsAndSessionListContains(firstSessionId, secondSessionId)
+                .orElse(Chat.creatChat(firstSessionId, secondSessionId));
     }
 }

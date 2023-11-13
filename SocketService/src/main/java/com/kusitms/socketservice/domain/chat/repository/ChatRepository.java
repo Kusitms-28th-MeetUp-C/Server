@@ -6,5 +6,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.Optional;
 
 public interface ChatRepository extends MongoRepository<Chat, String> {
-    Optional<Chat> findByChatName(String chatName);
+    Optional<Chat> findFirstBySessionListContainsAndSessionListContains(Long sessionId1, Long sessionId2);
 }
