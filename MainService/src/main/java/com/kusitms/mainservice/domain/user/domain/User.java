@@ -57,6 +57,10 @@ public class User {
                 .build();
     }
 
+    public void addRoadmapDownload(RoadmapDownload roadmapDownload){
+        this.roadmapDownloadList.add(roadmapDownload);
+    }
+
     public void addReviewer(Reviewer reviewer){
         this.reviewerList.add(reviewer);
     }
