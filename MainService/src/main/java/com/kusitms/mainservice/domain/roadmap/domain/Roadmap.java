@@ -18,6 +18,7 @@ public class Roadmap {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "roadmap_id")
     private Long id;
+    private String date;
     private String title;
     @Builder.Default
     private int count = 0;

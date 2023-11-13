@@ -50,8 +50,8 @@ public class RoadmapService {
     }
     private RoadmapDetailIntro createRoadmapDetailIntro(Roadmap roadmap){
         RoadmapDetailBaseIntro roadmapDetailBaseIntro = createRoadmapDetailBaseIntro(roadmap);
-        String introduction = roadmap.getIntroduction();
-        return RoadmapDetailIntro.of(roadmapDetailBaseIntro,introduction );
+
+        return RoadmapDetailIntro.of(roadmap, roadmapDetailBaseIntro);
     }
     private RoadmapDetailBaseIntro createRoadmapDetailBaseIntro(Roadmap roadmap){
         int teamCount = getTeamCount(roadmap);

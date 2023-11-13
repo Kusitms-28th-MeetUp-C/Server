@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
 
-import static com.kusitms.mainservice.global.error.ErrorCode.INVALID_TEMPLATE_TYPE;
+import static com.kusitms.mainservice.global.error.ErrorCode.INVALID_SHARED_TYPE;
 
 @RequiredArgsConstructor
 @Getter
@@ -21,6 +21,6 @@ public enum SharedType {
         return Arrays.stream(values())
                 .filter(sharedType -> sharedType.stringSharedType.equals(stringSharedType))
                 .findFirst()
-                .orElseThrow(() -> new InvalidValueException(INVALID_TEMPLATE_TYPE));
+                .orElseThrow(() -> new InvalidValueException(INVALID_SHARED_TYPE));
     }
 }

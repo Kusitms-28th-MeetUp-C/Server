@@ -7,14 +7,14 @@ import lombok.Getter;
 @Builder
 public class TemplateDetailIntroBaseResponseDto {
     private double rating;
-    private int estimateTime;
+    private int estimatedTime;
     private int teamCount;
     private int reviewCount;
 
-    public static TemplateDetailIntroBaseResponseDto of(double rating, int estimateTime, int teamCount, int reviewCount){
+    public static TemplateDetailIntroBaseResponseDto of(double rating, int estimatedTime, int teamCount, int reviewCount){
         return TemplateDetailIntroBaseResponseDto.builder()
                 .rating(rating)
-                .estimateTime(estimateTime)
+                .estimatedTime(estimatedTime)
                 .teamCount(teamCount)
                 .reviewCount(reviewCount)
                 .build();
