@@ -17,15 +17,15 @@ public class ChatMessageElementResponseDto {
 
     public static List<ChatMessageElementResponseDto> listOf(List<ChatContent> chatContentList){
         return chatContentList.stream()
-                .map(chatContent -> ChatMessageElementResponseDto.of(chatContent.getUserName(), chatContent.getContent(), chatContent.getTime().toString()))
+                .map(ChatMessageElementResponseDto::of)
                 .collect(Collectors.toList());
     }
 
-    public static ChatMessageElementResponseDto of(String userName, String content, String time) {
+    public static ChatMessageElementResponseDto of(ChatContent chatContent) {
         return ChatMessageElementResponseDto.builder()
-                .userName(userName)
-                .content(content)
-                .time(time)
+                .userName(chatContent.getUserName())
+                .content(chatContent.getContent())
+                .time(chatContent.getTime().toString())
                 .build();
     }
 }

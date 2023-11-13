@@ -1,18 +1,21 @@
 package com.kusitms.socketservice.domain.chat.dto.response;
 
+import com.kusitms.socketservice.domain.chat.domain.ChatType;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.util.List;
 
 @Builder
 @Getter
 public class SendMessageResponseDto {
-    private List<ChatMessageElementResponseDto> chatMessageList;
+    private ChatType chatType;
+    private String receivedUser;
+    private ChatMessageElementResponseDto message;
 
-    public static SendMessageResponseDto of(List<ChatMessageElementResponseDto> chatMessageList){
+    public static SendMessageResponseDto of(ChatType chatType, String receivedUser, ChatMessageElementResponseDto message) {
         return SendMessageResponseDto.builder()
-                .chatMessageList(chatMessageList)
+                .chatType(chatType)
+                .receivedUser(receivedUser)
+                .message(message)
                 .build();
     }
 }

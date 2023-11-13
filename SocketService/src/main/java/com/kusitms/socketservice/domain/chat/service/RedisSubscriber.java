@@ -1,6 +1,7 @@
 package com.kusitms.socketservice.domain.chat.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kusitms.socketservice.domain.chat.domain.ChatType;
 import com.kusitms.socketservice.domain.chat.dto.response.ChatMessageResponseDto;
 import com.kusitms.socketservice.domain.chat.dto.response.SendMessageResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,8 @@ public class RedisSubscriber implements MessageListener {
     public void onMessage(Message message, byte[] pattern) {
         String publishMessage = getPublishMessage(message);
         ChatMessageResponseDto messageResponseDto = getChatMessageFromObjectMapper(publishMessage);
-        SendMessageResponseDto sendMessageResponseDto = SendMessageResponseDto.of(messageResponseDto.getChatMessageList());
+        SendMessageResponseDto sendMessageResponseDto
+                = SendMessageResponseDto.of(ChatType.MESSAGE, messageResponseDto.getReceivedUser(), messageResponseDto.getMessage());
         messageResponseDto.getSessionList().forEach(sessionId -> sendChatMessage(sessionId, sendMessageResponseDto));
     }
 

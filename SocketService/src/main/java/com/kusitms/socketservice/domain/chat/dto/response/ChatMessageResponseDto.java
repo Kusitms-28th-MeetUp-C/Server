@@ -9,13 +9,15 @@ import java.util.List;
 @Builder
 @Getter
 public class ChatMessageResponseDto {
+    private String receivedUser;
     private List<Long> sessionList;
-    private List<ChatMessageElementResponseDto> chatMessageList;
+    private ChatMessageElementResponseDto message;
 
-    public static ChatMessageResponseDto of(Chat chat, List<ChatMessageElementResponseDto> chatMessageList) {
+    public static ChatMessageResponseDto of(String receivedUser, Chat chat, ChatMessageElementResponseDto message) {
         return ChatMessageResponseDto.builder()
+                .receivedUser(receivedUser)
                 .sessionList(chat.getSessionList())
-                .chatMessageList(chatMessageList)
+                .message(message)
                 .build();
     }
 }
