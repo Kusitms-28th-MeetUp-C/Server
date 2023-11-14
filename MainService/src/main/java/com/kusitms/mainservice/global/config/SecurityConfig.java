@@ -22,6 +22,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 @Configuration
 public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final CorsConfig corsConfig;
     private final JwtProvider jwtProvider;
     // TODO api 추가될 때 white list url 확인해서 추가하기.
     private static final String[] whiteList = {"/api/user/signIn", "/api/user/signUp", "/api/template/**","/api/roadmap/**","/api/mypage/**"};
@@ -43,6 +44,7 @@ public class SecurityConfig {
                         exceptionHandlingConfigurer.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry.anyRequest().authenticated())
+                .addFilter(corsConfig.corsFilter())
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new ExceptionHandlerFilter(), JwtAuthenticationFilter.class)
                 .build();
