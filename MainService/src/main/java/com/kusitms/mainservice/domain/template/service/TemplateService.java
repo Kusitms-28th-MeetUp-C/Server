@@ -17,7 +17,6 @@ import com.kusitms.mainservice.domain.template.repository.TemplateRepository;
 import com.kusitms.mainservice.domain.user.domain.User;
 import com.kusitms.mainservice.domain.user.dto.response.DetailUserResponseDto;
 import com.kusitms.mainservice.domain.user.repository.UserRepository;
-import com.kusitms.mainservice.domain.user.service.AuthService;
 import com.kusitms.mainservice.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,9 +47,9 @@ public class TemplateService {
     private final UserRepository userRepository;
     private final UserService userService;
 
-    public Page<SearchBaseTemplateResponseDto> searchTemplateByTitleAndRoadmapType(SearchTemplateRequsetDto searchTemplateRequsetDto,Pageable pageable){
+    public Page<SearchBaseTemplateResponseDto> searchTemplateByTitleAndRoadmapType(SearchTemplateRequsetDto searchTemplateRequsetDto, Pageable pageable) {
         Page<Template> templateList = getTemplateListByTitleAndTemplateType(searchTemplateRequsetDto, pageable);
-        Page<SearchBaseTemplateResponseDto> searchBaseTemplateResponseDtoList = getTemplatesWithPaging(templateList,pageable);
+        Page<SearchBaseTemplateResponseDto> searchBaseTemplateResponseDtoList = getTemplatesWithPaging(templateList, pageable);
 //        return SearchTemplateResponseDto.of(searchBaseTemplateResponseDtoList);
         return searchBaseTemplateResponseDtoList;
     }
@@ -61,8 +60,8 @@ public class TemplateService {
         List<TemplateContent> templateContentList = getTemplateContentListByTemplateId(template);
         List<TemplateDetailBaseRelateDto> templateDetailBaseRelateDtoList = createTemplateDetailRelateTemplateDto(template);
         TemplateDetailConnectRoadmapDto roadmapIdAndConnectRoadmap = getRoadmapTitleResponseDto(template);
-        DetailUserResponseDto detailUserResponseDto =createDetailUserResponseDto(template.getUser());
-        return TemplateDetailResponseDto.of(template,templateDetailIntroResponseDto ,templateContentList,roadmapIdAndConnectRoadmap, templateDetailBaseRelateDtoList,detailUserResponseDto);
+        DetailUserResponseDto detailUserResponseDto = createDetailUserResponseDto(template.getUser());
+        return TemplateDetailResponseDto.of(template, templateDetailIntroResponseDto, templateContentList, roadmapIdAndConnectRoadmap, templateDetailBaseRelateDtoList, detailUserResponseDto);
 
     }
 
@@ -81,15 +80,15 @@ public class TemplateService {
     }
 
     @Transactional
-    public String saveTemplateByUserId(SaveTemplateResponseDto saveTemplateResponseDto){
+    public String saveTemplateByUserId(SaveTemplateResponseDto saveTemplateResponseDto) {
         Template template = getTemplateByTemplateId(saveTemplateResponseDto.getTemplateid());
         Optional<User> user = userRepository.findById(saveTemplateResponseDto.getUserid());
-        TemplateDownload templateDownload = TemplateDownload.createTemplateDownload(user.get(),template);
+        TemplateDownload templateDownload = TemplateDownload.createTemplateDownload(user.get(), template);
         templateDownloadRepository.save(templateDownload);
         return "저장";
     }
 
-    private List<TemplateDetailBaseRelateDto> createTemplateDetailRelateTemplateDto(Template template){
+    private List<TemplateDetailBaseRelateDto> createTemplateDetailRelateTemplateDto(Template template) {
         List<Template> templateList = getTemplatesBySameCategoryAndId(template);
         List<TemplateDetailBaseRelateDto> templateDetailBaseRelateDtoList = createTemplateDetailRelateTemplateDtoList(templateList);
         return templateDetailBaseRelateDtoList;
@@ -118,8 +117,8 @@ public class TemplateService {
         return TemplateDetailIntroBaseResponseDto.of(templateReviewResponseDto.getRatingAverage(), template.getEstimatedTime(), teamCount, templateReviewResponseDto.getReviewCount());
     }
 
-private List<TemplateContent> getTemplateContentListByTemplateId(Template template) {
-    List<TemplateContent> templateContentList = templateContentRepository.findAllByTemplateId(template.getId());
+    private List<TemplateContent> getTemplateContentListByTemplateId(Template template) {
+        List<TemplateContent> templateContentList = templateContentRepository.findAllByTemplateId(template.getId());
 
 
 //    List<TemplateContent> filteredList = templateContentList.stream()
@@ -143,9 +142,8 @@ private List<TemplateContent> getTemplateContentListByTemplateId(Template templa
 //    result.put(template.getId(), contentList);
 
 
-    return templateContentList;
-}
-
+        return templateContentList;
+    }
 
 
     private Page<Template> getTemplateListByTitleAndTemplateType(SearchTemplateRequsetDto searchTemplateRequsetDto, Pageable pageable) {
@@ -257,12 +255,21 @@ private List<TemplateContent> getTemplateContentListByTemplateId(Template templa
         return reviewContentResponseDtoList;
     }
 
-    private DetailUserResponseDto createDetailUserResponseDto(User user){
-        return userService.createDetailUserResponseDto(user);
-
+    private DetailUserResponseDto createDetailUserResponseDto(User user) {
+        int templateNum = getTemplateCountByUser(user);
+        int roadmapNum = getRoadmapCountByUser(user);
+        return DetailUserResponseDto.of(user, templateNum, roadmapNum);
     }
 
-    private List<Template> getTemplatesBySameCategoryAndId(Template template){
+    private int getTemplateCountByUser(User user) {
+        return templateRepository.countByUser(user);
+    }
+
+    private int getRoadmapCountByUser(User user) {
+        return roadmapRepository.countByUser(user);
+    }
+
+    private List<Template> getTemplatesBySameCategoryAndId(Template template) {
 //
         List<Template> templates = templateRepository.findTop4ByTemplateTypeAndIdNot(template.getTemplateType(), template.getId());
         return templates;
