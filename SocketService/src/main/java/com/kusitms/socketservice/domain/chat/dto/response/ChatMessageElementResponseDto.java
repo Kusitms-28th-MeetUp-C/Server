@@ -4,7 +4,6 @@ import com.kusitms.socketservice.domain.chat.domain.ChatContent;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,7 +14,7 @@ public class ChatMessageElementResponseDto {
     private String content;
     private String time;
 
-    public static List<ChatMessageElementResponseDto> listOf(List<ChatContent> chatContentList){
+    public static List<ChatMessageElementResponseDto> listOf(List<ChatContent> chatContentList) {
         return chatContentList.stream()
                 .map(ChatMessageElementResponseDto::of)
                 .collect(Collectors.toList());

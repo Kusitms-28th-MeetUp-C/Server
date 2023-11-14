@@ -8,4 +8,6 @@ import lombok.NoArgsConstructor;
 @Getter
 public class ChatMessageListRequestDto {
     private Long chatSession;
+    private String fromUserName;
+    private String toUserName;
 }
