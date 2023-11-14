@@ -1,6 +1,7 @@
 package com.kusitms.mainservice.global;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,18 @@ public class S3Service {
 
     private final AmazonS3 s3Client;
 
+    public void deleteFile(String fileName) {
+        try {
+            if (s3Client.doesObjectExist(bucketName, fileName)) {
+                s3Client.deleteObject(new DeleteObjectRequest(bucketName, fileName));
+                log.info("File deleted: {}", fileName);
+            } else {
+                log.warn("File not found: {}", fileName);
+            }
+        } catch (Exception e) {
+            log.error("Error deleting file: {}", fileName, e);
+        }
+    }
 
     public String uploadFile(MultipartFile file, Long memberId) {
         File fileObj = convertMultiPartFileToFile(file);
