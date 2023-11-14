@@ -1,4 +1,4 @@
-package com.kusitms.mainservice.domain.mypage.dto;
+package com.kusitms.mainservice.domain.mypage.dto.response;
 
 import com.kusitms.mainservice.domain.mypage.domain.SharedType;
 import lombok.Builder;

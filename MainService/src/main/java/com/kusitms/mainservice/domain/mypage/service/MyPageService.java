@@ -1,9 +1,9 @@
 package com.kusitms.mainservice.domain.mypage.service;
 
 import com.kusitms.mainservice.domain.mypage.domain.SharedType;
-import com.kusitms.mainservice.domain.mypage.dto.MyPageResponseDto;
-import com.kusitms.mainservice.domain.mypage.dto.MyPageUserResponseDto;
-import com.kusitms.mainservice.domain.mypage.dto.MySharedContentDto;
+import com.kusitms.mainservice.domain.mypage.dto.response.MyPageResponseDto;
+import com.kusitms.mainservice.domain.mypage.dto.response.MyPageUserResponseDto;
+import com.kusitms.mainservice.domain.mypage.dto.response.MySharedContentDto;
 import com.kusitms.mainservice.domain.roadmap.domain.Roadmap;
 import com.kusitms.mainservice.domain.roadmap.repository.RoadmapDownloadRepository;
 import com.kusitms.mainservice.domain.roadmap.repository.RoadmapRepository;

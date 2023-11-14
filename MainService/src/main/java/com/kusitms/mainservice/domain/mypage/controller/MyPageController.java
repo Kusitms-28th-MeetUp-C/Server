@@ -1,6 +1,6 @@
 package com.kusitms.mainservice.domain.mypage.controller;
 
-import com.kusitms.mainservice.domain.mypage.dto.MyPageResponseDto;
+import com.kusitms.mainservice.domain.mypage.dto.response.MyPageResponseDto;
 import com.kusitms.mainservice.domain.mypage.service.MyPageService;
 import com.kusitms.mainservice.global.common.SuccessResponse;
 import lombok.RequiredArgsConstructor;
