@@ -1,14 +1,11 @@
 package com.kusitms.mainservice.domain.user.service;
 
-import com.kusitms.mainservice.domain.roadmap.repository.RoadmapRepository;
-import com.kusitms.mainservice.domain.template.repository.TemplateRepository;
 import com.kusitms.mainservice.domain.user.auth.PlatformUserInfo;
 import com.kusitms.mainservice.domain.user.auth.RestTemplateProvider;
 import com.kusitms.mainservice.domain.user.domain.Platform;
 import com.kusitms.mainservice.domain.user.domain.User;
 import com.kusitms.mainservice.domain.user.dto.request.UserSignInRequestDto;
 import com.kusitms.mainservice.domain.user.dto.request.UserSignUpRequestDto;
-import com.kusitms.mainservice.domain.user.dto.response.DetailUserResponseDto;
 import com.kusitms.mainservice.domain.user.dto.response.UserAuthResponseDto;
 import com.kusitms.mainservice.domain.user.repository.RefreshTokenRepository;
 import com.kusitms.mainservice.domain.user.repository.UserRepository;
@@ -36,12 +33,11 @@ public class AuthService {
     private final JwtProvider jwtProvider;
     private final RestTemplateProvider restTemplateProvider;
     private final RefreshTokenRepository refreshTokenRepository;
-    private final TemplateRepository templateRepository;
-    private final RoadmapRepository roadmapRepository;
+
     public UserAuthResponseDto signIn(UserSignInRequestDto userSignInRequestDto, String authToken) {
         Platform platform = getEnumPlatformFromStringPlatform(userSignInRequestDto.getPlatform());
         PlatformUserInfo platformUser = getPlatformUserInfoFromRestTemplate(platform, authToken);
-        User getUser = getUser(platformUser);
+        User getUser = getUserByPlatformUserInfo(platformUser);
         TokenInfo tokenInfo = issueAccessTokenAndRefreshToken(getUser);
         updateRefreshToken(tokenInfo.getRefreshToken(), getUser);
         return UserAuthResponseDto.of(getUser, tokenInfo);
@@ -55,6 +51,16 @@ public class AuthService {
         TokenInfo tokenInfo = issueAccessTokenAndRefreshToken(createdUser);
         updateRefreshToken(tokenInfo.getRefreshToken(), createdUser);
         return UserAuthResponseDto.of(createdUser, tokenInfo);
+    }
+
+    public void signOut(Long userId) {
+        User findUser = getUserFromUserId(userId);
+        deleteRefreshToken(findUser);
+    }
+
+    private void deleteRefreshToken(User user) {
+        user.updateRefreshToken(null);
+        refreshTokenRepository.deleteById(user.getId());
     }
 
     private void validateDuplicateUser(Platform platform, String platformId) {
@@ -77,7 +83,12 @@ public class AuthService {
         return jwtProvider.issueToken(user.getId());
     }
 
-    private User getUser(PlatformUserInfo platformUserInfo) {
+    private User getUserFromUserId(Long userId){
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND));
+    }
+
+    private User getUserByPlatformUserInfo(PlatformUserInfo platformUserInfo) {
         return userRepository.findByPlatformId(platformUserInfo.getId())
                 .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND));
     }

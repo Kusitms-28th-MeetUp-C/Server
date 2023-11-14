@@ -9,6 +9,7 @@ import com.kusitms.mainservice.domain.user.service.UserService;
 import com.kusitms.mainservice.global.common.SuccessResponse;
 import com.kusitms.mainservice.global.config.auth.UserId;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,5 +31,11 @@ public class UserController {
                                                      @RequestBody final UserSignUpRequestDto requestDto) {
         final UserAuthResponseDto responseDto = authService.signUp(requestDto, authToken);
         return SuccessResponse.ok(responseDto);
+    }
+
+    @PatchMapping("/signOut")
+    public ResponseEntity<SuccessResponse<?>> signOut(@UserId final Long userId) {
+        authService.signOut(userId);
+        return SuccessResponse.ok(null);
     }
 }
