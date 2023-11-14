@@ -22,7 +22,8 @@ public class CustomRoadmapSpace {
     private int step;
     private LocalDate startDate;
     private LocalDate endDate;
-    private boolean isCompleted;
+    @Builder.Default
+    private boolean isCompleted = false;
     private String introduction;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "custom_roadmap_id")
@@ -47,5 +48,15 @@ public class CustomRoadmapSpace {
 
     public void addCustomRoadmapTemplate(CustomRoadmapTemplate customRoadmapTemplate){
         this.customRoadmapTemplateList.add(customRoadmapTemplate);
+    }
+
+    public void updateCompletedAneEndTime(boolean isCompleted){
+        this.isCompleted = isCompleted;
+        if(isCompleted) this.updateEndTime(LocalDate.now());
+        else this.updateEndTime(null);
+    }
+
+    public void updateEndTime(LocalDate endDate){
+        this.endDate = endDate;
     }
 }

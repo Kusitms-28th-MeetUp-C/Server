@@ -42,6 +42,10 @@ public class CustomRoadmap {
         return customRoadmap;
     }
 
+    public void updateEndDate(LocalDate endDate){
+        this.endDate = endDate;
+    }
+
     public void addCustomRoadmapSpace(CustomRoadmapSpace customRoadmapSpace){
         this.customRoadmapSpaceList.add(customRoadmapSpace);
     }
