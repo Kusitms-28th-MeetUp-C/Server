@@ -1,8 +1,8 @@
-package com.kusitms.mainservice.global.infra.mypage.controller;
+package com.kusitms.mainservice.domain.mypage.controller;
 
+import com.kusitms.mainservice.domain.mypage.dto.MyPageResponseDto;
+import com.kusitms.mainservice.domain.mypage.service.MyPageService;
 import com.kusitms.mainservice.global.common.SuccessResponse;
-import com.kusitms.mainservice.global.infra.mypage.dto.MyPageResponseDto;
-import com.kusitms.mainservice.global.infra.mypage.service.MyPageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;

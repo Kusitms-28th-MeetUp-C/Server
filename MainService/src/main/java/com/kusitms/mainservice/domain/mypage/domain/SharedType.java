@@ -1,4 +1,4 @@
-package com.kusitms.mainservice.global.infra.mypage.domain;
+package com.kusitms.mainservice.domain.mypage.domain;
 
 import com.kusitms.mainservice.global.error.exception.InvalidValueException;
 import lombok.Getter;

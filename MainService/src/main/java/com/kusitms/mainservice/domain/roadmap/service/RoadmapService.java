@@ -8,6 +8,7 @@ import com.kusitms.mainservice.domain.roadmap.dto.response.*;
 import com.kusitms.mainservice.domain.roadmap.repository.RoadmapDownloadRepository;
 import com.kusitms.mainservice.domain.roadmap.repository.RoadmapRepository;
 import com.kusitms.mainservice.domain.roadmap.repository.RoadmapSpaceRepository;
+import com.kusitms.mainservice.domain.template.repository.TemplateRepository;
 import com.kusitms.mainservice.domain.user.domain.User;
 import com.kusitms.mainservice.domain.user.dto.response.DetailUserResponseDto;
 import com.kusitms.mainservice.domain.user.service.AuthService;
@@ -33,7 +34,7 @@ public class RoadmapService {
     private final RoadmapRepository roadmapRepository;
     private final RoadmapSpaceRepository roadmapSpaceRepository;
     private final RoadmapDownloadRepository roadmapDownloadRepository;
-    private final UserService userService;
+    private final TemplateRepository templateRepository;
     public Page<SearchBaseRoadmapResponseDto> searchRoadmapByTitleAndRoadmapType(SearchRoadmapRequestDto searchRoadmapRequestDto, Pageable pageable){
         Page<Roadmap> roadmapList = getRoadmapListByTitleAndRoadmapType(searchRoadmapRequestDto, pageable);
         Page<SearchBaseRoadmapResponseDto> searchBaseRoadmapResponseDtos = createSearchBaseRoadmapResponseDtoPage(roadmapList,pageable);
@@ -76,9 +77,6 @@ public class RoadmapService {
             return getRoadmapByRoadmapType(searchRoadmapRequestDto.getRoadmapType(), pageable);
         }
         return getRoadmapByTitleAndRoadmapType(searchRoadmapRequestDto,pageable);
-    }
-    private DetailUserResponseDto createDetailUserResponseDto(User user){
-        return userService.createDetailUserResponseDto(user);
     }
     private List<RoadmapDetailBaseRelateRoadmapDto> createRoadmapDetailRelateRoadmapDto(Roadmap roadmap) {
         List<Roadmap> roadmapList = getRoadmapListBySameCategoryAndId(roadmap);
@@ -137,5 +135,19 @@ public class RoadmapService {
     private List<Roadmap> getRoadmapListBySameCategoryAndId(Roadmap roadmap){
         List<Roadmap> roadmapList = roadmapRepository.findTop6ByRoadmapTypeAndIdNot(roadmap.getRoadmapType(), roadmap.getId());
        return roadmapList;
+    }
+
+    private DetailUserResponseDto createDetailUserResponseDto(User user) {
+        int templateNum = getTemplateCountByUser(user);
+        int roadmapNum = getRoadmapCountByUser(user);
+        return DetailUserResponseDto.of(user, templateNum, roadmapNum);
+    }
+
+    private int getTemplateCountByUser(User user) {
+        return templateRepository.countByUser(user);
+    }
+
+    private int getRoadmapCountByUser(User user) {
+        return roadmapRepository.countByUser(user);
     }
 }

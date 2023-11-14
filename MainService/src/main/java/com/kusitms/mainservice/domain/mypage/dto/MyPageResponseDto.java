@@ -1,10 +1,8 @@
-package com.kusitms.mainservice.global.infra.mypage.dto;
+package com.kusitms.mainservice.domain.mypage.dto;
 
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
-
-import java.util.List;
 
 @Builder
 @Getter
