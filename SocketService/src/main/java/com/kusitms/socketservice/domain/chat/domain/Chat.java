@@ -17,20 +17,28 @@ public class Chat {
     @Builder.Default
     private List<Long> sessionList = new ArrayList<>();
     @Builder.Default
+    private List<String> nameList = new ArrayList<>();
+    @Builder.Default
     private List<ChatContent> chatContentList = new ArrayList<>();
 
-    public static Chat creatChat(Long firstSessionId, Long secondSessionId){
+    public static Chat creatChat(Long firstSessionId, Long secondSessionId, String firstName, String secondName) {
         Chat chat = Chat.builder().build();
+        chat.addName(firstName);
+        chat.addName(secondName);
         chat.addSession(firstSessionId);
         chat.addSession(secondSessionId);
         return chat;
     }
 
-    public void addChatContent(ChatContent content){
+    public void addChatContent(ChatContent content) {
         this.chatContentList.add(content);
     }
 
-    public void addSession(Long sessionId){
+    public void addName(String name) {
+        this.nameList.add(name);
+    }
+
+    public void addSession(Long sessionId) {
         this.sessionList.add(sessionId);
     }
 }

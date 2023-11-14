@@ -1,9 +1,10 @@
 package com.kusitms.socketservice.domain.chat.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kusitms.socketservice.domain.chat.domain.ChatType;
 import com.kusitms.socketservice.domain.chat.dto.response.ChatMessageResponseDto;
 import com.kusitms.socketservice.domain.chat.dto.response.SendMessageResponseDto;
+import com.kusitms.socketservice.global.common.MessageSuccessCode;
+import com.kusitms.socketservice.global.common.MessageSuccessResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;
@@ -26,25 +27,26 @@ public class RedisSubscriber implements MessageListener {
         String publishMessage = getPublishMessage(message);
         ChatMessageResponseDto messageResponseDto = getChatMessageFromObjectMapper(publishMessage);
         SendMessageResponseDto sendMessageResponseDto
-                = SendMessageResponseDto.of(ChatType.MESSAGE, messageResponseDto.getReceivedUser(), messageResponseDto.getMessage());
+                = SendMessageResponseDto.of(messageResponseDto.getReceivedUser(), messageResponseDto.getMessage());
         messageResponseDto.getSessionList().forEach(sessionId -> sendChatMessage(sessionId, sendMessageResponseDto));
     }
 
-    private ChatMessageResponseDto getChatMessageFromObjectMapper(String publishMessage){
+    private ChatMessageResponseDto getChatMessageFromObjectMapper(String publishMessage) {
         ChatMessageResponseDto messageResponseDto;
         try {
-            messageResponseDto =  objectMapper.readValue(publishMessage, ChatMessageResponseDto.class);
+            messageResponseDto = objectMapper.readValue(publishMessage, ChatMessageResponseDto.class);
         } catch (Exception e) {
             throw new MessageDeliveryException("Error");
         }
         return messageResponseDto;
     }
 
-    private String getPublishMessage(Message message){
+    private String getPublishMessage(Message message) {
         return (String) redisTemplate.getStringSerializer().deserialize(message.getBody());
     }
 
-    private void sendChatMessage(Long sessionId, SendMessageResponseDto publishMessage){
-        messagingTemplate.convertAndSend("/sub/chat/" + sessionId, publishMessage);
+    private void sendChatMessage(Long sessionId, SendMessageResponseDto publishMessage) {
+        messagingTemplate.convertAndSend("/sub/chat/" + sessionId,
+                MessageSuccessResponse.of(MessageSuccessCode.RECEIVED, publishMessage));
     }
 }

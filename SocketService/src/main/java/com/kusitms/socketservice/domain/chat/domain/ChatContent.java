@@ -12,8 +12,8 @@ public class ChatContent {
     private String content;
     private LocalDateTime time;
 
-    public static ChatContent createChatContent(String userName, String content, Chat chat){
-        ChatContent chatContent =  ChatContent.builder()
+    public static ChatContent createChatContent(String userName, String content, Chat chat) {
+        ChatContent chatContent = ChatContent.builder()
                 .userName(userName)
                 .content(content)
                 .time(LocalDateTime.now())

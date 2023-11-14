@@ -6,8 +6,6 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class ChatMessageListRequestDto {
-    private Long chatSession;
-    private String fromUserName;
-    private String toUserName;
+public class ChatListRequestDto {
+    private String userName;
 }
