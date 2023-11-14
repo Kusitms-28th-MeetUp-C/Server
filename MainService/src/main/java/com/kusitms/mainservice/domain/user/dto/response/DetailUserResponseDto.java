@@ -1,6 +1,7 @@
 package com.kusitms.mainservice.domain.user.dto.response;
 
 import com.kusitms.mainservice.domain.user.domain.User;
+import com.kusitms.mainservice.domain.user.domain.UserType;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -9,6 +10,7 @@ import lombok.Getter;
 public class DetailUserResponseDto {
     private Long id;
     private String profile;
+    private UserType userType;
     private String name;
     private String email;
     private int templateNum;
@@ -18,6 +20,7 @@ public class DetailUserResponseDto {
         return DetailUserResponseDto.builder()
                 .id(user.getId())
                 .profile(user.getProfile())
+                .userType(user.getUserType())
                 .name(user.getName())
                 .email(user.getEmail())
                 .templateNum(templateNum)
