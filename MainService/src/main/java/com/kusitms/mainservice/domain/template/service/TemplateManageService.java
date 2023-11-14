@@ -12,6 +12,7 @@ import com.kusitms.mainservice.domain.team.dto.response.TeamSpaceResponseDto;
 import com.kusitms.mainservice.domain.team.repository.TeamRepository;
 import com.kusitms.mainservice.domain.template.domain.*;
 import com.kusitms.mainservice.domain.template.dto.request.TemplateReviewRequestDto;
+import com.kusitms.mainservice.domain.template.dto.request.TemplateSharingRequestDto;
 import com.kusitms.mainservice.domain.template.dto.response.BaseCustomTemplateResponseDto;
 import com.kusitms.mainservice.domain.template.dto.response.CustomTemplateDetailResponseDto;
 import com.kusitms.mainservice.domain.template.dto.response.OriginalTemplateResponseDto;
@@ -31,6 +32,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.kusitms.mainservice.domain.template.domain.TemplateContent.createTemplateContent;
+import static com.kusitms.mainservice.domain.template.domain.TemplateType.getEnumTemplateTypeFromStringTemplateType;
 import static com.kusitms.mainservice.global.error.ErrorCode.*;
 
 @Slf4j
@@ -49,6 +52,15 @@ public class TemplateManageService {
     private final TemplateReviewRepository templateReviewRepository;
     private final RoadmapRepository roadmapRepository;
     private final ReviewerRepository reviewerRepository;
+
+    public void createSharingTemplate(Long userId, TemplateSharingRequestDto templateSharingRequestDto) {
+        User user = getUserFromUserId(userId);
+        TemplateType templateType = getEnumTemplateTypeFromStringTemplateType(templateSharingRequestDto.getTemplateType());
+        Template createdTemplate = Template.createTemplate(templateSharingRequestDto, templateType, user);
+        saveTemplate(createdTemplate);
+        TemplateContent templateContent = createTemplateContent(createdTemplate.getId(), templateSharingRequestDto.getContent());
+        saveTemplateContent(templateContent);
+    }
 
     public OriginalTemplateResponseDto getOriginalTemplateInfo(Long userId, Long templateId) {
         Template template = getTemplateFromTemplateId(templateId);
@@ -161,6 +173,14 @@ public class TemplateManageService {
     private User getUserFromUserId(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND));
+    }
+
+    private void saveTemplateContent(TemplateContent templateContent) {
+        teamContentRepository.save(templateContent);
+    }
+
+    private void saveTemplate(Template template) {
+        templateRepository.save(template);
     }
 
     private void saveReviewer(Reviewer reviewer) {

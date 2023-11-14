@@ -1,12 +1,16 @@
 package com.kusitms.mainservice.domain.template.domain;
 
 import com.kusitms.mainservice.domain.roadmap.domain.RoadmapTemplate;
+import com.kusitms.mainservice.domain.template.dto.request.TemplateSharingRequestDto;
 import com.kusitms.mainservice.domain.user.domain.User;
+import com.kusitms.mainservice.global.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.jdbc.core.metadata.TableMetaDataProvider;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,7 +23,7 @@ import java.util.List;
 @Table(name = "template")
 @Entity
 @Setter
-public class Template {
+public class Template extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "template_id")
@@ -31,7 +35,6 @@ public class Template {
     private int count = 0;
     private int estimatedTime;
     private String introduction;
-    private String date;
     @ManyToOne
     @JoinColumn(name = "maker_id")
     private User user;
@@ -44,6 +47,18 @@ public class Template {
     @OneToMany(mappedBy = "template")
     @Builder.Default
     private List<RoadmapTemplate> roadmapTemplates = new ArrayList<>();
+
+    public static Template createTemplate(TemplateSharingRequestDto templateSharingRequestDto, TemplateType templateType, User user){
+        Template template = Template.builder()
+                .title(templateSharingRequestDto.getTitle())
+                .templateType(templateType)
+                .estimatedTime(templateSharingRequestDto.getEstimatedTime())
+                .introduction(templateSharingRequestDto.getIntroduction())
+                .user(user)
+                .build();
+        user.addTemplate(template);
+        return template;
+    }
 
     public void addReviewer(Reviewer reviewer){
         this.reviewerList.add(reviewer);

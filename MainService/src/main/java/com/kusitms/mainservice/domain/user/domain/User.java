@@ -4,6 +4,7 @@ import com.kusitms.mainservice.domain.roadmap.domain.Roadmap;
 import com.kusitms.mainservice.domain.roadmap.domain.RoadmapDownload;
 import com.kusitms.mainservice.domain.team.domain.Team;
 import com.kusitms.mainservice.domain.template.domain.Reviewer;
+import com.kusitms.mainservice.domain.template.domain.Template;
 import com.kusitms.mainservice.domain.template.domain.TemplateDownload;
 import com.kusitms.mainservice.domain.user.auth.PlatformUserInfo;
 import jakarta.persistence.*;
@@ -45,6 +46,9 @@ public class User {
     private List<TemplateDownload> templateDownloadList = new ArrayList<>();
     @OneToMany(mappedBy = "user")
     @Builder.Default
+    private List<Template> templateList = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    @Builder.Default
     private List<Reviewer> reviewerList = new ArrayList<>();
 
     public static User createUser(PlatformUserInfo platformUserInfo, Platform platform) {
@@ -55,6 +59,10 @@ public class User {
                 .name(platformUserInfo.getName())
                 .profile(platformUserInfo.getPicture())
                 .build();
+    }
+
+    public void addTemplate(Template template){
+        this.templateList.add(template);
     }
 
     public void addRoadmapDownload(RoadmapDownload roadmapDownload){
