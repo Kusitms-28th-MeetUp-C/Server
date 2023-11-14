@@ -27,6 +27,12 @@ public class TeamController {
         return SuccessResponse.ok(responseDto);
     }
 
+    @GetMapping("/{teamId}")
+    public ResponseEntity<SuccessResponse<?>> getTeamRoadmapDetail(@PathVariable final Long teamId) {
+        final TeamRoadmapDetailResponseDto responseDto = teamRoadmapService.getTeamRoadmapDetail(teamId);
+        return SuccessResponse.ok(responseDto);
+    }
+
     @PostMapping
     public ResponseEntity<SuccessResponse<?>> createTeam(@UserId final Long userId,
                                                          @RequestBody final TeamRequestDto requestDto) {
@@ -45,11 +51,5 @@ public class TeamController {
                                                              @RequestBody final TeamRoadmapRequestDto requestDto) {
         teamRoadmapService.addTeamRoadmap(userId, requestDto);
         return SuccessResponse.created(null);
-    }
-
-    @GetMapping("/detail")
-    public ResponseEntity<SuccessResponse<?>> getTeamRoadmapDetail(@RequestParam final Long teamId) {
-        final TeamRoadmapDetailResponseDto responseDto = teamRoadmapService.getTeamRoadmapDetail(teamId);
-        return SuccessResponse.ok(responseDto);
     }
 }
