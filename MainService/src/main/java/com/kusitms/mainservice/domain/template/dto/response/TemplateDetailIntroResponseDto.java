@@ -15,7 +15,7 @@ public class TemplateDetailIntroResponseDto {
 
     public static TemplateDetailIntroResponseDto of(Template template, TemplateDetailIntroBaseResponseDto templateIntro, List<ReviewContentResponseDto> reviews){
         return TemplateDetailIntroResponseDto.builder()
-                .date(template.getDate())
+                .date(template.getCreateDate().toLocalDate().toString())
                 .simpleInfo(templateIntro)
                 .introduction(template.getIntroduction())
                 .reviews(reviews)
