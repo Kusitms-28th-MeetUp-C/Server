@@ -1,5 +1,6 @@
 package com.kusitms.mainservice.domain.mypage.service;
 
+import com.kusitms.mainservice.domain.mypage.domain.SharedType;
 import com.kusitms.mainservice.domain.mypage.dto.MyPageResponseDto;
 import com.kusitms.mainservice.domain.mypage.dto.MyPageUserResponseDto;
 import com.kusitms.mainservice.domain.mypage.dto.MySharedContentDto;
@@ -13,15 +14,14 @@ import com.kusitms.mainservice.domain.user.domain.User;
 import com.kusitms.mainservice.domain.user.dto.response.DetailUserResponseDto;
 import com.kusitms.mainservice.domain.user.repository.UserRepository;
 import com.kusitms.mainservice.global.error.exception.EntityNotFoundException;
-import com.kusitms.mainservice.domain.mypage.domain.SharedType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,15 +38,18 @@ public class MyPageService {
     private final TemplateRepository templateRepository;
     private final RoadmapRepository roadmapRepository;
     private final UserRepository userRepository;
-    public MyPageResponseDto getMyPageResponse(Long userId, Pageable pageable ){
+
+    public MyPageResponseDto getMyPageResponse(Long userId, Pageable pageable) {
         MyPageResponseDto myPageResponseDto = createMyPageResponseDto(userId, pageable);
-    return myPageResponseDto;
+        return myPageResponseDto;
     }
-    private MyPageResponseDto createMyPageResponseDto(Long userId,Pageable pageable){
+
+    private MyPageResponseDto createMyPageResponseDto(Long userId, Pageable pageable) {
         MyPageUserResponseDto myPageUserResponseDto = createMyPageUserResponseDto(userId);
         Page<MySharedContentDto> mySharedContentDtoList = createmySharedContentDtoList(userId, pageable);
-        return MyPageResponseDto.of(myPageUserResponseDto,mySharedContentDtoList);
+        return MyPageResponseDto.of(myPageUserResponseDto, mySharedContentDtoList);
     }
+
     private Page<MySharedContentDto> createmySharedContentDtoList(Long userId, Pageable pageable) {
         List<Template> templateList = templateRepository.findAllByUserId(userId);
         List<Roadmap> roadmapList = roadmapRepository.findAllByUserId(userId);
@@ -54,12 +57,12 @@ public class MyPageService {
 
         // Template 리스트와 Roadmap 리스트를 합침
         for (Template template : templateList) {
-            MySharedContentDto dto = MySharedContentDto.of(template.getId(),SharedType.Template, template.getTitle(), template.getTemplateType().toString());
+            MySharedContentDto dto = MySharedContentDto.of(template.getId(), SharedType.Template, template.getTitle(), template.getTemplateType().toString());
             contentList.add(dto);
         }
 
         for (Roadmap roadmap : roadmapList) {
-            MySharedContentDto dto = MySharedContentDto.of(roadmap.getId(),SharedType.Roadmap, roadmap.getTitle(), roadmap.getRoadmapType().toString());
+            MySharedContentDto dto = MySharedContentDto.of(roadmap.getId(), SharedType.Roadmap, roadmap.getTitle(), roadmap.getRoadmapType().toString());
             contentList.add(dto);
         }
 
@@ -79,28 +82,31 @@ public class MyPageService {
 
         return resultPage;
     }
-    private MyPageUserResponseDto createMyPageUserResponseDto(Long userId){
+
+    private MyPageUserResponseDto createMyPageUserResponseDto(Long userId) {
         User user = getUserByUserId(userId);
         DetailUserResponseDto detailUserResponseDto = createDetailUserResponseDto(user);
         int templateNum = detailUserResponseDto.getTemplateNum();
         int roadmapNum = detailUserResponseDto.getRoadmapNum();
         int point = 0;
-        return MyPageUserResponseDto.of(user,templateNum,roadmapNum,point);
+        return MyPageUserResponseDto.of(user, templateNum, roadmapNum, point);
     }
 
-    private User getUserByUserId(Long id){
+    private User getUserByUserId(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND));
     }
 
-    public DetailUserResponseDto createDetailUserResponseDto(User user){
+    public DetailUserResponseDto createDetailUserResponseDto(User user) {
         int templateNum = getTemplateCountByUser(user);
         int roadmapNum = getRoadmapCountByUser(user);
-        return DetailUserResponseDto.of(user, templateNum,roadmapNum);
+        return DetailUserResponseDto.of(user, templateNum, roadmapNum);
     }
+
     private int getTemplateCountByUser(User user) {
         return templateRepository.countByUser(user);
     }
+
     private int getRoadmapCountByUser(User user) {
         return roadmapRepository.countByUser(user);
     }
