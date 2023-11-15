@@ -49,7 +49,7 @@ public class TemplateService {
 
     public Page<SearchBaseTemplateResponseDto> searchTemplateByTitleAndRoadmapType(SearchTemplateRequsetDto searchTemplateRequsetDto, Pageable pageable) {
         Page<Template> templateList = getTemplateListByTitleAndTemplateType(searchTemplateRequsetDto, pageable);
-        Page<SearchBaseTemplateResponseDto> searchBaseTemplateResponseDtoList = getTemplatesWithPaging(templateList, pageable);
+        Page<SearchBaseTemplateResponseDto> searchBaseTemplateResponseDtoList = getTemplatesWithPaging(templateList);
 //        return SearchTemplateResponseDto.of(searchBaseTemplateResponseDtoList);
         return searchBaseTemplateResponseDtoList;
     }
@@ -79,9 +79,9 @@ public class TemplateService {
         return GetTeamForSaveTemplateResponseDto.of(teamTitleResponseDtoList);
     }
 
-    public String saveTemplateByUserId(SaveTemplateResponseDto saveTemplateResponseDto) {
-        Template template = getTemplateByTemplateId(saveTemplateResponseDto.getTemplateId());
-        Optional<User> user = userRepository.findById(saveTemplateResponseDto.getUserId());
+    public String saveTemplateByUserId(Long userId, Long templateId) {
+        Template template = getTemplateByTemplateId(templateId);
+        Optional<User> user = userRepository.findById(userId);
         TemplateDownload templateDownload = TemplateDownload.createTemplateDownload(user.get(), template);
         templateDownloadRepository.save(templateDownload);
         return "저장";
@@ -186,7 +186,7 @@ public class TemplateService {
         }
     }
 
-    public Page<SearchBaseTemplateResponseDto> getTemplatesWithPaging(Page<Template> templatePage, Pageable pageable) {
+    public Page<SearchBaseTemplateResponseDto> getTemplatesWithPaging(Page<Template> templatePage) {
 
         return templatePage.map(template ->
                 SearchBaseTemplateResponseDto.of(

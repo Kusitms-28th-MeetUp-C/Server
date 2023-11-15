@@ -10,7 +10,7 @@ import lombok.Getter;
 public class SearchBaseRoadmapResponseDto {
 
     private Long roadmapId;
-    private RoadmapType roadmapType;
+    private RoadmapType type;
     private String title;
     private int step;
     private int count;
@@ -18,7 +18,7 @@ public class SearchBaseRoadmapResponseDto {
     public static  SearchBaseRoadmapResponseDto of(Roadmap roadmap, int step ){
         return SearchBaseRoadmapResponseDto.builder()
                 .roadmapId(roadmap.getId())
-                .roadmapType(roadmap.getRoadmapType())
+                .type(roadmap.getRoadmapType())
                 .title(roadmap.getTitle())
                 .step(step)
                 .count(roadmap.getCount())

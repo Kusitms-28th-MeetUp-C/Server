@@ -7,13 +7,13 @@ import org.springframework.data.domain.Page;
 @Builder
 @Getter
 public class MyPageResponseDto {
-    private MyPageUserResponseDto myPageUserResponseDto;
-    private Page<MySharedContentDto> mySharedContentDtoList;
+    private MyPageUserResponseDto user;
+    private Page<MySharedContentDto> contentList;
 
     public static MyPageResponseDto of(MyPageUserResponseDto myPageUserResponseDto,Page<MySharedContentDto> mySharedContentDtoList){
         return MyPageResponseDto.builder()
-                .myPageUserResponseDto(myPageUserResponseDto)
-                .mySharedContentDtoList(mySharedContentDtoList)
+                .user(myPageUserResponseDto)
+                .contentList(mySharedContentDtoList)
                 .build();
     }
 

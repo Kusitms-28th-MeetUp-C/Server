@@ -12,7 +12,7 @@ import java.util.List;
 public class SearchBaseTemplateResponseDto {
     private Long templateId;
     private String title;
-    private TemplateType templateType;
+    private TemplateType type;
     private int count;
     private int estimatedTime;
     private String connectedRoadmap;
@@ -21,7 +21,7 @@ public class SearchBaseTemplateResponseDto {
         return SearchBaseTemplateResponseDto.builder()
                 .templateId(template.getId())
                 .title(template.getTitle())
-                .templateType(template.getTemplateType())
+                .type(template.getTemplateType())
                 .count(count)
                 .estimatedTime(template.getEstimatedTime())
                 .connectedRoadmap(connectedRoadmap)

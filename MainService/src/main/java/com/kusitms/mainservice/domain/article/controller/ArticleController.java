@@ -17,7 +17,7 @@ import java.util.List;
 public class ArticleController {
     private final ArticleService articleService;
 
-    @GetMapping("/get")
+    @GetMapping
     public ResponseEntity<SuccessResponse<?>> getAritcleList(){
         final List<ArticleResponseDto> articleResponseDtoList = articleService.getArticleList();
         return SuccessResponse.ok(articleResponseDtoList);
