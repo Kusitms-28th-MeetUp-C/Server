@@ -26,12 +26,12 @@ public class UserController {
         return SuccessResponse.ok(responseDto);
     }
 
-    @PostMapping("/signUp")
-    public ResponseEntity<SuccessResponse<?>> signUp(@RequestHeader("Authorization") final String authToken,
-                                                     @RequestBody final UserSignUpRequestDto requestDto) {
-        final UserAuthResponseDto responseDto = authService.signUp(requestDto, authToken);
-        return SuccessResponse.ok(responseDto);
-    }
+//    @PostMapping("/signUp")
+//    public ResponseEntity<SuccessResponse<?>> signUp(@RequestHeader("Authorization") final String authToken,
+//                                                     @RequestBody final UserSignUpRequestDto requestDto) {
+//        final UserAuthResponseDto responseDto = authService.signUp(requestDto, authToken);
+//        return SuccessResponse.ok(responseDto);
+//    }
 
     @PatchMapping("/signOut")
     public ResponseEntity<SuccessResponse<?>> signOut(@UserId final Long userId) {

@@ -53,9 +53,8 @@ public class User {
     @Builder.Default
     private List<Reviewer> reviewerList = new ArrayList<>();
 
-    public static User createUser(PlatformUserInfo platformUserInfo, Platform platform) {
+    public static User createUser(PlatformUserInfo platformUserInfo) {
         return User.builder()
-                .platform(platform)
                 .platformId(platformUserInfo.getId())
                 .email(platformUserInfo.getEmail())
                 .name(platformUserInfo.getName())
@@ -63,18 +62,23 @@ public class User {
                 .build();
     }
 
-    public void addTemplate(Template template){
+    public void updatePlatform(Platform platform) {
+        this.platform = platform;
+    }
+
+    public void addTemplate(Template template) {
         this.templateList.add(template);
     }
-    public void addRoadmap(Roadmap roadmap){
+
+    public void addRoadmap(Roadmap roadmap) {
         this.roadmapList.add(roadmap);
     }
 
-    public void addRoadmapDownload(RoadmapDownload roadmapDownload){
+    public void addRoadmapDownload(RoadmapDownload roadmapDownload) {
         this.roadmapDownloadList.add(roadmapDownload);
     }
 
-    public void addReviewer(Reviewer reviewer){
+    public void addReviewer(Reviewer reviewer) {
         this.reviewerList.add(reviewer);
     }
 
@@ -85,13 +89,18 @@ public class User {
     public void updateTeamList(Team team) {
         this.teamList.add(team);
     }
-    public void updateProfile(String profile){ this.profile = profile;}
-    public void updateMypage( ModifyUserProfileRequestDto modifyUserProfileRequestDto){
+
+    public void updateProfile(String profile) {
+        this.profile = profile;
+    }
+
+    public void updateMypage(ModifyUserProfileRequestDto modifyUserProfileRequestDto) {
         this.profile = modifyUserProfileRequestDto.getProfile();
         this.name = modifyUserProfileRequestDto.getName();
         this.userType = modifyUserProfileRequestDto.getUserType();
     }
-    public static User getProfile(User user,String profile){
+
+    public static User getProfile(User user, String profile) {
         return User.builder()
                 .id(user.getId())
                 .profile(profile)

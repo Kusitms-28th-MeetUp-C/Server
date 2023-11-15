@@ -18,6 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
 import static com.kusitms.mainservice.domain.user.domain.Platform.getEnumPlatformFromStringPlatform;
 import static com.kusitms.mainservice.domain.user.domain.RefreshToken.createRefreshToken;
 import static com.kusitms.mainservice.global.error.ErrorCode.DUPLICATE_USER;
@@ -35,23 +37,26 @@ public class AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
 
     public UserAuthResponseDto signIn(UserSignInRequestDto userSignInRequestDto, String authToken) {
+        System.out.println(userSignInRequestDto.getPlatform());
         Platform platform = getEnumPlatformFromStringPlatform(userSignInRequestDto.getPlatform());
         PlatformUserInfo platformUser = getPlatformUserInfoFromRestTemplate(platform, authToken);
         User getUser = getUserByPlatformUserInfo(platformUser);
+        Boolean isFistLogin = Objects.isNull(getUser.getPlatform()) ? Boolean.TRUE : Boolean.FALSE;
         TokenInfo tokenInfo = issueAccessTokenAndRefreshToken(getUser);
         updateRefreshToken(tokenInfo.getRefreshToken(), getUser);
-        return UserAuthResponseDto.of(getUser, tokenInfo);
+        saveUser(getUser, platform);
+        return UserAuthResponseDto.of(getUser, tokenInfo, isFistLogin);
     }
 
-    public UserAuthResponseDto signUp(UserSignUpRequestDto userSignUpRequestDto, String authToken) {
-        Platform platform = getEnumPlatformFromStringPlatform(userSignUpRequestDto.getPlatform());
-        PlatformUserInfo platformUser = getPlatformUserInfoFromRestTemplate(platform, authToken);
-        validateDuplicateUser(platform, platformUser.getId());
-        User createdUser = saveUser(platformUser, platform);
-        TokenInfo tokenInfo = issueAccessTokenAndRefreshToken(createdUser);
-        updateRefreshToken(tokenInfo.getRefreshToken(), createdUser);
-        return UserAuthResponseDto.of(createdUser, tokenInfo);
-    }
+//    public UserAuthResponseDto signUp(UserSignUpRequestDto userSignUpRequestDto, String authToken) {
+//        Platform platform = getEnumPlatformFromStringPlatform(userSignUpRequestDto.getPlatform());
+//        PlatformUserInfo platformUser = getPlatformUserInfoFromRestTemplate(platform, authToken);
+//        validateDuplicateUser(platform, platformUser.getId());
+//        User createdUser = saveUser(platformUser, platform);
+//        TokenInfo tokenInfo = issueAccessTokenAndRefreshToken(createdUser);
+//        updateRefreshToken(tokenInfo.getRefreshToken(), createdUser);
+//        return UserAuthResponseDto.of(createdUser, tokenInfo);
+//    }
 
     public void signOut(Long userId) {
         User findUser = getUserFromUserId(userId);
@@ -68,10 +73,9 @@ public class AuthService {
             throw new ConflictException(DUPLICATE_USER);
     }
 
-    private User saveUser(PlatformUserInfo platformUser, Platform platform) {
-        User createdUser = User.createUser(platformUser, platform);
+    private void saveUser(User createdUser, Platform platform) {
+        createdUser.updatePlatform(platform);
         userRepository.save(createdUser);
-        return createdUser;
     }
 
     private void updateRefreshToken(String refreshToken, User user) {
@@ -90,7 +94,7 @@ public class AuthService {
 
     private User getUserByPlatformUserInfo(PlatformUserInfo platformUserInfo) {
         return userRepository.findByPlatformId(platformUserInfo.getId())
-                .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND));
+                .orElse(User.createUser(platformUserInfo));
     }
 
     private PlatformUserInfo getPlatformUserInfoFromRestTemplate(Platform platform, String authToken) {

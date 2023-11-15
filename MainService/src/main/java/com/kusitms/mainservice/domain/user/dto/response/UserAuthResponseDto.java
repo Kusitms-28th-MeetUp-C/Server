@@ -14,13 +14,15 @@ public class UserAuthResponseDto {
     private String picture;
     private String accessToken;
     private String refreshToken;
+    private Boolean isFirst;
 
-    public static UserAuthResponseDto of(User user, TokenInfo token) {
+    public static UserAuthResponseDto of(User user, TokenInfo token, Boolean isFirst) {
         return UserAuthResponseDto.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .name(user.getName())
                 .picture(user.getProfile())
+                .isFirst(isFirst)
                 .accessToken(token.getAccessToken())
                 .refreshToken(token.getRefreshToken())
                 .build();
