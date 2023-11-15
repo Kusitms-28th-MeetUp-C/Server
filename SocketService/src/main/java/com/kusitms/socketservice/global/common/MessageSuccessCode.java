@@ -9,7 +9,8 @@ import lombok.RequiredArgsConstructor;
 public enum MessageSuccessCode {
     RECEIVED(200, "received"),
     MESSAGE(200, "messageDetail"),
-    CHATLIST(200, "chatList");
+    CHATLIST(200, "chatList"),
+    SEARCH(200, "search");
 
     private final int code;
     private final String messageType;
