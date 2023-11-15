@@ -22,4 +22,5 @@ public class MyPageController {
         final MyPageResponseDto myPageResponseDto = myPageService.getMyPageResponse(userId,pageable);
         return SuccessResponse.ok(myPageResponseDto);
     }
+
 }

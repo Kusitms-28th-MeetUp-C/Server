@@ -27,6 +27,7 @@ public class User {
     private Long id;
     @Enumerated(EnumType.STRING)
     private Platform platform;
+    @Enumerated(EnumType.STRING)
     private UserType userType;
     private String platformId;
     private String email;
