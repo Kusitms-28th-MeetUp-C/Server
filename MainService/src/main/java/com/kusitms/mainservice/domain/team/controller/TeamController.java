@@ -6,6 +6,7 @@ import com.kusitms.mainservice.domain.team.dto.request.UpdateTeamRequestDto;
 import com.kusitms.mainservice.domain.team.dto.response.TeamListResponseDto;
 import com.kusitms.mainservice.domain.team.dto.response.TeamResponseDto;
 import com.kusitms.mainservice.domain.team.dto.response.TeamRoadmapDetailResponseDto;
+import com.kusitms.mainservice.domain.team.dto.response.TeamTitleListResponseDto;
 import com.kusitms.mainservice.domain.team.service.TeamRoadmapService;
 import com.kusitms.mainservice.domain.team.service.TeamService;
 import com.kusitms.mainservice.global.common.SuccessResponse;
@@ -30,6 +31,12 @@ public class TeamController {
     @GetMapping("/{teamId}")
     public ResponseEntity<SuccessResponse<?>> getTeamRoadmapDetail(@PathVariable final Long teamId) {
         final TeamRoadmapDetailResponseDto responseDto = teamRoadmapService.getTeamRoadmapDetail(teamId);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<SuccessResponse<?>> getTeamList(@UserId final Long userId) {
+        final TeamTitleListResponseDto responseDto = teamService.getTeamTitleList(userId);
         return SuccessResponse.ok(responseDto);
     }
 
