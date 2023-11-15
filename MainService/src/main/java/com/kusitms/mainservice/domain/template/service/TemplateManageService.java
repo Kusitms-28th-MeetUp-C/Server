@@ -2,10 +2,12 @@ package com.kusitms.mainservice.domain.template.service;
 
 import com.kusitms.mainservice.domain.roadmap.domain.CustomRoadmap;
 import com.kusitms.mainservice.domain.roadmap.domain.CustomRoadmapSpace;
+import com.kusitms.mainservice.domain.roadmap.domain.CustomRoadmapTemplate;
 import com.kusitms.mainservice.domain.roadmap.dto.response.CustomRoadmapDetailResponseDto;
 import com.kusitms.mainservice.domain.roadmap.dto.response.CustomRoadmapSpaceDetailResponseDto;
 import com.kusitms.mainservice.domain.roadmap.repository.CustomRoadmapRepository;
-import com.kusitms.mainservice.domain.roadmap.repository.RoadmapRepository;
+import com.kusitms.mainservice.domain.roadmap.repository.CustomRoadmapSpaceRepository;
+import com.kusitms.mainservice.domain.roadmap.repository.CustomRoadmapTemplateRepository;
 import com.kusitms.mainservice.domain.team.domain.Team;
 import com.kusitms.mainservice.domain.team.dto.response.TeamResponseDto;
 import com.kusitms.mainservice.domain.team.dto.response.TeamSpaceResponseDto;
@@ -13,15 +15,14 @@ import com.kusitms.mainservice.domain.team.repository.TeamRepository;
 import com.kusitms.mainservice.domain.template.domain.*;
 import com.kusitms.mainservice.domain.template.dto.request.TemplateReviewRequestDto;
 import com.kusitms.mainservice.domain.template.dto.request.TemplateSharingRequestDto;
+import com.kusitms.mainservice.domain.template.dto.request.TemplateTeamRequestDto;
 import com.kusitms.mainservice.domain.template.dto.response.BaseCustomTemplateResponseDto;
 import com.kusitms.mainservice.domain.template.dto.response.CustomTemplateDetailResponseDto;
-import com.kusitms.mainservice.domain.template.dto.response.OriginalTemplateResponseDto;
 import com.kusitms.mainservice.domain.template.dto.response.TemplateDownloadDetailResponseDto;
 import com.kusitms.mainservice.domain.template.mongoRepository.CustomTemplateContentRepository;
 import com.kusitms.mainservice.domain.template.mongoRepository.TemplateContentRepository;
 import com.kusitms.mainservice.domain.template.repository.*;
 import com.kusitms.mainservice.domain.user.domain.User;
-import com.kusitms.mainservice.domain.user.dto.response.MakerResponseDto;
 import com.kusitms.mainservice.domain.user.repository.UserRepository;
 import com.kusitms.mainservice.global.error.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +43,7 @@ import static com.kusitms.mainservice.global.error.ErrorCode.*;
 @Service
 public class TemplateManageService {
     private final TemplateRepository templateRepository;
-    private final TemplateContentRepository teamContentRepository;
+    private final TemplateContentRepository templateContentRepository;
     private final CustomTemplateContentRepository customTemplateContentRepository;
     private final CustomTemplateRepository customTemplateRepository;
     private final CustomRoadmapRepository customRoadmapRepository;
@@ -50,8 +51,20 @@ public class TemplateManageService {
     private final TeamRepository teamRepository;
     private final TemplateDownloadRepository templateDownloadRepository;
     private final TemplateReviewRepository templateReviewRepository;
-    private final RoadmapRepository roadmapRepository;
     private final ReviewerRepository reviewerRepository;
+    private final CustomRoadmapSpaceRepository customRoadmapSpaceRepository;
+    private final CustomRoadmapTemplateRepository customRoadmapTemplateRepository;
+
+    public void addTemplateToTeam(Long userId, TemplateTeamRequestDto templateTeamRequestDto) {
+        Template template = getTemplateFromTemplateId(templateTeamRequestDto.getTemplateId());
+        TemplateDownload templateDownload = getTemplateDownloadFromUserIdAndTemplateId(userId, templateTeamRequestDto.getTemplateId());
+        CustomTemplate customTemplate = CustomTemplate.createCustomTemplate(template, templateDownload);
+        saveCustomTemplate(customTemplate);
+        CustomRoadmapSpace customRoadmapSpace = getCustomRoadmapSpaceFromStepId(templateTeamRequestDto.getStepId());
+        CustomRoadmapTemplate customRoadmapTemplate = CustomRoadmapTemplate.createCustomRoadmapTemplate(customRoadmapSpace, customTemplate);
+        saveCustomRoadmapTemplate(customRoadmapTemplate);
+        saveCustomTemplateContent(template, customTemplate);
+    }
 
     public void createSharingTemplate(Long userId, TemplateSharingRequestDto templateSharingRequestDto) {
         User user = getUserFromUserId(userId);
@@ -60,13 +73,6 @@ public class TemplateManageService {
         saveTemplate(createdTemplate);
         TemplateContent templateContent = createTemplateContent(createdTemplate.getId(), templateSharingRequestDto.getContent());
         saveTemplateContent(templateContent);
-    }
-
-    public OriginalTemplateResponseDto getPreTemplateInfo(Long userId, Long templateId) {
-        Template template = getTemplateFromTemplateId(templateId);
-        TemplateContent templateContent = getTemplateContentFromTemplateId(templateId);
-        MakerResponseDto makerResponseDto = createMakerResponseDto(template, userId);
-        return OriginalTemplateResponseDto.of(template, templateContent.getContent(), makerResponseDto);
     }
 
     public CustomTemplateDetailResponseDto getTeamTemplateDetailInfo(Long userId, String roadmapTitle, String teamTitle, Long templateId) {
@@ -100,11 +106,11 @@ public class TemplateManageService {
         saveTemplateReview(createdTemplateReview);
     }
 
-    private MakerResponseDto createMakerResponseDto(Template template, Long sessionId) {
-        User maker = template.getUser();
-        int templateCount = getCreatedTemplateCount(maker.getId());
-        int roadmapCount = getCreatedRoadmapCount(maker.getId());
-        return MakerResponseDto.of(maker.getName(), templateCount, roadmapCount, sessionId);
+    public void saveCustomTemplateContent(Template template, CustomTemplate customTemplate) {
+        TemplateContent templateContent = getTemplateContentFromTemplateId(template.getId());
+        CustomTemplateContent customTemplateContent
+                = CustomTemplateContent.createCustomTemplateContent(customTemplate.getId(), templateContent.getContent());
+        saveCustomTemplateContent(customTemplateContent);
     }
 
     private TeamResponseDto createTeamResponseDto(Team team) {
@@ -125,12 +131,9 @@ public class TemplateManageService {
                 .collect(Collectors.toList());
     }
 
-    private int getCreatedTemplateCount(Long userId) {
-        return templateRepository.countByUserId(userId);
-    }
-
-    private int getCreatedRoadmapCount(Long userId) {
-        return roadmapRepository.countByUserId(userId);
+    private CustomRoadmapSpace getCustomRoadmapSpaceFromStepId(Long stepId) {
+        return customRoadmapSpaceRepository.findById(stepId)
+                .orElseThrow(() -> new EntityNotFoundException(ROADMAP_SPACE_NOT_FOUND));
     }
 
     private TemplateDownload getTemplateDownloadFromUserIdAndTemplateId(Long userId, Long templateId) {
@@ -159,7 +162,7 @@ public class TemplateManageService {
     }
 
     private TemplateContent getTemplateContentFromTemplateId(Long templateId) {
-        return teamContentRepository.findByTemplateId(templateId)
+        return templateContentRepository.findByTemplateId(templateId)
                 .orElseThrow(() -> new EntityNotFoundException(TEMPLATE_CONTENT_NOT_FOUND));
     }
 
@@ -173,8 +176,20 @@ public class TemplateManageService {
                 .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND));
     }
 
+    private void saveCustomTemplateContent(CustomTemplateContent customTemplateContent) {
+        customTemplateContentRepository.save(customTemplateContent);
+    }
+
+    private void saveCustomTemplate(CustomTemplate customTemplate) {
+        customTemplateRepository.save(customTemplate);
+    }
+
+    private void saveCustomRoadmapTemplate(CustomRoadmapTemplate customRoadmapTemplate) {
+        customRoadmapTemplateRepository.save(customRoadmapTemplate);
+    }
+
     private void saveTemplateContent(TemplateContent templateContent) {
-        teamContentRepository.save(templateContent);
+        templateContentRepository.save(templateContent);
     }
 
     private void saveTemplate(Template template) {
