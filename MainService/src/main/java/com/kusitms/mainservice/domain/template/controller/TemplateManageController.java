@@ -34,20 +34,12 @@ public class TemplateManageController {
         return SuccessResponse.ok(responseDto);
     }
 
-    @GetMapping
-    public ResponseEntity<SuccessResponse<?>> getTemplateDetailInfo(@UserId final Long userId,
-                                                                    @RequestParam final Long templateId,
+    @GetMapping("/{templateId}")
+    public ResponseEntity<SuccessResponse<?>> getTemplateDetailInfo(@PathVariable final Long templateId,
                                                                     @RequestParam final boolean isOpened) {
         final TemplateDownloadDetailResponseDto responseDto;
-        if(isOpened) responseDto = templateManageService.getDownloadTemplateDetailInfo(userId, templateId);
+        if(isOpened) responseDto = templateManageService.getPreDownloadTemplateInfo(templateId);
         else responseDto = templateManageService.getDownloadCustomTemplateDetailInfo(templateId);
-        return SuccessResponse.ok(responseDto);
-    }
-
-    @GetMapping("/original")
-    public ResponseEntity<SuccessResponse<?>> getOriginalTemplateInfo(@UserId final Long userId,
-                                                                      @RequestParam final Long relatedTemplateId) {
-        final OriginalTemplateResponseDto responseDto = templateManageService.getOriginalTemplateInfo(userId, relatedTemplateId);
         return SuccessResponse.ok(responseDto);
     }
 
