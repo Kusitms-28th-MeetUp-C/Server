@@ -49,6 +49,7 @@ public enum ErrorCode {
     TEMPLATE_DOWNLOAD_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 다운로드 회의록 내용입니다."),
     ROADMAP_DOWNLOAD_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 로드맵 다운로드 기록입니다."),
     ROADMAP_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 로드맵입니다."),
+    ROADMAP_SPACE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 로드맵 딘계입니다."),
 
     /**
      * 405 Method Not Allowed

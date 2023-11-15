@@ -2,6 +2,7 @@ package com.kusitms.mainservice.domain.template.controller;
 
 import com.kusitms.mainservice.domain.template.dto.request.TemplateReviewRequestDto;
 import com.kusitms.mainservice.domain.template.dto.request.TemplateSharingRequestDto;
+import com.kusitms.mainservice.domain.template.dto.request.TemplateTeamRequestDto;
 import com.kusitms.mainservice.domain.template.dto.response.CustomTemplateDetailResponseDto;
 import com.kusitms.mainservice.domain.template.dto.response.OriginalTemplateResponseDto;
 import com.kusitms.mainservice.domain.template.dto.response.TemplateDownloadDetailResponseDto;
@@ -17,6 +18,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class TemplateManageController {
     private final TemplateManageService templateManageService;
+
+    @PostMapping("/team")
+    public ResponseEntity<SuccessResponse<?>> addTemplateToTeam(@UserId final Long userId,
+                                                                @RequestBody final TemplateTeamRequestDto requestDto){
+        templateManageService.addTemplateToTeam(userId, requestDto);
+        return SuccessResponse.created(null);
+    }
 
     @PostMapping
     public ResponseEntity<SuccessResponse<?>> createSharingTemplate(@UserId final Long userId,
