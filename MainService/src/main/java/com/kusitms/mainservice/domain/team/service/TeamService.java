@@ -10,10 +10,7 @@ import com.kusitms.mainservice.domain.team.domain.TeamType;
 import com.kusitms.mainservice.domain.team.dto.request.TeamRequestDto;
 import com.kusitms.mainservice.domain.team.dto.request.TeamSpaceRequestDto;
 import com.kusitms.mainservice.domain.team.dto.request.UpdateTeamRequestDto;
-import com.kusitms.mainservice.domain.team.dto.response.TeamListElementsResponseDto;
-import com.kusitms.mainservice.domain.team.dto.response.TeamListResponseDto;
-import com.kusitms.mainservice.domain.team.dto.response.TeamResponseDto;
-import com.kusitms.mainservice.domain.team.dto.response.TeamSpaceResponseDto;
+import com.kusitms.mainservice.domain.team.dto.response.*;
 import com.kusitms.mainservice.domain.team.repository.TeamRepository;
 import com.kusitms.mainservice.domain.team.repository.TeamSpaceRepository;
 import com.kusitms.mainservice.domain.user.domain.User;
@@ -43,6 +40,14 @@ public class TeamService {
     private final TeamRepository teamRepository;
     private final TeamSpaceRepository teamSpaceRepository;
     private final static int MAX_SPACE_SIZE = 3;
+
+
+    public TeamTitleListResponseDto getTeamTitleList(Long userId){
+        User user = getUserFromUserId(userId);
+        List<Team> teamList = user.getTeamList();
+        List<TeamTitleElementResponseDto> teamTitleElementResponseDtoList = TeamTitleElementResponseDto.listOf(teamList);
+        return TeamTitleListResponseDto.of(teamTitleElementResponseDtoList);
+    }
 
     public TeamListResponseDto getAllTeamList(Long userId) {
         List<Team> teamList = getTeamListFromUserId(userId);
