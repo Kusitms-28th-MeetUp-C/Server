@@ -43,15 +43,15 @@ public class MyPageController {
         final MyPageUserResponseDto myPageUserResponseDto = myPageService.updateUserInfo(userId,modifyUserProfileRequestDto);
         return SuccessResponse.ok(myPageUserResponseDto);
     }
-    @GetMapping("/another/roadmap")
-    public ResponseEntity<SuccessResponse<?>> getAnotherUserRoadmap(@RequestParam Long userId, @PageableDefault(size=12) Pageable pageable){
+    @GetMapping("/another/template")
+    public ResponseEntity<SuccessResponse<?>> getAnotherUserTemplate(@RequestParam Long userId, @PageableDefault(size=12) Pageable pageable){
         final NotMyPageTemplateResponseDto notMyPageTemplateResponseDto = myPageService.getNotMyPageTemplateResponse(userId,pageable);
         return SuccessResponse.ok(notMyPageTemplateResponseDto);
 
     }
-    @GetMapping("/another/template")
-    public ResponseEntity<SuccessResponse<?>> getAnotherUserTemplate(@RequestParam Long userId, @PageableDefault(size=12) Pageable pageable){
-        final NotMyPageRoadmapResponseDto notMyPageRoadmapResponseDto = myPageService.getNotMyPageRoadmapRespons(userId, pageable);
+    @GetMapping("/another/roadmap")
+    public ResponseEntity<SuccessResponse<?>> getAnotherUserRoadmap(@RequestParam Long userId, @PageableDefault(size=12) Pageable pageable){
+        final NotMyPageRoadmapResponseDto notMyPageRoadmapResponseDto = myPageService.getNotMyPageRoadmapResponse(userId, pageable);
         return SuccessResponse.ok(notMyPageRoadmapResponseDto);
 
     }

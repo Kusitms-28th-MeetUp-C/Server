@@ -73,7 +73,7 @@ public class MyPageService {
         Page<SearchBaseTemplateResponseDto> searchBaseTemplateResponseDtoList = templateService.getTemplatesWithPaging(templatePage);
         return NotMyPageTemplateResponseDto.of(detailUserResponseDto, searchBaseTemplateResponseDtoList);
     }
-    public NotMyPageRoadmapResponseDto getNotMyPageRoadmapRespons(Long userId, Pageable pageable){
+    public NotMyPageRoadmapResponseDto getNotMyPageRoadmapResponse(Long userId, Pageable pageable){
         User user = getUserByUserId(userId);
         Page<Roadmap> roadmapPage = getRoadmapByUserId(userId,pageable);
         DetailUserResponseDto detailUserResponseDto = createDetailUserResponseDto(user);
