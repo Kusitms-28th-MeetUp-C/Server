@@ -14,7 +14,7 @@ public class RoadmapSharingRequestDto {
     private List<StepDto> steps;
     private String content;
     private String roadmapType;
-    private int estimatedTime;
+
 
 }
 
