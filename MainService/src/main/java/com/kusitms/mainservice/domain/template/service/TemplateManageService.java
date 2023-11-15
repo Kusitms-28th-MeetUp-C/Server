@@ -79,18 +79,16 @@ public class TemplateManageService {
         return CustomTemplateDetailResponseDto.of(customTemplate, templateContent.getContent(), baseRoadmapResponseDto, teamResponseDto);
     }
 
-    public TemplateDownloadDetailResponseDto getDownloadTemplateDetailInfo(Long userId, Long templateId) {
+    public TemplateDownloadDetailResponseDto getPreDownloadTemplateInfo(Long templateId) {
         Template template = getTemplateFromTemplateId(templateId);
         TemplateContent templateContent = getTemplateContentFromTemplateId(templateId);
-        TemplateDownload templateDownload = getTemplateDownloadFromUserIdAndTemplateId(userId, templateId);
-        return TemplateDownloadDetailResponseDto.ofTemplate(template, templateDownload.getCustomTemplate().getId(), templateContent.getContent());
+        return TemplateDownloadDetailResponseDto.ofTemplate(template, templateContent.getContent());
     }
 
     public TemplateDownloadDetailResponseDto getDownloadCustomTemplateDetailInfo(Long templateId) {
         CustomTemplate customTemplate = getCustomTemplateFromTemplateId(templateId);
         CustomTemplateContent templateContent = getCustomTemplateContentFromTemplateId(templateId);
-        Long relatedTemplateId = customTemplate.getTemplateDownload().getId();
-        return TemplateDownloadDetailResponseDto.ofCustomTemplate(customTemplate, relatedTemplateId, templateContent.getContent());
+        return TemplateDownloadDetailResponseDto.ofCustomTemplate(customTemplate, templateContent.getContent());
     }
 
     public void createTemplateReview(Long userId, TemplateReviewRequestDto templateReviewRequestDto) {
