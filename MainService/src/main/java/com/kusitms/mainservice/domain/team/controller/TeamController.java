@@ -41,7 +41,8 @@ public class TeamController {
     }
 
     @PatchMapping
-    public ResponseEntity<SuccessResponse<?>> updateTeamInfo(@RequestBody final UpdateTeamRequestDto requestDto) {
+    public ResponseEntity<SuccessResponse<?>> updateTeamInfo(@UserId final Long userId,
+                                                             @RequestBody final UpdateTeamRequestDto requestDto) {
         final TeamResponseDto responseDto = teamService.updateTeamInfo(requestDto);
         return SuccessResponse.ok(responseDto);
     }
