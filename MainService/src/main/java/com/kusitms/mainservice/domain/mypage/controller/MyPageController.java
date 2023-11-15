@@ -2,10 +2,13 @@ package com.kusitms.mainservice.domain.mypage.controller;
 
 import com.kusitms.mainservice.domain.mypage.dto.response.MyPageResponseDto;
 import com.kusitms.mainservice.domain.mypage.dto.response.MyPageUserResponseDto;
+import com.kusitms.mainservice.domain.mypage.dto.response.MySharedContentDto;
 import com.kusitms.mainservice.domain.mypage.dto.resquest.ModifyUserProfileRequestDto;
+import com.kusitms.mainservice.domain.mypage.dto.resquest.MySharedContentRequestDto;
 import com.kusitms.mainservice.domain.mypage.service.MyPageService;
 import com.kusitms.mainservice.global.common.SuccessResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -20,10 +23,15 @@ import java.io.IOException;
 @RestController
 public class MyPageController {
     private final MyPageService myPageService;
-    @GetMapping("/get")
-    public ResponseEntity<SuccessResponse<?>> getMyPageResponse(@RequestBody Long userId, @PageableDefault(size=6) Pageable pageable){
+    @GetMapping
+    public ResponseEntity<SuccessResponse<?>> getMyPageResponse(@RequestParam Long userId, @PageableDefault(size=6) Pageable pageable){
         final MyPageResponseDto myPageResponseDto = myPageService.getMyPageResponse(userId,pageable);
         return SuccessResponse.ok(myPageResponseDto);
+    }
+    @PostMapping("/get")
+    public ResponseEntity<SuccessResponse<?>> getSharedContent(@RequestBody MySharedContentRequestDto mySharedContentRequestDto, @PageableDefault(size=6) Pageable pageable){
+        final Page<MySharedContentDto> mySharedContentDtoPage = myPageService.getSharedContentBySharedType(mySharedContentRequestDto,pageable);
+        return SuccessResponse.ok(mySharedContentDtoPage);
     }
     @PostMapping("/uploadProfile")
     public ResponseEntity<SuccessResponse<?>> uploadProfile(@RequestPart("file") MultipartFile file,@RequestParam Long userId) throws IOException {
