@@ -11,9 +11,9 @@ import static com.kusitms.mainservice.global.error.ErrorCode.INVALID_SHARED_TYPE
 @RequiredArgsConstructor
 @Getter
 public enum SharedType {
-    ALL("all"),
-    Template("template"),
-    Roadmap("roadmap");
+    ALL("ALL"),
+    Template("Template"),
+    Roadmap("Roadmap");
 
     private final String stringSharedType;
 

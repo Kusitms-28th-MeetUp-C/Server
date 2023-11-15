@@ -21,7 +21,7 @@ import java.io.IOException;
 public class MyPageController {
     private final MyPageService myPageService;
     @GetMapping("/get")
-    public ResponseEntity<SuccessResponse<?>> getMyPageResponse(@RequestParam Long userId, @PageableDefault(size=6) Pageable pageable){
+    public ResponseEntity<SuccessResponse<?>> getMyPageResponse(@RequestBody Long userId, @PageableDefault(size=6) Pageable pageable){
         final MyPageResponseDto myPageResponseDto = myPageService.getMyPageResponse(userId,pageable);
         return SuccessResponse.ok(myPageResponseDto);
     }

@@ -1,7 +1,9 @@
 package com.kusitms.mainservice.domain.roadmap.repository;
 
+import com.kusitms.mainservice.domain.mypage.domain.SharedType;
 import com.kusitms.mainservice.domain.roadmap.domain.Roadmap;
 import com.kusitms.mainservice.domain.roadmap.domain.RoadmapType;
+import com.kusitms.mainservice.domain.template.domain.Template;
 import com.kusitms.mainservice.domain.user.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,5 +35,6 @@ public interface RoadmapRepository extends JpaRepository<Roadmap, Long> {
     Page<Roadmap> findAllByUserId(Long id, Pageable pageable);
     List<Roadmap> findAllByUserId(Long id);
 
+    Page<Roadmap> findAllBySharedType(SharedType sharedType, Pageable pageable);
 
 }
