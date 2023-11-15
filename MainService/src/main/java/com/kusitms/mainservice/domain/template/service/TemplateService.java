@@ -49,7 +49,7 @@ public class TemplateService {
 
     public Page<SearchBaseTemplateResponseDto> searchTemplateByTitleAndRoadmapType(SearchTemplateRequsetDto searchTemplateRequsetDto, Pageable pageable) {
         Page<Template> templateList = getTemplateListByTitleAndTemplateType(searchTemplateRequsetDto, pageable);
-        Page<SearchBaseTemplateResponseDto> searchBaseTemplateResponseDtoList = getTemplatesWithPaging(templateList, pageable);
+        Page<SearchBaseTemplateResponseDto> searchBaseTemplateResponseDtoList = getTemplatesWithPaging(templateList);
 //        return SearchTemplateResponseDto.of(searchBaseTemplateResponseDtoList);
         return searchBaseTemplateResponseDtoList;
     }
@@ -186,7 +186,7 @@ public class TemplateService {
         }
     }
 
-    public Page<SearchBaseTemplateResponseDto> getTemplatesWithPaging(Page<Template> templatePage, Pageable pageable) {
+    public Page<SearchBaseTemplateResponseDto> getTemplatesWithPaging(Page<Template> templatePage) {
 
         return templatePage.map(template ->
                 SearchBaseTemplateResponseDto.of(

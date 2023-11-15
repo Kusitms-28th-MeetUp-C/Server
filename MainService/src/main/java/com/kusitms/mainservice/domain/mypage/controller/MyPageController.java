@@ -4,7 +4,6 @@ import com.kusitms.mainservice.domain.mypage.dto.response.MyPageResponseDto;
 import com.kusitms.mainservice.domain.mypage.dto.response.MyPageUserResponseDto;
 import com.kusitms.mainservice.domain.mypage.dto.response.MySharedContentDto;
 import com.kusitms.mainservice.domain.mypage.dto.resquest.ModifyUserProfileRequestDto;
-import com.kusitms.mainservice.domain.mypage.dto.resquest.MySharedContentRequestDto;
 import com.kusitms.mainservice.domain.mypage.service.MyPageService;
 import com.kusitms.mainservice.global.common.SuccessResponse;
 import com.kusitms.mainservice.global.config.auth.UserId;
@@ -12,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,8 +41,8 @@ public class MyPageController {
 
 
     @PostMapping("/update")
-    public ResponseEntity<SuccessResponse<?>> updateUser(@RequestBody ModifyUserProfileRequestDto modifyUserProfileRequestDto){
-        final MyPageUserResponseDto myPageUserResponseDto = myPageService.updateUserInfo(modifyUserProfileRequestDto);
+    public ResponseEntity<SuccessResponse<?>> updateUser(@UserId Long userId, @RequestBody ModifyUserProfileRequestDto modifyUserProfileRequestDto){
+        final MyPageUserResponseDto myPageUserResponseDto = myPageService.updateUserInfo(userId,modifyUserProfileRequestDto);
         return SuccessResponse.ok(myPageUserResponseDto);
     }
 }

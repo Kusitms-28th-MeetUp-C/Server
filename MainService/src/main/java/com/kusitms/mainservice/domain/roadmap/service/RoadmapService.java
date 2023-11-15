@@ -120,7 +120,7 @@ public class RoadmapService {
 
         }
     }
-    private Page<SearchBaseRoadmapResponseDto> createSearchBaseRoadmapResponseDtoPage(Page<Roadmap> roadmapPage,Pageable pageable){
+    public Page<SearchBaseRoadmapResponseDto> createSearchBaseRoadmapResponseDtoPage(Page<Roadmap> roadmapPage){
         return roadmapPage.map(roadmap ->
                         SearchBaseRoadmapResponseDto.of(
                                 roadmap,
