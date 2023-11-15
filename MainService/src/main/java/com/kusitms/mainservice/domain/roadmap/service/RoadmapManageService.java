@@ -33,6 +33,11 @@ public class RoadmapManageService {
             StepDto stepDto = roadmapSharingRequestDto.getSteps().get(i);
             RoadmapSpace createdRoadmapSpace = RoadmapSpace.createRoadmapSpace(stepDto, createdRoadmap, i);
             saveRoadmapSpace(createdRoadmapSpace);
+            // 반복문 => step에 해당하는 template List 수 만큼
+                // template 객체 생성
+                // template 저장
+                // roadmap_template 관계 만들기 => roadmap, template
+                // roadmap_template 저장
         }
 
     }
