@@ -19,7 +19,7 @@ public class SearchController {
     public void getSearchResult(@SessionId final Long sessionId,
                                 final SearchRequestDto searchRequestDto) {
         final SearchResultResponseDto responseDto = searchService.getSearchResult(sessionId, searchRequestDto);
-        template.convertAndSend("/sub/template/management/" + sessionId, responseDto);
+        template.convertAndSend("/sub/search/" + sessionId, responseDto);
     }
 
 //    @MessageExceptionHandler

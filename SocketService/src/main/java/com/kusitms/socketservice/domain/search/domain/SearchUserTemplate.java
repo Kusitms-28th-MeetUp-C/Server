@@ -4,14 +4,16 @@ import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 @Builder
 @Getter
-@Document(collection = "search_custom_roadmap")
-public class SearchCustomRoadmap {
-    private Long userId;
-    private Long roadmapId;
+@Document(collection = "search_user_template")
+public class SearchUserTemplate {
+    private Long templateId;
+    private String userId;
     private String title;
-    private RoadmapType roadmapType;
     private String relatedTeamTitle;
+    private TemplateType templateType;
     private boolean isOpened;
 }
