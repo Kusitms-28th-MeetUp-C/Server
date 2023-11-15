@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 @Getter
 public class MyPageResponseDto {
     private MyPageUserResponseDto user;
-    private Page<Sear> contentList;
+    private Page<MySharedContentDto> contentList;
 
     public static MyPageResponseDto of(MyPageUserResponseDto myPageUserResponseDto,Page<MySharedContentDto> mySharedContentDtoList){
         return MyPageResponseDto.builder()
