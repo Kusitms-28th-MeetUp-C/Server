@@ -66,6 +66,9 @@ public class User {
     public void addTemplate(Template template){
         this.templateList.add(template);
     }
+    public void addRoadmap(Roadmap roadmap){
+        this.roadmapList.add(roadmap);
+    }
 
     public void addRoadmapDownload(RoadmapDownload roadmapDownload){
         this.roadmapDownloadList.add(roadmapDownload);

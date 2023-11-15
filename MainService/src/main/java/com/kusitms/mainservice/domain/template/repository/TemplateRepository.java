@@ -1,5 +1,6 @@
 package com.kusitms.mainservice.domain.template.repository;
 
+import com.kusitms.mainservice.domain.mypage.domain.SharedType;
 import com.kusitms.mainservice.domain.roadmap.domain.Roadmap;
 import com.kusitms.mainservice.domain.roadmap.domain.RoadmapType;
 import com.kusitms.mainservice.domain.template.domain.Template;
@@ -35,4 +36,5 @@ public interface TemplateRepository extends JpaRepository<Template, Long> {
     Page<Template> findByTemplateType(TemplateType templateType, Pageable pageable);
     Page<Template> findAllByUserId(Long userId, Pageable pageable);
     List<Template> findAllByUserId(Long userId);
+
 }

@@ -5,10 +5,12 @@ import com.kusitms.mainservice.domain.mypage.dto.response.MyPageResponseDto;
 import com.kusitms.mainservice.domain.mypage.dto.response.MyPageUserResponseDto;
 import com.kusitms.mainservice.domain.mypage.dto.response.MySharedContentDto;
 import com.kusitms.mainservice.domain.mypage.dto.resquest.ModifyUserProfileRequestDto;
+import com.kusitms.mainservice.domain.mypage.dto.resquest.MySharedContentRequestDto;
 import com.kusitms.mainservice.domain.roadmap.domain.Roadmap;
 import com.kusitms.mainservice.domain.roadmap.repository.RoadmapDownloadRepository;
 import com.kusitms.mainservice.domain.roadmap.repository.RoadmapRepository;
 import com.kusitms.mainservice.domain.template.domain.Template;
+import com.kusitms.mainservice.domain.template.dto.response.SearchBaseTemplateResponseDto;
 import com.kusitms.mainservice.domain.template.repository.TemplateDownloadRepository;
 import com.kusitms.mainservice.domain.template.repository.TemplateRepository;
 import com.kusitms.mainservice.domain.user.domain.User;
@@ -49,6 +51,10 @@ public class MyPageService {
         MyPageResponseDto myPageResponseDto = createMyPageResponseDto(userId, pageable);
         return myPageResponseDto;
     }
+    public Page<MySharedContentDto> getSharedContentBySharedType(MySharedContentRequestDto mySharedContentRequestDto, Pageable pageable){
+        Page<MySharedContentDto> mySharedContentDtoPage = createMySharedContentDtoPage(mySharedContentRequestDto, pageable);
+        return mySharedContentDtoPage;
+    }
     public String uploadProfile(MultipartFile multipartFile, Long userId) throws IOException {
         User user = getUserByUserId(userId);
         String url = saveFileToUser(multipartFile, user);
@@ -59,6 +65,40 @@ public class MyPageService {
         user.updateMypage(modifyUserProfileRequestDto);
 
         return createMyPageUserResponseDto(user);
+    }
+    private Page<MySharedContentDto> createMySharedContentDtoPage(MySharedContentRequestDto mySharedContentRequestDto, Pageable pageable){
+
+        if(mySharedContentRequestDto.getSharedType().equals("템플릿")){
+            Page<MySharedContentDto> mySharedContentDtoPage = createTemplateContentpage(mySharedContentRequestDto,pageable);
+            return mySharedContentDtoPage;
+        }
+        if(mySharedContentRequestDto.getSharedType().equals("로드맵")){
+            Page<MySharedContentDto> mySharedContentDtoPage = createRoadmapContentpage(mySharedContentRequestDto,pageable);
+            return mySharedContentDtoPage;
+        }
+        return createmySharedContentDtoList(mySharedContentRequestDto.getUserId(),pageable);
+    }
+    private Page<MySharedContentDto> createTemplateContentpage(MySharedContentRequestDto mySharedContentRequestDto,Pageable pageable){
+        Page<Template> templatePage = templateRepository.findAllByUserId(mySharedContentRequestDto.getUserId(), pageable);
+        return templatePage.map(template ->
+                MySharedContentDto.of(
+                        template.getId(),
+                        SharedType.템플릿,
+                        template.getTitle(),
+                        template.getTemplateType().toString()
+                )
+        );
+    }
+    private Page<MySharedContentDto> createRoadmapContentpage(MySharedContentRequestDto mySharedContentRequestDto,Pageable pageable){
+        Page<Roadmap> roadmapPage = roadmapRepository.findAllByUserId(mySharedContentRequestDto.getUserId(), pageable);
+        return roadmapPage.map(roadmap ->
+                MySharedContentDto.of(
+                        roadmap.getId(),
+                        SharedType.로드맵,
+                        roadmap.getTitle(),
+                        roadmap.getRoadmapType().toString()
+                )
+        );
     }
     private String saveFileToUser(MultipartFile multipartFile, User user) throws IOException {
         String url = s3Service.saveFile(multipartFile, user.getId().toString());
@@ -80,12 +120,12 @@ public class MyPageService {
 
         // Template 리스트와 Roadmap 리스트를 합침
         for (Template template : templateList) {
-            MySharedContentDto dto = MySharedContentDto.of(template.getId(), SharedType.Template, template.getTitle(), template.getTemplateType().toString());
+            MySharedContentDto dto = MySharedContentDto.of(template.getId(), SharedType.템플릿, template.getTitle(), template.getTemplateType().toString());
             contentList.add(dto);
         }
 
         for (Roadmap roadmap : roadmapList) {
-            MySharedContentDto dto = MySharedContentDto.of(roadmap.getId(), SharedType.Roadmap, roadmap.getTitle(), roadmap.getRoadmapType().toString());
+            MySharedContentDto dto = MySharedContentDto.of(roadmap.getId(), SharedType.로드맵, roadmap.getTitle(), roadmap.getRoadmapType().toString());
             contentList.add(dto);
         }
 
@@ -96,8 +136,7 @@ public class MyPageService {
         // 추출한 데이터로 Page 객체 생성
         List<MySharedContentDto> pagedContentList = contentList.subList(start, end);
 
-        // pagesize를 2배로 설정
-        int pageSize = pageable.getPageSize() * 2;
+        int pageSize = pageable.getPageSize();
 
         Pageable adjustedPageable = PageRequest.of(pageable.getPageNumber(), pageSize);
 

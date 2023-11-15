@@ -1,5 +1,7 @@
 package com.kusitms.mainservice.domain.roadmap.domain;
 
+import com.kusitms.mainservice.domain.roadmap.dto.request.RoadmapSharingRequestDto;
+import com.kusitms.mainservice.domain.roadmap.dto.request.StepDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,4 +27,13 @@ public class RoadmapSpace {
     @OneToMany(mappedBy = "roadmapSpace")
     @Builder.Default
     private List<RoadmapTemplate> RoadmapTemplateList = new ArrayList<>();
+    public static RoadmapSpace createRoadmapSpace(StepDto stepDto, Roadmap roadmap, int step){
+        RoadmapSpace roadmapSpace = RoadmapSpace.builder()
+                .title(stepDto.getStepTitle())
+                .step(step)
+                .roadmap(roadmap)
+                .build();
+        roadmap.addRoadmapSpace(roadmapSpace);
+        return roadmapSpace;
+    }
 }

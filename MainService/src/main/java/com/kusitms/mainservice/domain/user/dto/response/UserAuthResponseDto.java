@@ -10,6 +10,7 @@ import lombok.Getter;
 public class UserAuthResponseDto {
     private Long id;
     private String email;
+    private String name;
     private String picture;
     private String accessToken;
     private String refreshToken;
@@ -18,6 +19,7 @@ public class UserAuthResponseDto {
         return UserAuthResponseDto.builder()
                 .id(user.getId())
                 .email(user.getEmail())
+                .name(user.getName())
                 .picture(user.getProfile())
                 .accessToken(token.getAccessToken())
                 .refreshToken(token.getRefreshToken())
