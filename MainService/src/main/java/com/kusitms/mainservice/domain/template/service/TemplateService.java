@@ -79,9 +79,9 @@ public class TemplateService {
         return GetTeamForSaveTemplateResponseDto.of(teamTitleResponseDtoList);
     }
 
-    public String saveTemplateByUserId(SaveTemplateResponseDto saveTemplateResponseDto) {
-        Template template = getTemplateByTemplateId(saveTemplateResponseDto.getTemplateId());
-        Optional<User> user = userRepository.findById(saveTemplateResponseDto.getUserId());
+    public String saveTemplateByUserId(Long userId, Long templateId) {
+        Template template = getTemplateByTemplateId(templateId);
+        Optional<User> user = userRepository.findById(userId);
         TemplateDownload templateDownload = TemplateDownload.createTemplateDownload(user.get(), template);
         templateDownloadRepository.save(templateDownload);
         return "저장";

@@ -1,18 +1,19 @@
 package com.kusitms.mainservice.domain.mypage.service;
 
 import com.kusitms.mainservice.domain.mypage.domain.SharedType;
-import com.kusitms.mainservice.domain.mypage.dto.response.MyPageResponseDto;
-import com.kusitms.mainservice.domain.mypage.dto.response.MyPageUserResponseDto;
-import com.kusitms.mainservice.domain.mypage.dto.response.MySharedContentDto;
+import com.kusitms.mainservice.domain.mypage.dto.response.*;
 import com.kusitms.mainservice.domain.mypage.dto.resquest.ModifyUserProfileRequestDto;
 import com.kusitms.mainservice.domain.mypage.dto.resquest.MySharedContentRequestDto;
 import com.kusitms.mainservice.domain.roadmap.domain.Roadmap;
+import com.kusitms.mainservice.domain.roadmap.dto.response.SearchBaseRoadmapResponseDto;
 import com.kusitms.mainservice.domain.roadmap.repository.RoadmapDownloadRepository;
 import com.kusitms.mainservice.domain.roadmap.repository.RoadmapRepository;
+import com.kusitms.mainservice.domain.roadmap.service.RoadmapService;
 import com.kusitms.mainservice.domain.template.domain.Template;
 import com.kusitms.mainservice.domain.template.dto.response.SearchBaseTemplateResponseDto;
 import com.kusitms.mainservice.domain.template.repository.TemplateDownloadRepository;
 import com.kusitms.mainservice.domain.template.repository.TemplateRepository;
+import com.kusitms.mainservice.domain.template.service.TemplateService;
 import com.kusitms.mainservice.domain.user.domain.User;
 import com.kusitms.mainservice.domain.user.dto.response.DetailUserResponseDto;
 import com.kusitms.mainservice.domain.user.repository.UserRepository;
@@ -46,12 +47,14 @@ public class MyPageService {
     private final RoadmapRepository roadmapRepository;
     private final UserRepository userRepository;
     private final S3Service s3Service;
+    private final TemplateService templateService;
+    private final RoadmapService roadmapService;
 
     public MyPageResponseDto getMyPageResponse(Long userId, Pageable pageable) {
         MyPageResponseDto myPageResponseDto = createMyPageResponseDto(userId, pageable);
         return myPageResponseDto;
     }
-    public Page<MySharedContentDto> getSharedContentBySharedType(MySharedContentRequestDto mySharedContentRequestDto, Pageable pageable){
+    public Page<MySharedContentDto> getSharedContentBySharedType(Long userId, String sharedType, Pageable pageable){
         Page<MySharedContentDto> mySharedContentDtoPage = createMySharedContentDtoPage(mySharedContentRequestDto, pageable);
         return mySharedContentDtoPage;
     }
@@ -65,6 +68,22 @@ public class MyPageService {
         user.updateMypage(modifyUserProfileRequestDto);
 
         return createMyPageUserResponseDto(user);
+    }
+    public NotMyPageTemplateResponseDto getNotMyPageTemplateResponse(Long userId, Pageable pageable){
+        User user = getUserByUserId(userId);
+        Page<Template> templatePage = getTemplateByUserId(userId, pageable);
+        DetailUserResponseDto detailUserResponseDto = createDetailUserResponseDto(user);
+        Page<SearchBaseTemplateResponseDto> searchBaseTemplateResponseDtoList = templateService.getTemplatesWithPaging(templatePage, pageable);
+        return NotMyPageTemplateResponseDto.of(detailUserResponseDto, );
+    }
+    public NotMyPageRoadmapResponseDto getNotMyPageRoadmapRespons(Long userId, Pageable pageable){
+        User user = getUserByUserId(userId);
+        DetailUserResponseDto detailUserResponseDto = createDetailUserResponseDto(user);
+        Page<SearchBaseRoadmapResponseDto> searchBaseRoadmapResponseDtos = createSearchBaseRoadmapResponseDtoPage(roadmapList,pageable);
+        return NotMyPageRoadmapResponseDto.of(detailUserResponseDto, );
+    }
+    private Page<Template> getTemplateByUserId(Long userId, Pageable pageable){
+        return templateRepository.findAllByUserId(userId,pageable);
     }
     private Page<MySharedContentDto> createMySharedContentDtoPage(MySharedContentRequestDto mySharedContentRequestDto, Pageable pageable){
 

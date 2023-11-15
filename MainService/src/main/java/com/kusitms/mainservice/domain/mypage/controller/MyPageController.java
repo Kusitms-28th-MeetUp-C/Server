@@ -7,6 +7,7 @@ import com.kusitms.mainservice.domain.mypage.dto.resquest.ModifyUserProfileReque
 import com.kusitms.mainservice.domain.mypage.dto.resquest.MySharedContentRequestDto;
 import com.kusitms.mainservice.domain.mypage.service.MyPageService;
 import com.kusitms.mainservice.global.common.SuccessResponse;
+import com.kusitms.mainservice.global.config.auth.UserId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,13 +25,13 @@ import java.io.IOException;
 public class MyPageController {
     private final MyPageService myPageService;
     @GetMapping
-    public ResponseEntity<SuccessResponse<?>> getMyPageResponse(@RequestParam Long userId, @PageableDefault(size=6) Pageable pageable){
+    public ResponseEntity<SuccessResponse<?>> getMyPageResponse(@UserId Long userId, @PageableDefault(size=6) Pageable pageable){
         final MyPageResponseDto myPageResponseDto = myPageService.getMyPageResponse(userId,pageable);
         return SuccessResponse.ok(myPageResponseDto);
     }
-    @PostMapping("/get")
-    public ResponseEntity<SuccessResponse<?>> getSharedContent(@RequestBody MySharedContentRequestDto mySharedContentRequestDto, @PageableDefault(size=6) Pageable pageable){
-        final Page<MySharedContentDto> mySharedContentDtoPage = myPageService.getSharedContentBySharedType(mySharedContentRequestDto,pageable);
+    @PostMapping("/shared")
+    public ResponseEntity<SuccessResponse<?>> getSharedContent(@UserId Long userId, @RequestParam String sharedType, @PageableDefault(size=6) Pageable pageable){
+        final Page<MySharedContentDto> mySharedContentDtoPage = myPageService.getSharedContentBySharedType(userId, sharedType,pageable);
         return SuccessResponse.ok(mySharedContentDtoPage);
     }
     @PostMapping("/uploadProfile")

@@ -1,11 +1,11 @@
 package com.kusitms.mainservice.domain.template.controller;
 
 import com.kusitms.mainservice.domain.template.dto.request.SearchTemplateRequsetDto;
-import com.kusitms.mainservice.domain.template.dto.response.SaveTemplateResponseDto;
 import com.kusitms.mainservice.domain.template.dto.response.SearchBaseTemplateResponseDto;
 import com.kusitms.mainservice.domain.template.dto.response.TemplateDetailResponseDto;
 import com.kusitms.mainservice.domain.template.service.TemplateService;
 import com.kusitms.mainservice.global.common.SuccessResponse;
+import com.kusitms.mainservice.global.config.auth.UserId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class TemplateController {
     private final TemplateService templateService;
 
-    @PostMapping("/get")
+    @PostMapping
     public ResponseEntity<SuccessResponse<?>> getTemplateByTitleAndTemplateType(@RequestBody SearchTemplateRequsetDto searchTemplateRequsetDto, @PageableDefault(size = 12) Pageable pageable) {
         final Page<SearchBaseTemplateResponseDto> searchTemplateResponseDto = templateService.searchTemplateByTitleAndRoadmapType(searchTemplateRequsetDto, pageable);
         return SuccessResponse.ok(searchTemplateResponseDto);
@@ -33,8 +33,8 @@ public class TemplateController {
     }
 
     @PostMapping("/save/user")
-    public ResponseEntity<SuccessResponse<?>> saveTemplateForUser(@RequestBody SaveTemplateResponseDto saveTemplateResponseDto) {
-        final String dd = templateService.saveTemplateByUserId(saveTemplateResponseDto);
+    public ResponseEntity<SuccessResponse<?>> saveTemplateForUser(@UserId Long userId, @RequestBody Long templateId) {
+        final String dd = templateService.saveTemplateByUserId(userId, templateId);
         return SuccessResponse.ok(dd);
     }
 }
