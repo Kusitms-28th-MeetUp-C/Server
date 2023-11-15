@@ -1,6 +1,7 @@
 package com.kusitms.mainservice.domain.team.service;
 
 import com.kusitms.mainservice.domain.roadmap.domain.CustomRoadmap;
+import com.kusitms.mainservice.domain.roadmap.domain.RoadmapDownload;
 import com.kusitms.mainservice.domain.roadmap.dto.response.CustomRoadmapDetailResponseDto;
 import com.kusitms.mainservice.domain.roadmap.dto.response.CustomRoadmapSpaceDetailResponseDto;
 import com.kusitms.mainservice.domain.team.domain.Team;
@@ -73,7 +74,7 @@ public class TeamService {
         return teamList.stream()
                 .map(team -> TeamListElementsResponseDto.of(
                         createTeamResponseDto(team),
-                        customRoadmapDetailResponseDto(team.getRoadmapDownload().getCustomRoadmap())))
+                        customRoadmapDetailResponseDto(team.getRoadmapDownload())))
                 .collect(Collectors.toList());
     }
 
@@ -82,7 +83,9 @@ public class TeamService {
         return TeamResponseDto.of(team, teamSpaceResponseDtoList);
     }
 
-    private CustomRoadmapDetailResponseDto customRoadmapDetailResponseDto(CustomRoadmap roadmap) {
+    private CustomRoadmapDetailResponseDto customRoadmapDetailResponseDto(RoadmapDownload roadmapDownload) {
+        if(Objects.isNull(roadmapDownload)) return null;
+        CustomRoadmap roadmap = roadmapDownload.getCustomRoadmap();
         List<CustomRoadmapSpaceDetailResponseDto> customRoadmapSpaceDetailResponseDtoList
                 = CustomRoadmapSpaceDetailResponseDto.listOf(roadmap);
         return CustomRoadmapDetailResponseDto.of(roadmap, customRoadmapSpaceDetailResponseDtoList);
