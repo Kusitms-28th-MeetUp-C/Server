@@ -96,8 +96,7 @@ public class MyPageService {
         // 추출한 데이터로 Page 객체 생성
         List<MySharedContentDto> pagedContentList = contentList.subList(start, end);
 
-        // pagesize를 2배로 설정
-        int pageSize = pageable.getPageSize() * 2;
+        int pageSize = pageable.getPageSize();
 
         Pageable adjustedPageable = PageRequest.of(pageable.getPageNumber(), pageSize);
 
