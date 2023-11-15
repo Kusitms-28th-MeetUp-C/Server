@@ -1,8 +1,6 @@
 package com.kusitms.mainservice.domain.mypage.controller;
 
-import com.kusitms.mainservice.domain.mypage.dto.response.MyPageResponseDto;
-import com.kusitms.mainservice.domain.mypage.dto.response.MyPageUserResponseDto;
-import com.kusitms.mainservice.domain.mypage.dto.response.MySharedContentDto;
+import com.kusitms.mainservice.domain.mypage.dto.response.*;
 import com.kusitms.mainservice.domain.mypage.dto.resquest.ModifyUserProfileRequestDto;
 import com.kusitms.mainservice.domain.mypage.service.MyPageService;
 import com.kusitms.mainservice.global.common.SuccessResponse;
@@ -33,7 +31,7 @@ public class MyPageController {
         return SuccessResponse.ok(mySharedContentDtoPage);
     }
     @PostMapping("/uploadProfile")
-    public ResponseEntity<SuccessResponse<?>> uploadProfile(@RequestPart("file") MultipartFile file,@RequestParam Long userId) throws IOException {
+    public ResponseEntity<SuccessResponse<?>> uploadProfile(@RequestPart("file") MultipartFile file,@UserId Long userId) throws IOException {
 
         final String url = myPageService.uploadProfile(file, userId);
         return SuccessResponse.ok(url);
@@ -44,5 +42,17 @@ public class MyPageController {
     public ResponseEntity<SuccessResponse<?>> updateUser(@UserId Long userId, @RequestBody ModifyUserProfileRequestDto modifyUserProfileRequestDto){
         final MyPageUserResponseDto myPageUserResponseDto = myPageService.updateUserInfo(userId,modifyUserProfileRequestDto);
         return SuccessResponse.ok(myPageUserResponseDto);
+    }
+    @GetMapping("/another/roadmap")
+    public ResponseEntity<SuccessResponse<?>> getAnotherUserRoadmap(@RequestParam Long userId, @PageableDefault(size=12) Pageable pageable){
+        final NotMyPageTemplateResponseDto notMyPageTemplateResponseDto = myPageService.getNotMyPageTemplateResponse(userId,pageable);
+        return SuccessResponse.ok(notMyPageTemplateResponseDto);
+
+    }
+    @GetMapping("/another/template")
+    public ResponseEntity<SuccessResponse<?>> getAnotherUserTemplate(@RequestParam Long userId, @PageableDefault(size=12) Pageable pageable){
+        final NotMyPageRoadmapResponseDto notMyPageRoadmapResponseDto = myPageService.getNotMyPageRoadmapRespons(userId, pageable);
+        return SuccessResponse.ok(notMyPageRoadmapResponseDto);
+
     }
 }

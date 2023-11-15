@@ -37,7 +37,7 @@ public class RoadmapService {
     private final TemplateRepository templateRepository;
     public Page<SearchBaseRoadmapResponseDto> searchRoadmapByTitleAndRoadmapType(SearchRoadmapRequestDto searchRoadmapRequestDto, Pageable pageable){
         Page<Roadmap> roadmapList = getRoadmapListByTitleAndRoadmapType(searchRoadmapRequestDto, pageable);
-        Page<SearchBaseRoadmapResponseDto> searchBaseRoadmapResponseDtos = createSearchBaseRoadmapResponseDtoPage(roadmapList,pageable);
+        Page<SearchBaseRoadmapResponseDto> searchBaseRoadmapResponseDtos = createSearchBaseRoadmapResponseDtoPage(roadmapList);
         return searchBaseRoadmapResponseDtos;
     }
 

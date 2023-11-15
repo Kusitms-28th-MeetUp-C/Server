@@ -70,15 +70,15 @@ public class MyPageService {
         User user = getUserByUserId(userId);
         Page<Template> templatePage = getTemplateByUserId(userId, pageable);
         DetailUserResponseDto detailUserResponseDto = createDetailUserResponseDto(user);
-        Page<SearchBaseTemplateResponseDto> searchBaseTemplateResponseDtoList = templateService.getTemplatesWithPaging(templatePage, pageable);
-        return NotMyPageTemplateResponseDto.of(detailUserResponseDto, );
+        Page<SearchBaseTemplateResponseDto> searchBaseTemplateResponseDtoList = templateService.getTemplatesWithPaging(templatePage);
+        return NotMyPageTemplateResponseDto.of(detailUserResponseDto, searchBaseTemplateResponseDtoList);
     }
     public NotMyPageRoadmapResponseDto getNotMyPageRoadmapRespons(Long userId, Pageable pageable){
         User user = getUserByUserId(userId);
         Page<Roadmap> roadmapPage = getRoadmapByUserId(userId,pageable);
         DetailUserResponseDto detailUserResponseDto = createDetailUserResponseDto(user);
         Page<SearchBaseRoadmapResponseDto> searchBaseRoadmapResponseDtos = roadmapService.createSearchBaseRoadmapResponseDtoPage(roadmapPage);
-        return NotMyPageRoadmapResponseDto.of(detailUserResponseDto, );
+        return NotMyPageRoadmapResponseDto.of(detailUserResponseDto, searchBaseRoadmapResponseDtos);
     }
     private Page<Roadmap> getRoadmapByUserId(Long userId, Pageable pageable){
         return  roadmapRepository.findAllByUserId(userId,pageable);
