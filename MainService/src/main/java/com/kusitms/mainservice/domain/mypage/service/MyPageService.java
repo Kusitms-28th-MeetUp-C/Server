@@ -13,6 +13,7 @@ import com.kusitms.mainservice.domain.template.repository.TemplateRepository;
 import com.kusitms.mainservice.domain.user.domain.User;
 import com.kusitms.mainservice.domain.user.dto.response.DetailUserResponseDto;
 import com.kusitms.mainservice.domain.user.repository.UserRepository;
+import com.kusitms.mainservice.global.S3Service;
 import com.kusitms.mainservice.global.error.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +23,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,10 +41,22 @@ public class MyPageService {
     private final TemplateRepository templateRepository;
     private final RoadmapRepository roadmapRepository;
     private final UserRepository userRepository;
+    private final S3Service s3Service;
 
     public MyPageResponseDto getMyPageResponse(Long userId, Pageable pageable) {
         MyPageResponseDto myPageResponseDto = createMyPageResponseDto(userId, pageable);
         return myPageResponseDto;
+    }
+    public void uploadProfile(MultipartFile multipartFile, Long userId) throws IOException {
+        saveFileToUser(multipartFile, userId);
+        return;
+    }
+    private void saveFileToUser(MultipartFile multipartFile, Long userId) throws IOException {
+        User user = getUserByUserId(userId);
+        String url = s3Service.saveFile(multipartFile, userId.toString());
+        user.setProfile(url);
+        userRepository.save(user);
+        return;
     }
 
     private MyPageResponseDto createMyPageResponseDto(Long userId, Pageable pageable) {

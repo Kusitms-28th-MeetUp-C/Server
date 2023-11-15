@@ -28,27 +28,34 @@ public class S3Service {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public String saveFile(MultipartFile multipartFile) throws IOException {
+    public String saveFile(MultipartFile multipartFile, String userId) throws IOException {
         String originalFilename = multipartFile.getOriginalFilename();
+
+        // 사용자 ID를 파일 이름에 추가
+        String newFilename = userId + "_" + originalFilename;
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(multipartFile.getSize());
         metadata.setContentType(multipartFile.getContentType());
 
-        amazonS3.putObject(bucket, originalFilename, multipartFile.getInputStream(), metadata);
-        return amazonS3.getUrl(bucket, originalFilename).toString();
+        amazonS3.putObject(bucket, newFilename, multipartFile.getInputStream(), metadata);
+        return amazonS3.getUrl(bucket, newFilename).toString();
     }
-    public ResponseEntity<UrlResource> downloadImage(String originalFilename) {
-        UrlResource urlResource = new UrlResource(amazonS3.getUrl(bucket, originalFilename));
 
-        String contentDisposition = "attachment; filename=\"" +  originalFilename + "\"";
+    public ResponseEntity<UrlResource> downloadImage(String originalFilename, String userId) {
+        // 사용자 ID를 파일 이름에 추가
+        String newFilename = userId + "_" + originalFilename;
+
+        UrlResource urlResource = new UrlResource(amazonS3.getUrl(bucket, newFilename));
+
+        String contentDisposition = "attachment; filename=\"" + newFilename + "\"";
 
         // header에 CONTENT_DISPOSITION 설정을 통해 클릭 시 다운로드 진행
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
                 .body(urlResource);
-
     }
+
     public void deleteImage(String originalFilename)  {
         amazonS3.deleteObject(bucket, originalFilename);
     }
