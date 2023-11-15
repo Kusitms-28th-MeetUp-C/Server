@@ -61,7 +61,6 @@ public class TeamService {
     }
 
     public TeamResponseDto updateTeamInfo(UpdateTeamRequestDto updateTeamRequestDto) {
-        validateDuplicateTeamTitleWithNull(updateTeamRequestDto.getTitle());
         validateTeamSpaceSize(updateTeamRequestDto.getSpaceList());
         Team team = getTeamFromTeamId(updateTeamRequestDto.getTeamId());
         team.updateTeamInfo(updateTeamRequestDto.getTitle(), updateTeamRequestDto.getTeamType(), updateTeamRequestDto.getIntroduction());
@@ -159,12 +158,6 @@ public class TeamService {
             throw new InvalidValueException(EMPTY_TEAM_SPACE);
         if (requestDtoList.size() > MAX_SPACE_SIZE)
             throw new InvalidValueException(INVALID_TEAM_SPACE_SIZE);
-    }
-
-    private void validateDuplicateTeamTitleWithNull(String title) {
-        if (Objects.isNull(title)) return;
-        if (teamRepository.existsTeamByTitle(title))
-            throw new ConflictException(DUPLICATE_TEAM);
     }
 
     private void validateDuplicateTeamTitle(String title) {
