@@ -62,7 +62,7 @@ public class TemplateManageService {
         saveTemplateContent(templateContent);
     }
 
-    public OriginalTemplateResponseDto getOriginalTemplateInfo(Long userId, Long templateId) {
+    public OriginalTemplateResponseDto getPreTemplateInfo(Long userId, Long templateId) {
         Template template = getTemplateFromTemplateId(templateId);
         TemplateContent templateContent = getTemplateContentFromTemplateId(templateId);
         MakerResponseDto makerResponseDto = createMakerResponseDto(template, userId);
