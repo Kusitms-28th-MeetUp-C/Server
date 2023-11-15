@@ -7,7 +7,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class SearchRequestDto {
-    private String searchString;
-    private String searchType;
-    private String subSearchType;
+    private String searchText;
 }
