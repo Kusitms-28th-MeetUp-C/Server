@@ -82,4 +82,18 @@ public class User {
     public void updateTeamList(Team team) {
         this.teamList.add(team);
     }
+    public void updateProfile(String profile){ this.profile = profile;}
+    public static User getProfile(User user,String profile){
+        return User.builder()
+                .id(user.getId())
+                .profile(profile)
+                .platform(user.getPlatform())
+                .userType(user.getUserType())
+                .platformId(user.getPlatformId())
+                .email(user.getEmail())
+                .name(user.getName())
+                .refreshToken(user.getRefreshToken())
+                .build();
+    }
 }
+

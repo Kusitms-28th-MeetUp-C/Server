@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.kusitms.mainservice.domain.user.domain.User.getProfile;
 import static com.kusitms.mainservice.global.error.ErrorCode.USER_NOT_FOUND;
 
 @Slf4j
@@ -47,16 +48,19 @@ public class MyPageService {
         MyPageResponseDto myPageResponseDto = createMyPageResponseDto(userId, pageable);
         return myPageResponseDto;
     }
-    public void uploadProfile(MultipartFile multipartFile, Long userId) throws IOException {
+    public MyPageUserResponseDto uploadProfile(MultipartFile multipartFile, Long userId) throws IOException {
         saveFileToUser(multipartFile, userId);
-        return;
+        MyPageUserResponseDto myPageUserResponseDto =createMyPageUserResponseDto(userId);
+        return myPageUserResponseDto;
     }
-    private void saveFileToUser(MultipartFile multipartFile, Long userId) throws IOException {
+    @Transactional
+    private User saveFileToUser(MultipartFile multipartFile, Long userId) throws IOException {
         User user = getUserByUserId(userId);
         String url = s3Service.saveFile(multipartFile, userId.toString());
-        user.setProfile(url);
-        userRepository.save(user);
-        return;
+        user.updateProfile(url);
+        User getuser = getProfile(user,url);
+        userRepository.save(getuser);
+        return getuser;
     }
 
     private MyPageResponseDto createMyPageResponseDto(Long userId, Pageable pageable) {
