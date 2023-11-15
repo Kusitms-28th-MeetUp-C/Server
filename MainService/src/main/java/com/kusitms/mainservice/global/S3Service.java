@@ -49,4 +49,7 @@ public class S3Service {
                 .body(urlResource);
 
     }
+    public void deleteImage(String originalFilename)  {
+        amazonS3.deleteObject(bucket, originalFilename);
+    }
 }
