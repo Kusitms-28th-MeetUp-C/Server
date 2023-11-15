@@ -68,11 +68,11 @@ public class MyPageService {
     }
     private Page<MySharedContentDto> createMySharedContentDtoPage(MySharedContentRequestDto mySharedContentRequestDto, Pageable pageable){
 
-        if(mySharedContentRequestDto.getSharedType()==SharedType.Template.toString()){
+        if(mySharedContentRequestDto.getSharedType().equals("템플릿")){
             Page<MySharedContentDto> mySharedContentDtoPage = createTemplateContentpage(mySharedContentRequestDto,pageable);
             return mySharedContentDtoPage;
         }
-        if(mySharedContentRequestDto.getSharedType()==SharedType.Roadmap.toString()){
+        if(mySharedContentRequestDto.getSharedType().equals("로드맵")){
             Page<MySharedContentDto> mySharedContentDtoPage = createRoadmapContentpage(mySharedContentRequestDto,pageable);
             return mySharedContentDtoPage;
         }
@@ -83,7 +83,7 @@ public class MyPageService {
         return templatePage.map(template ->
                 MySharedContentDto.of(
                         template.getId(),
-                        SharedType.Template,
+                        SharedType.템플릿,
                         template.getTitle(),
                         template.getTemplateType().toString()
                 )
@@ -94,7 +94,7 @@ public class MyPageService {
         return roadmapPage.map(roadmap ->
                 MySharedContentDto.of(
                         roadmap.getId(),
-                        SharedType.Roadmap,
+                        SharedType.로드맵,
                         roadmap.getTitle(),
                         roadmap.getRoadmapType().toString()
                 )
@@ -120,12 +120,12 @@ public class MyPageService {
 
         // Template 리스트와 Roadmap 리스트를 합침
         for (Template template : templateList) {
-            MySharedContentDto dto = MySharedContentDto.of(template.getId(), SharedType.Template, template.getTitle(), template.getTemplateType().toString());
+            MySharedContentDto dto = MySharedContentDto.of(template.getId(), SharedType.템플릿, template.getTitle(), template.getTemplateType().toString());
             contentList.add(dto);
         }
 
         for (Roadmap roadmap : roadmapList) {
-            MySharedContentDto dto = MySharedContentDto.of(roadmap.getId(), SharedType.Roadmap, roadmap.getTitle(), roadmap.getRoadmapType().toString());
+            MySharedContentDto dto = MySharedContentDto.of(roadmap.getId(), SharedType.로드맵, roadmap.getTitle(), roadmap.getRoadmapType().toString());
             contentList.add(dto);
         }
 
