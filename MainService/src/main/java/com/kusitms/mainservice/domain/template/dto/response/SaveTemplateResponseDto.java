@@ -9,13 +9,13 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SaveTemplateResponseDto {
-    private Long templateid;
-    private Long userid;
+    private Long templateId;
+    private Long userId;
 
-public static SaveTemplateResponseDto of(Long templateid,Long userid){
+public static SaveTemplateResponseDto of(Long templateId,Long userId){
     return SaveTemplateResponseDto.builder()
-            .templateid(templateid)
-            .userid(userid)
+            .templateId(templateId)
+            .userId(userId)
             .build();
 }
 }

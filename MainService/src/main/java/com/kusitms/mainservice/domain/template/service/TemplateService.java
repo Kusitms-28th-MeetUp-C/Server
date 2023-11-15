@@ -35,7 +35,7 @@ import static com.kusitms.mainservice.domain.template.domain.TemplateType.getEnu
 
 @Slf4j
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 @Service
 public class TemplateService {
     private final TemplateRepository templateRepository;
@@ -79,10 +79,9 @@ public class TemplateService {
         return GetTeamForSaveTemplateResponseDto.of(teamTitleResponseDtoList);
     }
 
-    @Transactional
     public String saveTemplateByUserId(SaveTemplateResponseDto saveTemplateResponseDto) {
-        Template template = getTemplateByTemplateId(saveTemplateResponseDto.getTemplateid());
-        Optional<User> user = userRepository.findById(saveTemplateResponseDto.getUserid());
+        Template template = getTemplateByTemplateId(saveTemplateResponseDto.getTemplateId());
+        Optional<User> user = userRepository.findById(saveTemplateResponseDto.getUserId());
         TemplateDownload templateDownload = TemplateDownload.createTemplateDownload(user.get(), template);
         templateDownloadRepository.save(templateDownload);
         return "저장";
