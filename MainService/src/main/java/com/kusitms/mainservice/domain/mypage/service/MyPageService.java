@@ -1,9 +1,10 @@
 package com.kusitms.mainservice.domain.mypage.service;
 
 import com.kusitms.mainservice.domain.mypage.domain.SharedType;
-import com.kusitms.mainservice.domain.mypage.dto.MyPageResponseDto;
-import com.kusitms.mainservice.domain.mypage.dto.MyPageUserResponseDto;
-import com.kusitms.mainservice.domain.mypage.dto.MySharedContentDto;
+import com.kusitms.mainservice.domain.mypage.dto.response.MyPageResponseDto;
+import com.kusitms.mainservice.domain.mypage.dto.response.MyPageUserResponseDto;
+import com.kusitms.mainservice.domain.mypage.dto.response.MySharedContentDto;
+import com.kusitms.mainservice.domain.mypage.dto.resquest.ModifyUserProfileRequestDto;
 import com.kusitms.mainservice.domain.roadmap.domain.Roadmap;
 import com.kusitms.mainservice.domain.roadmap.repository.RoadmapDownloadRepository;
 import com.kusitms.mainservice.domain.roadmap.repository.RoadmapRepository;
@@ -13,6 +14,7 @@ import com.kusitms.mainservice.domain.template.repository.TemplateRepository;
 import com.kusitms.mainservice.domain.user.domain.User;
 import com.kusitms.mainservice.domain.user.dto.response.DetailUserResponseDto;
 import com.kusitms.mainservice.domain.user.repository.UserRepository;
+import com.kusitms.mainservice.global.S3Service;
 import com.kusitms.mainservice.global.error.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,15 +24,18 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.kusitms.mainservice.domain.user.domain.User.getProfile;
 import static com.kusitms.mainservice.global.error.ErrorCode.USER_NOT_FOUND;
 
 @Slf4j
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 @Service
 public class MyPageService {
     private final TemplateDownloadRepository templateDownloadRepository;
@@ -38,14 +43,32 @@ public class MyPageService {
     private final TemplateRepository templateRepository;
     private final RoadmapRepository roadmapRepository;
     private final UserRepository userRepository;
+    private final S3Service s3Service;
 
     public MyPageResponseDto getMyPageResponse(Long userId, Pageable pageable) {
         MyPageResponseDto myPageResponseDto = createMyPageResponseDto(userId, pageable);
         return myPageResponseDto;
     }
+    public String uploadProfile(MultipartFile multipartFile, Long userId) throws IOException {
+        User user = getUserByUserId(userId);
+        String url = saveFileToUser(multipartFile, user);
+        return url;
+    }
+    public MyPageUserResponseDto updateUserInfo( ModifyUserProfileRequestDto modifyUserProfileRequestDto){
+        User user = getUserByUserId(modifyUserProfileRequestDto.getUserId());
+        user.updateMypage(modifyUserProfileRequestDto);
+
+        return createMyPageUserResponseDto(user);
+    }
+    private String saveFileToUser(MultipartFile multipartFile, User user) throws IOException {
+        String url = s3Service.saveFile(multipartFile, user.getId().toString());
+        user.updateProfile(url);
+        return url;
+    }
 
     private MyPageResponseDto createMyPageResponseDto(Long userId, Pageable pageable) {
-        MyPageUserResponseDto myPageUserResponseDto = createMyPageUserResponseDto(userId);
+       User user = getUserByUserId(userId);
+        MyPageUserResponseDto myPageUserResponseDto = createMyPageUserResponseDto(user);
         Page<MySharedContentDto> mySharedContentDtoList = createmySharedContentDtoList(userId, pageable);
         return MyPageResponseDto.of(myPageUserResponseDto, mySharedContentDtoList);
     }
@@ -83,8 +106,8 @@ public class MyPageService {
         return resultPage;
     }
 
-    private MyPageUserResponseDto createMyPageUserResponseDto(Long userId) {
-        User user = getUserByUserId(userId);
+    private MyPageUserResponseDto createMyPageUserResponseDto(User user) {
+
         DetailUserResponseDto detailUserResponseDto = createDetailUserResponseDto(user);
         int templateNum = detailUserResponseDto.getTemplateNum();
         int roadmapNum = detailUserResponseDto.getRoadmapNum();

@@ -1,5 +1,6 @@
 package com.kusitms.mainservice.domain.user.domain;
 
+import com.kusitms.mainservice.domain.mypage.dto.resquest.ModifyUserProfileRequestDto;
 import com.kusitms.mainservice.domain.roadmap.domain.Roadmap;
 import com.kusitms.mainservice.domain.roadmap.domain.RoadmapDownload;
 import com.kusitms.mainservice.domain.team.domain.Team;
@@ -19,7 +20,6 @@ import java.util.List;
 @Getter
 @Table(name = "user")
 @Entity
-@Setter
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +27,7 @@ public class User {
     private Long id;
     @Enumerated(EnumType.STRING)
     private Platform platform;
+    @Enumerated(EnumType.STRING)
     private UserType userType;
     private String platformId;
     private String email;
@@ -81,4 +82,23 @@ public class User {
     public void updateTeamList(Team team) {
         this.teamList.add(team);
     }
+    public void updateProfile(String profile){ this.profile = profile;}
+    public void updateMypage( ModifyUserProfileRequestDto modifyUserProfileRequestDto){
+        this.profile = modifyUserProfileRequestDto.getProfile();
+        this.name = modifyUserProfileRequestDto.getName();
+        this.userType = modifyUserProfileRequestDto.getUserType();
+    }
+    public static User getProfile(User user,String profile){
+        return User.builder()
+                .id(user.getId())
+                .profile(profile)
+                .platform(user.getPlatform())
+                .userType(user.getUserType())
+                .platformId(user.getPlatformId())
+                .email(user.getEmail())
+                .name(user.getName())
+                .refreshToken(user.getRefreshToken())
+                .build();
+    }
 }
+
