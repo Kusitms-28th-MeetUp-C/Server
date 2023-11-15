@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ModifyUserProfileRequestDto {
+    private Long userId;
     private String profile;
     private String name;
     private UserType userType;

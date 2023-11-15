@@ -4,6 +4,7 @@ import com.kusitms.mainservice.domain.mypage.domain.SharedType;
 import com.kusitms.mainservice.domain.mypage.dto.response.MyPageResponseDto;
 import com.kusitms.mainservice.domain.mypage.dto.response.MyPageUserResponseDto;
 import com.kusitms.mainservice.domain.mypage.dto.response.MySharedContentDto;
+import com.kusitms.mainservice.domain.mypage.dto.resquest.ModifyUserProfileRequestDto;
 import com.kusitms.mainservice.domain.roadmap.domain.Roadmap;
 import com.kusitms.mainservice.domain.roadmap.repository.RoadmapDownloadRepository;
 import com.kusitms.mainservice.domain.roadmap.repository.RoadmapRepository;
@@ -34,7 +35,7 @@ import static com.kusitms.mainservice.global.error.ErrorCode.USER_NOT_FOUND;
 
 @Slf4j
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 @Service
 public class MyPageService {
     private final TemplateDownloadRepository templateDownloadRepository;
@@ -48,23 +49,26 @@ public class MyPageService {
         MyPageResponseDto myPageResponseDto = createMyPageResponseDto(userId, pageable);
         return myPageResponseDto;
     }
-    public MyPageUserResponseDto uploadProfile(MultipartFile multipartFile, Long userId) throws IOException {
-        saveFileToUser(multipartFile, userId);
-        MyPageUserResponseDto myPageUserResponseDto =createMyPageUserResponseDto(userId);
-        return myPageUserResponseDto;
-    }
-    @Transactional
-    private User saveFileToUser(MultipartFile multipartFile, Long userId) throws IOException {
+    public String uploadProfile(MultipartFile multipartFile, Long userId) throws IOException {
         User user = getUserByUserId(userId);
-        String url = s3Service.saveFile(multipartFile, userId.toString());
+        String url = saveFileToUser(multipartFile, user);
+        return url;
+    }
+    public MyPageUserResponseDto updateUserInfo( ModifyUserProfileRequestDto modifyUserProfileRequestDto){
+        User user = getUserByUserId(modifyUserProfileRequestDto.getUserId());
+        user.updateMypage(modifyUserProfileRequestDto);
+
+        return createMyPageUserResponseDto(user);
+    }
+    private String saveFileToUser(MultipartFile multipartFile, User user) throws IOException {
+        String url = s3Service.saveFile(multipartFile, user.getId().toString());
         user.updateProfile(url);
-        User getuser = getProfile(user,url);
-        userRepository.save(getuser);
-        return getuser;
+        return url;
     }
 
     private MyPageResponseDto createMyPageResponseDto(Long userId, Pageable pageable) {
-        MyPageUserResponseDto myPageUserResponseDto = createMyPageUserResponseDto(userId);
+       User user = getUserByUserId(userId);
+        MyPageUserResponseDto myPageUserResponseDto = createMyPageUserResponseDto(user);
         Page<MySharedContentDto> mySharedContentDtoList = createmySharedContentDtoList(userId, pageable);
         return MyPageResponseDto.of(myPageUserResponseDto, mySharedContentDtoList);
     }
@@ -102,8 +106,8 @@ public class MyPageService {
         return resultPage;
     }
 
-    private MyPageUserResponseDto createMyPageUserResponseDto(Long userId) {
-        User user = getUserByUserId(userId);
+    private MyPageUserResponseDto createMyPageUserResponseDto(User user) {
+
         DetailUserResponseDto detailUserResponseDto = createDetailUserResponseDto(user);
         int templateNum = detailUserResponseDto.getTemplateNum();
         int roadmapNum = detailUserResponseDto.getRoadmapNum();
