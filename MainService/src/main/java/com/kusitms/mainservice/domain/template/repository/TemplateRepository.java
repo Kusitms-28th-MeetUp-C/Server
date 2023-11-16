@@ -37,5 +37,5 @@ public interface TemplateRepository extends JpaRepository<Template, Long> {
     Page<Template> findAllByUserId(Long userId, Pageable pageable);
     List<Template> findAllByUserId(Long userId);
 
-
+    Template findByTitle(String title);
 }
