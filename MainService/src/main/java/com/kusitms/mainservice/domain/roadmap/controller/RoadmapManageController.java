@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class RoadmapManageController {
     private final RoadmapManageService roadmapManageService;
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<SuccessResponse<?>> createRoadmap(@UserId Long userId, @RequestBody RoadmapSharingRequestDto roadmapSharingRequestDto){
         roadmapManageService.createSharingRoadmap(userId, roadmapSharingRequestDto);
         return SuccessResponse.ok("");
