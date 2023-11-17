@@ -36,4 +36,7 @@ public class RoadmapSpace {
         roadmap.addRoadmapSpace(roadmapSpace);
         return roadmapSpace;
     }
+    public void addRoadmapTemplate(RoadmapTemplate roadmapTemplate){
+        this.RoadmapTemplateList.add(roadmapTemplate);
+    }
 }

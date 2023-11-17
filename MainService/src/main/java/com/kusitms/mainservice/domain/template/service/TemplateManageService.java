@@ -17,6 +17,7 @@ import com.kusitms.mainservice.domain.template.dto.request.TemplateReviewRequest
 import com.kusitms.mainservice.domain.template.dto.request.TemplateSharingRequestDto;
 import com.kusitms.mainservice.domain.template.dto.request.TemplateTeamRequestDto;
 import com.kusitms.mainservice.domain.template.dto.response.BaseCustomTemplateResponseDto;
+import com.kusitms.mainservice.domain.template.dto.response.CreateTemplateResponseDto;
 import com.kusitms.mainservice.domain.template.dto.response.CustomTemplateDetailResponseDto;
 import com.kusitms.mainservice.domain.template.dto.response.TemplateDownloadDetailResponseDto;
 import com.kusitms.mainservice.domain.template.mongoRepository.CustomTemplateContentRepository;
@@ -66,13 +67,14 @@ public class TemplateManageService {
         saveCustomTemplateContent(template, customTemplate);
     }
 
-    public void createSharingTemplate(Long userId, TemplateSharingRequestDto templateSharingRequestDto) {
+    public CreateTemplateResponseDto createSharingTemplate(Long userId, TemplateSharingRequestDto templateSharingRequestDto) {
         User user = getUserFromUserId(userId);
         TemplateType templateType = getEnumTemplateTypeFromStringTemplateType(templateSharingRequestDto.getTemplateType());
         Template createdTemplate = Template.createTemplate(templateSharingRequestDto, templateType, user);
         saveTemplate(createdTemplate);
         TemplateContent templateContent = createTemplateContent(createdTemplate.getId(), templateSharingRequestDto.getContent());
         saveTemplateContent(templateContent);
+        return CreateTemplateResponseDto.of(createdTemplate.getId());
     }
 
     public CustomTemplateDetailResponseDto getTeamTemplateDetailInfo(Long userId, String roadmapTitle, String teamTitle, Long templateId) {

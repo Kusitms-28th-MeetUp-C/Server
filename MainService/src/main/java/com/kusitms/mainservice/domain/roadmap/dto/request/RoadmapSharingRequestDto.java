@@ -12,7 +12,6 @@ public class RoadmapSharingRequestDto {
     private String title;
     private String introduction;
     private List<StepDto> steps;
-    private String content;
     private String roadmapType;
 
 

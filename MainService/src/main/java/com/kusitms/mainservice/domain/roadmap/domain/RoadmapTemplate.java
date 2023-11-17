@@ -22,4 +22,13 @@ public class RoadmapTemplate {
     @ManyToOne
     @JoinColumn(name = "template_id")
     private Template template;
+
+    public static RoadmapTemplate createRoadmapTemplate(RoadmapSpace roadmapSpace,Template template ){
+        RoadmapTemplate roadmapTemplate = RoadmapTemplate.builder()
+                .roadmapSpace(roadmapSpace)
+                .template(template)
+                .build();
+        roadmapSpace.addRoadmapTemplate(roadmapTemplate);
+        return roadmapTemplate;
+    }
 }
