@@ -38,9 +38,5 @@ public class RoadmapController {
         final RoadmapDetailInfoResponseDto roadmapDetailInfoResponseDto = roadmapService.getRoadmapDetail(roadmapId);
         return SuccessResponse.ok(roadmapDetailInfoResponseDto);
     }
-    @PostMapping("/create")
-    public ResponseEntity<SuccessResponse<?>> createRoadmap(@RequestParam Long userId, @RequestBody RoadmapSharingRequestDto roadmapSharingRequestDto){
-        roadmapManageService.createSharingRoadmap(userId, roadmapSharingRequestDto);
-        return SuccessResponse.ok("");
-    }
+
 }
