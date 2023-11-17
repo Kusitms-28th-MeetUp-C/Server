@@ -10,5 +10,5 @@ import java.util.List;
 @Getter
 public class StepDto {
     private String stepTitle;
-    private List<String> templateTitle;
+    private List<Long> templateIdList;
 }

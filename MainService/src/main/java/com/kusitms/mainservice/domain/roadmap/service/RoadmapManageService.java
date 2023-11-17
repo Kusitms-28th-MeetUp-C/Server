@@ -18,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 import static com.kusitms.mainservice.domain.roadmap.domain.RoadmapType.getEnumRoadmapTypeFromStringRoadmapType;
 import static com.kusitms.mainservice.global.error.ErrorCode.USER_NOT_FOUND;
 
@@ -37,11 +39,10 @@ public class RoadmapManageService {
         saveRoadmap(createdRoadmap);
         for (int i = 0; i < roadmapSharingRequestDto.getSteps().size(); i++) {
             StepDto stepDto = roadmapSharingRequestDto.getSteps().get(i);
-            RoadmapSpace createdRoadmapSpace = RoadmapSpace.createRoadmapSpace(stepDto, createdRoadmap, i);
+            RoadmapSpace createdRoadmapSpace = RoadmapSpace.createRoadmapSpace(stepDto, createdRoadmap, i+1);
             saveRoadmapSpace(createdRoadmapSpace);
-            for(String title : stepDto.getTemplateTitle()){
-                Template template = getTemplateByTitle(title);
-                templateRepository.save(template);
+            for(Long templateId : stepDto.getTemplateIdList()){
+                Template template = getTemplateById(templateId);
                 RoadmapTemplate createRoadmapTemplate = RoadmapTemplate.createRoadmapTemplate(createdRoadmapSpace,template);
                 roadmapTemplateRepository.save(createRoadmapTemplate);
             }
@@ -53,9 +54,9 @@ public class RoadmapManageService {
         }
 
     }
-    private Template getTemplateByTitle(String title){
-        Template template = templateRepository.findByTitle(title);
-        return template;
+    private Template getTemplateById(Long templateId){
+        Optional<Template> optemplate = templateRepository.findById(templateId);
+        return optemplate.get();
     }
     private void saveRoadmap(Roadmap createdRoadmap){
         roadmapRepository.save(createdRoadmap);
