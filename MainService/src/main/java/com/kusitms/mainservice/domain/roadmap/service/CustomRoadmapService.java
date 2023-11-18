@@ -1,16 +1,7 @@
 package com.kusitms.mainservice.domain.roadmap.service;
 
 import com.kusitms.mainservice.domain.roadmap.domain.*;
-import com.kusitms.mainservice.domain.roadmap.dto.request.RoadmapSharingRequestDto;
 import com.kusitms.mainservice.domain.roadmap.repository.CustomRoadmapSpaceRepository;
-import com.kusitms.mainservice.domain.roadmap.repository.RoadmapRepository;
-import com.kusitms.mainservice.domain.roadmap.repository.RoadmapSpaceRepository;
-import com.kusitms.mainservice.domain.template.domain.Template;
-import com.kusitms.mainservice.domain.template.domain.TemplateContent;
-import com.kusitms.mainservice.domain.template.domain.TemplateType;
-import com.kusitms.mainservice.domain.template.dto.request.TemplateSharingRequestDto;
-import com.kusitms.mainservice.domain.user.domain.User;
-import com.kusitms.mainservice.domain.user.repository.UserRepository;
 import com.kusitms.mainservice.global.error.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

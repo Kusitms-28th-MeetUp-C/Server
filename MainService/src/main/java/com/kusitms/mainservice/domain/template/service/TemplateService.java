@@ -17,7 +17,6 @@ import com.kusitms.mainservice.domain.template.repository.TemplateRepository;
 import com.kusitms.mainservice.domain.user.domain.User;
 import com.kusitms.mainservice.domain.user.dto.response.DetailUserResponseDto;
 import com.kusitms.mainservice.domain.user.repository.UserRepository;
-import com.kusitms.mainservice.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -45,7 +44,7 @@ public class TemplateService {
     private final RoadmapRepository roadmapRepository;
     private final TeamRepository teamRepository;
     private final UserRepository userRepository;
-    private final UserService userService;
+    private final TemplateManageService templateManageService;
 
     public Page<SearchBaseTemplateResponseDto> searchTemplateByTitleAndRoadmapType(SearchTemplateRequsetDto searchTemplateRequsetDto, Pageable pageable) {
         Page<Template> templateList = getTemplateListByTitleAndTemplateType(searchTemplateRequsetDto, pageable);
@@ -57,11 +56,11 @@ public class TemplateService {
     public TemplateDetailResponseDto getTemplateDetail(Long templateId) {
         Template template = getTemplateByTemplateId(templateId);
         TemplateDetailIntroResponseDto templateDetailIntroResponseDto = createTemplateDetailIntroResponseDto(template);
-        List<TemplateContent> templateContentList = getTemplateContentListByTemplateId(template);
+        String templateContent = getTemplateContentByTemplateId(template).getContent();
         List<TemplateDetailBaseRelateDto> templateDetailBaseRelateDtoList = createTemplateDetailRelateTemplateDto(template);
         TemplateDetailConnectRoadmapDto roadmapIdAndConnectRoadmap = getRoadmapTitleResponseDto(template);
         DetailUserResponseDto detailUserResponseDto = createDetailUserResponseDto(template.getUser());
-        return TemplateDetailResponseDto.of(template, templateDetailIntroResponseDto, templateContentList, roadmapIdAndConnectRoadmap, templateDetailBaseRelateDtoList, detailUserResponseDto);
+        return TemplateDetailResponseDto.of(template, templateDetailIntroResponseDto, templateContent, roadmapIdAndConnectRoadmap, templateDetailBaseRelateDtoList, detailUserResponseDto);
 
     }
 
@@ -116,32 +115,9 @@ public class TemplateService {
         return TemplateDetailIntroBaseResponseDto.of(templateReviewResponseDto.getRatingAverage(), template.getEstimatedTime(), teamCount, templateReviewResponseDto.getReviewCount());
     }
 
-    private List<TemplateContent> getTemplateContentListByTemplateId(Template template) {
-        List<TemplateContent> templateContentList = templateContentRepository.findAllByTemplateId(template.getId());
-
-
-//    List<TemplateContent> filteredList = templateContentList.stream()
-//            .filter(tc -> tc.getAgendaNum() != null)
-//            .collect(Collectors.toList());
-//
-//
-//    filteredList.sort(Comparator.comparing(TemplateContent::getAgendaNum));
-//
-//    Map<Long, List<Map<String, String>>> result = new LinkedHashMap<>();
-//    List<Map<String, String>> contentList = new ArrayList<>();
-//
-//    for (TemplateContent templateContent : filteredList) {
-//        Map<String, String> contentMap = new LinkedHashMap<>();
-//        contentMap.put("agendaNum", String.valueOf(templateContent.getAgendaNum()));
-//        contentMap.put("agenda", templateContent.getAgenda());
-//        contentMap.put("content", templateContent.getContent());
-//        contentList.add(contentMap);
-//    }
-//
-//    result.put(template.getId(), contentList);
-
-
-        return templateContentList;
+    private TemplateContent getTemplateContentByTemplateId(Template template) {
+        TemplateContent templateContent = templateManageService.getTemplateContentFromTemplateId(template.getId());
+        return templateContent;
     }
 
 

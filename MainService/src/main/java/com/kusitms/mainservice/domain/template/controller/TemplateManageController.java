@@ -5,7 +5,6 @@ import com.kusitms.mainservice.domain.template.dto.request.TemplateSharingReques
 import com.kusitms.mainservice.domain.template.dto.request.TemplateTeamRequestDto;
 import com.kusitms.mainservice.domain.template.dto.response.CreateTemplateResponseDto;
 import com.kusitms.mainservice.domain.template.dto.response.CustomTemplateDetailResponseDto;
-import com.kusitms.mainservice.domain.template.dto.response.OriginalTemplateResponseDto;
 import com.kusitms.mainservice.domain.template.dto.response.TemplateDownloadDetailResponseDto;
 import com.kusitms.mainservice.domain.template.service.TemplateManageService;
 import com.kusitms.mainservice.global.common.SuccessResponse;

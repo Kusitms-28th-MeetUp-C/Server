@@ -16,7 +16,7 @@ public class CustomRoadmapDetailResponseDto {
     private RoadmapType roadmapType;
     private LocalDate startTime;
     private LocalDate endTime;
-    private List<CustomRoadmapSpaceDetailResponseDto> roadmapDetailList;
+    private List<CustomRoadmapSpaceDetailResponseDto> roadmapList;
 
     public static CustomRoadmapDetailResponseDto of(CustomRoadmap roadmap, List<CustomRoadmapSpaceDetailResponseDto> roadmapDetailList) {
         return CustomRoadmapDetailResponseDto.builder()
@@ -25,7 +25,7 @@ public class CustomRoadmapDetailResponseDto {
                 .roadmapType(roadmap.getRoadmapType())
                 .startTime(roadmap.getStartDate())
                 .endTime(roadmap.getEndDate())
-                .roadmapDetailList(roadmapDetailList)
+                .roadmapList(roadmapDetailList)
                 .build();
     }
 }

@@ -11,8 +11,6 @@ import com.kusitms.mainservice.domain.roadmap.repository.RoadmapSpaceRepository;
 import com.kusitms.mainservice.domain.template.repository.TemplateRepository;
 import com.kusitms.mainservice.domain.user.domain.User;
 import com.kusitms.mainservice.domain.user.dto.response.DetailUserResponseDto;
-import com.kusitms.mainservice.domain.user.service.AuthService;
-import com.kusitms.mainservice.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
