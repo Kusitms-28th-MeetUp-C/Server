@@ -18,7 +18,7 @@ public class ArticleController {
     private final ArticleService articleService;
 
     @GetMapping
-    public ResponseEntity<SuccessResponse<?>> getAritcleList(){
+    public ResponseEntity<SuccessResponse<?>> getArticleList(){
         final List<ArticleResponseDto> articleResponseDtoList = articleService.getArticleList();
         return SuccessResponse.ok(articleResponseDtoList);
     }
