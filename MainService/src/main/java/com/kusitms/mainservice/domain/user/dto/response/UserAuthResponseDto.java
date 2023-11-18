@@ -15,6 +15,7 @@ public class UserAuthResponseDto {
     private String accessToken;
     private String refreshToken;
     private Boolean isFirst;
+    private String sessionId;
 
     public static UserAuthResponseDto of(User user, TokenInfo token, Boolean isFirst) {
         return UserAuthResponseDto.builder()
@@ -25,6 +26,7 @@ public class UserAuthResponseDto {
                 .isFirst(isFirst)
                 .accessToken(token.getAccessToken())
                 .refreshToken(token.getRefreshToken())
+                .sessionId(user.getSessionId())
                 .build();
     }
 }
