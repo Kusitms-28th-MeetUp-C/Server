@@ -71,21 +71,21 @@ public class ChatService {
         return ChatUserResponseDto.of(chatUser);
     }
 
+    private List<UserChatResponseDto> createUserChatResponseDto(List<Chat> chatList, String userName) {
+        return chatList.stream()
+                .map(chat ->
+                        UserChatResponseDto.of(
+                                getChatUserReceivedUser(chat, userName),
+                                getLastChatContent(chat.getChatContentList()).getContent(),
+                                getLastChatContent(chat.getChatContentList()).getTime()))
+                .collect(Collectors.toList());
+    }
+
     private ChatUser getChatUserReceivedUser(Chat chat, String name) {
         if (!Objects.equals(chat.getChatUserList().get(0).getName(), name))
             return chat.getChatUserList().get(0);
         else
             return chat.getChatUserList().get(1);
-    }
-
-    private List<UserChatResponseDto> createUserChatResponseDto(List<Chat> chatList, String user) {
-        return chatList.stream()
-                .map(chat ->
-                        UserChatResponseDto.of(
-                                getReceivedUserName(chat, user),
-                                getLastChatContent(chat.getChatContentList()).getContent(),
-                                getLastChatContent(chat.getChatContentList()).getTime()))
-                .collect(Collectors.toList());
     }
 
 
