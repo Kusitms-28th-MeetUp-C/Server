@@ -16,6 +16,7 @@ public class MyPageUserResponseDto {
     private int templateNum;
     private int roadmapNum;
     private int point;
+    private String sessionId;
     public static MyPageUserResponseDto of(User user,int templateNum, int roadmapNum, int point){
         return MyPageUserResponseDto.builder()
                 .userId(user.getId())
@@ -26,6 +27,7 @@ public class MyPageUserResponseDto {
                 .templateNum(templateNum)
                 .roadmapNum(roadmapNum)
                 .point(point)
+                .sessionId(user.getSessionId())
                 .build();
     }
 }
