@@ -16,6 +16,6 @@ public class RoadmapManageController {
     @PostMapping
     public ResponseEntity<SuccessResponse<?>> createRoadmap(@UserId Long userId, @RequestBody RoadmapSharingRequestDto roadmapSharingRequestDto){
         roadmapManageService.createSharingRoadmap(userId, roadmapSharingRequestDto);
-        return SuccessResponse.ok("");
+        return SuccessResponse.created(null);
     }
 }
