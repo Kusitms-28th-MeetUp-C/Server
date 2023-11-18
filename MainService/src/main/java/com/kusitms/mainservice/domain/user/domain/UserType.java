@@ -12,6 +12,4 @@ public enum UserType {
     개발자,
     기획자,
     에디터
-
-
 }

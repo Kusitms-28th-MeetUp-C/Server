@@ -49,8 +49,9 @@ public class TeamRoadmapService {
         CustomRoadmap teamRoadmap = team.getRoadmapDownload().getCustomRoadmap();
         List<CustomRoadmapSpaceDetailResponseDto> teamRoadmapSpaceDetailResponseDtoList
                 = createTeamRoadmapSpaceDetailResponseDto(teamRoadmap.getCustomRoadmapSpaceList());
+        Long processingNum = getProcessingNum(teamRoadmap);
         CustomRoadmapDetailResponseDto teamRoadmapDetailResponseDto
-                = CustomRoadmapDetailResponseDto.of(teamRoadmap, teamRoadmapSpaceDetailResponseDtoList);
+                = CustomRoadmapDetailResponseDto.of(teamRoadmap, processingNum.intValue(), teamRoadmapSpaceDetailResponseDtoList);
         return TeamRoadmapDetailResponseDto.of(team, teamSpaceResponseDtoList, teamRoadmapDetailResponseDto);
     }
 
@@ -91,6 +92,11 @@ public class TeamRoadmapService {
         List<CustomRoadmapTemplate> customRoadmapTemplate = createCustomRoadmapTemplateList(customTemplateList, customRoadmapSpace);
         saveCustomRoadmapTemplateList(customRoadmapTemplate);
         return customRoadmapSpace;
+    }
+
+    private Long getProcessingNum(CustomRoadmap relatedRoadmap){
+        return relatedRoadmap.getCustomRoadmapSpaceList().stream()
+                .filter(CustomRoadmapSpace::isCompleted).count();
     }
 
     private List<CustomTemplate> createCustomTemplateList(List<Template> templateList, User user) {

@@ -1,6 +1,7 @@
 package com.kusitms.mainservice.domain.team.service;
 
 import com.kusitms.mainservice.domain.roadmap.domain.CustomRoadmap;
+import com.kusitms.mainservice.domain.roadmap.domain.CustomRoadmapSpace;
 import com.kusitms.mainservice.domain.roadmap.domain.RoadmapDownload;
 import com.kusitms.mainservice.domain.roadmap.dto.response.CustomRoadmapDetailResponseDto;
 import com.kusitms.mainservice.domain.roadmap.dto.response.CustomRoadmapSpaceDetailResponseDto;
@@ -42,7 +43,7 @@ public class TeamService {
     private final static int MAX_SPACE_SIZE = 3;
 
 
-    public TeamTitleListResponseDto getTeamTitleList(Long userId){
+    public TeamTitleListResponseDto getTeamTitleList(Long userId) {
         User user = getUserFromUserId(userId);
         List<Team> teamList = user.getTeamList();
         List<TeamTitleElementResponseDto> teamTitleElementResponseDtoList = TeamTitleElementResponseDto.listOf(teamList);
@@ -89,11 +90,17 @@ public class TeamService {
     }
 
     private CustomRoadmapDetailResponseDto customRoadmapDetailResponseDto(RoadmapDownload roadmapDownload) {
-        if(Objects.isNull(roadmapDownload)) return null;
+        if (Objects.isNull(roadmapDownload)) return null;
         CustomRoadmap roadmap = roadmapDownload.getCustomRoadmap();
         List<CustomRoadmapSpaceDetailResponseDto> customRoadmapSpaceDetailResponseDtoList
                 = CustomRoadmapSpaceDetailResponseDto.listOf(roadmap);
-        return CustomRoadmapDetailResponseDto.of(roadmap, customRoadmapSpaceDetailResponseDtoList);
+        Long processingNum = getProcessingNum(roadmap);
+        return CustomRoadmapDetailResponseDto.of(roadmap, processingNum.intValue(), customRoadmapSpaceDetailResponseDtoList);
+    }
+
+    private Long getProcessingNum(CustomRoadmap relatedRoadmap) {
+        return relatedRoadmap.getCustomRoadmapSpaceList().stream()
+                .filter(CustomRoadmapSpace::isCompleted).count();
     }
 
     private List<TeamSpaceResponseDto> createTeamSpaceResponseDtoList(List<TeamSpace> teamSpaceList) {

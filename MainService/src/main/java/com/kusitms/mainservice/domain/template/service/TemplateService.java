@@ -17,6 +17,8 @@ import com.kusitms.mainservice.domain.template.repository.TemplateRepository;
 import com.kusitms.mainservice.domain.user.domain.User;
 import com.kusitms.mainservice.domain.user.dto.response.DetailUserResponseDto;
 import com.kusitms.mainservice.domain.user.repository.UserRepository;
+import com.kusitms.mainservice.global.error.ErrorCode;
+import com.kusitms.mainservice.global.error.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -30,6 +32,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.kusitms.mainservice.domain.template.domain.TemplateType.getEnumTemplateTypeFromStringTemplateType;
+import static com.kusitms.mainservice.global.error.ErrorCode.TEMPLATE_NOT_FOUND;
 
 
 @Slf4j
@@ -38,7 +41,6 @@ import static com.kusitms.mainservice.domain.template.domain.TemplateType.getEnu
 @Service
 public class TemplateService {
     private final TemplateRepository templateRepository;
-    private final TemplateContentRepository templateContentRepository;
     private final ReviewerRepository reviewerRepository;
     private final TemplateDownloadRepository templateDownloadRepository;
     private final RoadmapRepository roadmapRepository;
@@ -48,9 +50,7 @@ public class TemplateService {
 
     public Page<SearchBaseTemplateResponseDto> searchTemplateByTitleAndRoadmapType(SearchTemplateRequsetDto searchTemplateRequsetDto, Pageable pageable) {
         Page<Template> templateList = getTemplateListByTitleAndTemplateType(searchTemplateRequsetDto, pageable);
-        Page<SearchBaseTemplateResponseDto> searchBaseTemplateResponseDtoList = getTemplatesWithPaging(templateList);
-//        return SearchTemplateResponseDto.of(searchBaseTemplateResponseDtoList);
-        return searchBaseTemplateResponseDtoList;
+        return getTemplatesWithPaging(templateList);
     }
 
     public TemplateDetailResponseDto getTemplateDetail(Long templateId) {
@@ -88,8 +88,7 @@ public class TemplateService {
 
     private List<TemplateDetailBaseRelateDto> createTemplateDetailRelateTemplateDto(Template template) {
         List<Template> templateList = getTemplatesBySameCategoryAndId(template);
-        List<TemplateDetailBaseRelateDto> templateDetailBaseRelateDtoList = createTemplateDetailRelateTemplateDtoList(templateList);
-        return templateDetailBaseRelateDtoList;
+        return createTemplateDetailRelateTemplateDtoList(templateList);
     }
 
     private List<TemplateDetailBaseRelateDto> createTemplateDetailRelateTemplateDtoList(List<Template> templateList) {
@@ -116,8 +115,7 @@ public class TemplateService {
     }
 
     private TemplateContent getTemplateContentByTemplateId(Template template) {
-        TemplateContent templateContent = templateManageService.getTemplateContentFromTemplateId(template.getId());
-        return templateContent;
+        return templateManageService.getTemplateContentFromTemplateId(template.getId());
     }
 
 
@@ -142,14 +140,12 @@ public class TemplateService {
         if (TemplateType.ALL.equals(templateType)) {
             return templateRepository.findByTitleContaining(searchTemplateRequsetDto.getTitle(), pageable);
         } else {
-            Page<Template> templateList = templateRepository.findByTitleContainingAndTemplateType(title, templateType, pageable);
-            return templateList;
+            return templateRepository.findByTitleContainingAndTemplateType(title, templateType, pageable);
         }
     }
 
     private Template getTemplateByTemplateId(Long templateId) {
-        Optional<Template> template = templateRepository.findById(templateId);
-        return template.get();
+       return templateRepository.findById(templateId).orElseThrow(() -> new EntityNotFoundException(TEMPLATE_NOT_FOUND));
     }
 
     private Page<Template> getTemplateFromTemplateType(String stringTemplateType, Pageable pageable) {
@@ -245,8 +241,6 @@ public class TemplateService {
     }
 
     private List<Template> getTemplatesBySameCategoryAndId(Template template) {
-//
-        List<Template> templates = templateRepository.findTop4ByTemplateTypeAndIdNot(template.getTemplateType(), template.getId());
-        return templates;
+        return templateRepository.findTop4ByTemplateTypeAndIdNot(template.getTemplateType(), template.getId());
     }
 }
