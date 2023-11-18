@@ -36,7 +36,7 @@ public class TemplateManageController {
     @DeleteMapping
     public ResponseEntity<SuccessResponse<?>> deleteTemplate(@RequestParam Long templateId) {
         templateManageService.deleteTemplateByTemplateId(templateId);
-        return ResponseEntity.ok(null);
+        return SuccessResponse.ok(null);
     }
 
     @GetMapping("/team")
