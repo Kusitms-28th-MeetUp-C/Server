@@ -8,12 +8,14 @@ import lombok.Getter;
 @Builder
 @Getter
 public class ChatUserResponseDto {
+    private Long sessionId;
     private String name;
     private UserType type;
     private String profile;
 
     public static ChatUserResponseDto of(ChatUser chatUser){
         return ChatUserResponseDto.builder()
+                .sessionId(chatUser.getSessionId())
                 .name(chatUser.getName())
                 .type(chatUser.getType())
                 .profile(chatUser.getProfile())
