@@ -9,17 +9,26 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
 public class SearchService {
     private final SearchRepository searchRepository;
+    private final static String EMPTY_STRING = "";
 
     public SearchResultResponseDto getSearchResult(Long userId, SearchRequestDto searchRequestDto) {
         List<SearchUserTemplate> searchUserTemplateList
-                = searchRepository.findAllBySearchText(searchRequestDto.getSearchText(), userId.toString());
+                = getSearchResult(searchRequestDto.getSearchText(), userId.toString());
         List<SearchResultElementResponseDto> searchResultElementResponseDtoList
                 = SearchResultElementResponseDto.listOf(searchUserTemplateList);
         return SearchResultResponseDto.of(searchResultElementResponseDtoList);
+    }
+
+    private List<SearchUserTemplate> getSearchResult(String searchText, String userId){
+        if(!Objects.equals(searchText, EMPTY_STRING))
+            return searchRepository.findAllBySearchText(searchText, userId);
+        else
+            return searchRepository.findAllByUserId(userId);
     }
 }
