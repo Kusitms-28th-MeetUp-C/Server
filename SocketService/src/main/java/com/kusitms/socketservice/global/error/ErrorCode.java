@@ -26,6 +26,7 @@ public enum ErrorCode {
     MESSAGE_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "모임 정보를 찾을 수 없습니다."),
     SEARCH_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "검색 종류를 찾을 수 없습니다."),
     SUB_SEARCH_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "세부 검색 종류를 찾을 수 없습니다."),
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다."),
 
     /**
      * 500 Internal Server Error
