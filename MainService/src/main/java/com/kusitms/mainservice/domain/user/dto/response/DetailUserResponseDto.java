@@ -15,6 +15,7 @@ public class DetailUserResponseDto {
     private String email;
     private int templateNum;
     private int roadmapNum;
+    private String sessionId;
 
     public static DetailUserResponseDto of(User user, int templateNum, int roadmapNum){
         return DetailUserResponseDto.builder()
@@ -25,6 +26,7 @@ public class DetailUserResponseDto {
                 .email(user.getEmail())
                 .templateNum(templateNum)
                 .roadmapNum(roadmapNum)
+                .sessionId(user.getSessionId())
                 .build();
     }
 }
