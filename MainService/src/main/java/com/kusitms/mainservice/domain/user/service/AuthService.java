@@ -5,7 +5,6 @@ import com.kusitms.mainservice.domain.user.auth.RestTemplateProvider;
 import com.kusitms.mainservice.domain.user.domain.Platform;
 import com.kusitms.mainservice.domain.user.domain.User;
 import com.kusitms.mainservice.domain.user.dto.request.UserSignInRequestDto;
-import com.kusitms.mainservice.domain.user.dto.request.UserSignUpRequestDto;
 import com.kusitms.mainservice.domain.user.dto.response.UserAuthResponseDto;
 import com.kusitms.mainservice.domain.user.repository.RefreshTokenRepository;
 import com.kusitms.mainservice.domain.user.repository.UserRepository;
@@ -19,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
+import java.util.UUID;
 
 import static com.kusitms.mainservice.domain.user.domain.Platform.getEnumPlatformFromStringPlatform;
 import static com.kusitms.mainservice.domain.user.domain.RefreshToken.createRefreshToken;
@@ -37,7 +37,6 @@ public class AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
 
     public UserAuthResponseDto signIn(UserSignInRequestDto userSignInRequestDto, String authToken) {
-        System.out.println(userSignInRequestDto.getPlatform());
         Platform platform = getEnumPlatformFromStringPlatform(userSignInRequestDto.getPlatform());
         PlatformUserInfo platformUser = getPlatformUserInfoFromRestTemplate(platform, authToken);
         User getUser = getUserByPlatformUserInfo(platformUser);
@@ -87,18 +86,24 @@ public class AuthService {
         return jwtProvider.issueToken(user.getId());
     }
 
-    private User getUserFromUserId(Long userId){
+    private User getUserFromUserId(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND));
     }
 
     private User getUserByPlatformUserInfo(PlatformUserInfo platformUserInfo) {
         return userRepository.findByPlatformId(platformUserInfo.getId())
-                .orElse(User.createUser(platformUserInfo));
+                .orElse(User.createUser(platformUserInfo, generateRandomUuid(platformUserInfo)));
     }
 
     private PlatformUserInfo getPlatformUserInfoFromRestTemplate(Platform platform, String authToken) {
         return restTemplateProvider.getUserInfoUsingRestTemplate(platform, authToken);
+    }
+
+    private String generateRandomUuid(PlatformUserInfo platformUserInfo) {
+        UUID randomUuid = UUID.randomUUID();
+        String uuidAsString = randomUuid.toString().replace("-", "");
+        return platformUserInfo.getId() + "_" + uuidAsString.substring(0, 6);
     }
 
 }

@@ -34,6 +34,7 @@ public class User {
     private String name;
     private String profile;
     private String refreshToken;
+    private String sessionId;
     @OneToMany(mappedBy = "user")
     @Builder.Default
     private List<Team> teamList = new ArrayList<>();
@@ -53,12 +54,13 @@ public class User {
     @Builder.Default
     private List<Reviewer> reviewerList = new ArrayList<>();
 
-    public static User createUser(PlatformUserInfo platformUserInfo) {
+    public static User createUser(PlatformUserInfo platformUserInfo, String sessionId) {
         return User.builder()
                 .platformId(platformUserInfo.getId())
                 .email(platformUserInfo.getEmail())
                 .name(platformUserInfo.getName())
                 .profile(platformUserInfo.getPicture())
+                .sessionId(sessionId)
                 .build();
     }
 
