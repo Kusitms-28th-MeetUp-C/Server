@@ -117,13 +117,13 @@ public class ChatService {
 
     private Chat findFirstChatBySessions(Long firstSessionId, Long secondSessionId) {
         Query query = new Query();
-        query.addCriteria(Criteria.where("sessionList").all(firstSessionId, secondSessionId));
+        query.addCriteria(Criteria.where("chatUserList.sessionId").all(firstSessionId, secondSessionId));
         return mongoTemplate.findOne(query, Chat.class);
     }
 
     private List<Chat> findChatListBySession(Long sessionId) {
         Query query = new Query();
-        query.addCriteria(Criteria.where("sessionList").all(sessionId));
+        query.addCriteria(Criteria.where("chatUserList.sessionId").all(sessionId));
         return mongoTemplate.find(query, Chat.class);
     }
 

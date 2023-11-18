@@ -12,7 +12,6 @@ public class ChatUser {
     private UserType type;
 
     public static ChatUser createChatUser(User user){
-        System.out.println(user.getUserType());
         return ChatUser.builder()
                 .sessionId(user.getId())
                 .name(user.getName())
