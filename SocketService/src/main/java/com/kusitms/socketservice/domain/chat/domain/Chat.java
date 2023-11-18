@@ -15,18 +15,14 @@ public class Chat {
     @Id
     private String chatId;
     @Builder.Default
-    private List<Long> sessionList = new ArrayList<>();
-    @Builder.Default
-    private List<String> nameList = new ArrayList<>();
+    private List<ChatUser> chatUserList = new ArrayList<>();
     @Builder.Default
     private List<ChatContent> chatContentList = new ArrayList<>();
 
-    public static Chat creatChat(Long firstSessionId, Long secondSessionId, String firstName, String secondName) {
+    public static Chat creatChat(ChatUser firstUser, ChatUser secondUser) {
         Chat chat = Chat.builder().build();
-        chat.addName(firstName);
-        chat.addName(secondName);
-        chat.addSession(firstSessionId);
-        chat.addSession(secondSessionId);
+        chat.addChatUser(firstUser);
+        chat.addChatUser(secondUser);
         return chat;
     }
 
@@ -34,11 +30,8 @@ public class Chat {
         this.chatContentList.add(content);
     }
 
-    public void addName(String name) {
-        this.nameList.add(name);
+    public void addChatUser(ChatUser chatUser) {
+        this.chatUserList.add(chatUser);
     }
 
-    public void addSession(Long sessionId) {
-        this.sessionList.add(sessionId);
-    }
 }
