@@ -33,9 +33,7 @@ class MainServiceApplicationTests {
         TemplateContent templateContent = new TemplateContent();
 
 
-        templateContent.setAgendaNum(2L);
-        templateContent.setTemplateId(2L);
-        templateContent.setAgenda("PT 주제 정하기");
+        templateContent.setTemplateId(1L);
         templateContent.setContent("내용2");
 
         templateContentRepository.save(templateContent);

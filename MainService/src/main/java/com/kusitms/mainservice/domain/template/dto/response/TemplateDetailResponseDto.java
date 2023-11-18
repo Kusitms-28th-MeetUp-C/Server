@@ -16,19 +16,19 @@ public class TemplateDetailResponseDto {
     private String templateType;
     private String title;
     private TemplateDetailIntroResponseDto templateIntro;
-    private List<TemplateContent> templateContentList;
+    private String templateContent;
     private List<TemplateDetailBaseRelateDto> relatedTemplate;
     private TemplateDetailConnectRoadmapDto roadmapIdAndConnectRoadmap;
     private DetailUserResponseDto user;
 
-    public static TemplateDetailResponseDto of(Template template, TemplateDetailIntroResponseDto templateIntro,List<TemplateContent> templateContentList , TemplateDetailConnectRoadmapDto roadmapIdAndConnectRoadmap, List<TemplateDetailBaseRelateDto> relatedTemplate, DetailUserResponseDto user){
+    public static TemplateDetailResponseDto of(Template template, TemplateDetailIntroResponseDto templateIntro,String templateContent , TemplateDetailConnectRoadmapDto roadmapIdAndConnectRoadmap, List<TemplateDetailBaseRelateDto> relatedTemplate, DetailUserResponseDto user){
         return TemplateDetailResponseDto.builder()
                 .templateId(template.getId())
                 .templateType(template.getTemplateType().toString())
                 .title(template.getTitle())
                 .templateIntro(templateIntro)
                 .roadmapIdAndConnectRoadmap(roadmapIdAndConnectRoadmap)
-                .templateContentList(templateContentList)
+                .templateContent(templateContent)
                 .relatedTemplate(relatedTemplate)
                 .user(user)
                 .build();

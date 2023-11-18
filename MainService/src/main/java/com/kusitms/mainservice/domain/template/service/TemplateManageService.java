@@ -163,7 +163,7 @@ public class TemplateManageService {
                 .orElseThrow(() -> new EntityNotFoundException(TEMPLATE_NOT_FOUND));
     }
 
-    private TemplateContent getTemplateContentFromTemplateId(Long templateId) {
+    public TemplateContent getTemplateContentFromTemplateId(Long templateId) {
         return templateContentRepository.findByTemplateId(templateId)
                 .orElseThrow(() -> new EntityNotFoundException(TEMPLATE_CONTENT_NOT_FOUND));
     }
