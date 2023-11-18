@@ -13,10 +13,10 @@ public class ChatMessageResponseDto {
     private List<Long> sessionList;
     private ChatMessageElementResponseDto message;
 
-    public static ChatMessageResponseDto of(String receivedUser, Chat chat, ChatMessageElementResponseDto message) {
+    public static ChatMessageResponseDto of(String receivedUser, List<Long> sessionList, ChatMessageElementResponseDto message) {
         return ChatMessageResponseDto.builder()
                 .receivedUser(receivedUser)
-                .sessionList(chat.getSessionList())
+                .sessionList(sessionList)
                 .message(message)
                 .build();
     }

@@ -8,10 +8,12 @@ import java.util.List;
 @Builder
 @Getter
 public class ChatMessageListResponseDto {
+    private ChatUserResponseDto chatUserResponseDto;
     private List<ChatMessageElementResponseDto> chatMessageList;
 
-    public static ChatMessageListResponseDto of(List<ChatMessageElementResponseDto> chatMessageList) {
+    public static ChatMessageListResponseDto of(ChatUserResponseDto chatUserResponseDto, List<ChatMessageElementResponseDto> chatMessageList) {
         return ChatMessageListResponseDto.builder()
+                .chatUserResponseDto(chatUserResponseDto)
                 .chatMessageList(chatMessageList)
                 .build();
     }
