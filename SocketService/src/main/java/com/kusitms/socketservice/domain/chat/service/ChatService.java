@@ -71,21 +71,21 @@ public class ChatService {
         return ChatUserResponseDto.of(chatUser);
     }
 
+    private List<UserChatResponseDto> createUserChatResponseDto(List<Chat> chatList, String userName) {
+        return chatList.stream()
+                .map(chat ->
+                        UserChatResponseDto.of(
+                                getChatUserReceivedUser(chat, userName),
+                                getLastChatContent(chat.getChatContentList()).getContent(),
+                                getLastChatContent(chat.getChatContentList()).getTime()))
+                .collect(Collectors.toList());
+    }
+
     private ChatUser getChatUserReceivedUser(Chat chat, String name) {
         if (!Objects.equals(chat.getChatUserList().get(0).getName(), name))
             return chat.getChatUserList().get(0);
         else
             return chat.getChatUserList().get(1);
-    }
-
-    private List<UserChatResponseDto> createUserChatResponseDto(List<Chat> chatList, String user) {
-        return chatList.stream()
-                .map(chat ->
-                        UserChatResponseDto.of(
-                                getReceivedUserName(chat, user),
-                                getLastChatContent(chat.getChatContentList()).getContent(),
-                                getLastChatContent(chat.getChatContentList()).getTime()))
-                .collect(Collectors.toList());
     }
 
 
@@ -117,13 +117,13 @@ public class ChatService {
 
     private Chat findFirstChatBySessions(Long firstSessionId, Long secondSessionId) {
         Query query = new Query();
-        query.addCriteria(Criteria.where("sessionList").all(firstSessionId, secondSessionId));
+        query.addCriteria(Criteria.where("chatUserList.sessionId").all(firstSessionId, secondSessionId));
         return mongoTemplate.findOne(query, Chat.class);
     }
 
     private List<Chat> findChatListBySession(Long sessionId) {
         Query query = new Query();
-        query.addCriteria(Criteria.where("sessionList").all(sessionId));
+        query.addCriteria(Criteria.where("chatUserList.sessionId").all(sessionId));
         return mongoTemplate.find(query, Chat.class);
     }
 
