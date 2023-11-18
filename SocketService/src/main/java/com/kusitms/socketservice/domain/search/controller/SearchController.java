@@ -23,10 +23,4 @@ public class SearchController {
         final SearchResultResponseDto responseDto = searchService.getSearchResult(sessionId, searchRequestDto);
         template.convertAndSend("/sub/search/" + sessionId, MessageSuccessResponse.of(MessageSuccessCode.SEARCH, responseDto));
     }
-
-//    @MessageExceptionHandler
-//    public String handleException(BusinessException exception, MessageRequestDto messageRequestDto) {
-//        return exception.getErrorCode().getMessage();
-////        template.convertAndSend("/sub/meeting/" + messageRequestDto.getMeetingId(), exception.getErrorCode().getMessage());
-//    }
 }

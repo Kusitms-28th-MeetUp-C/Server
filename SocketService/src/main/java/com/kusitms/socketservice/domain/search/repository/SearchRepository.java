@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface SearchRepository {
     List<SearchUserTemplate> findAllBySearchText(String searchText, String userId);
+
+    List<SearchUserTemplate> findAllByUserId(String userId);
 }
