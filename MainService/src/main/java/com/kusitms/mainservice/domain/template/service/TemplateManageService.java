@@ -74,7 +74,7 @@ public class TemplateManageService {
         saveTemplate(createdTemplate);
         TemplateContent templateContent = createTemplateContent(createdTemplate.getId(), templateSharingRequestDto.getContent());
         saveTemplateContent(templateContent);
-        return CreateTemplateResponseDto.of(createdTemplate.getId());
+        return CreateTemplateResponseDto.of(createdTemplate);
     }
 
     public CustomTemplateDetailResponseDto getTeamTemplateDetailInfo(Long userId, String roadmapTitle, String teamTitle, Long templateId) {

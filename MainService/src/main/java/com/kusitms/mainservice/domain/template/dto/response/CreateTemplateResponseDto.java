@@ -1,5 +1,6 @@
 package com.kusitms.mainservice.domain.template.dto.response;
 
+import com.kusitms.mainservice.domain.template.domain.Template;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -7,9 +8,11 @@ import lombok.Getter;
 @Getter
 public class CreateTemplateResponseDto {
     private Long templateId;
-    public static CreateTemplateResponseDto of(Long templateId){
+    private String title;
+    public static CreateTemplateResponseDto of(Template template){
         return CreateTemplateResponseDto.builder()
-                .templateId(templateId)
+                .templateId(template.getId())
+                .title(template.getTitle())
                 .build();
     }
 }
