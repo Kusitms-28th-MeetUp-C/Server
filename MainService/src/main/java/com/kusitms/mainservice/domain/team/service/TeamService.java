@@ -126,8 +126,7 @@ public class TeamService {
     }
 
     private List<TeamSpace> updateTeamSpace(List<TeamSpaceRequestDto> spaceList, Team team) {
-        team.resetTeamSpaceList();
-        deleteTeamSpaceList(spaceList);
+        deleteTeamSpaceList(team);
         return createTeamSpaceFromRequestDto(spaceList, team);
     }
 
@@ -136,10 +135,14 @@ public class TeamService {
         return Team.createTeam(teamRequestDto.getTitle(), teamType, teamRequestDto.getIntroduction(), user);
     }
 
-    private void deleteTeamSpaceList(List<TeamSpaceRequestDto> spaceList) {
-        spaceList.forEach(space -> {
-            if (!Objects.isNull(space.getTeamSpaceId())) deleteTeamSpace(space.getTeamSpaceId());
-        });
+    private void deleteTeamSpaceList(Team team) {
+        team.getTeamSpaceList()
+                .forEach(teamSpace -> deleteTeamSpace(teamSpace.getId()));
+        team.resetTeamSpaceList();
+//        spaceList.forEach(space -> {
+//            if (!Objects.isNull(space.getTeamSpaceId()))
+//                deleteTeamSpace(space.getTeamSpaceId());
+//        });
     }
 
     private List<Team> getTeamListFromUserId(Long userId) {
