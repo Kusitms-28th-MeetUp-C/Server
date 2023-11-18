@@ -114,6 +114,12 @@ public class TemplateManageService {
                 = CustomTemplateContent.createCustomTemplateContent(customTemplate.getId(), templateContent.getContent());
         saveCustomTemplateContent(customTemplateContent);
     }
+    public void deleteTemplateByTemplateId(Long templateId){
+        deleteTemplate(templateId);
+    }
+    private void deleteTemplate(Long templateId){
+        templateRepository.deleteById(templateId);
+    }
 
     private TeamResponseDto createTeamResponseDto(Team team) {
         List<TeamSpaceResponseDto> teamSpaceResponseDtoList = TeamSpaceResponseDto.listOf(team.getTeamSpaceList());
