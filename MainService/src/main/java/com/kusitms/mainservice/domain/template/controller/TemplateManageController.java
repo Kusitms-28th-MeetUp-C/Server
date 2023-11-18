@@ -33,6 +33,8 @@ public class TemplateManageController {
         return SuccessResponse.created(createTemplateResponseDto);
     }
 
+
+
     @GetMapping("/team")
     public ResponseEntity<SuccessResponse<?>> getTeamTemplateDetailInfo(@UserId final Long userId,
                                                                         @RequestParam final Long templateId,
