@@ -14,15 +14,17 @@ public class CustomRoadmapDetailResponseDto {
     private Long roadmapId;
     private String title;
     private RoadmapType roadmapType;
+    private int processingNum;
     private LocalDate startTime;
     private LocalDate endTime;
     private List<CustomRoadmapSpaceDetailResponseDto> roadmapList;
 
-    public static CustomRoadmapDetailResponseDto of(CustomRoadmap roadmap, List<CustomRoadmapSpaceDetailResponseDto> roadmapDetailList) {
+    public static CustomRoadmapDetailResponseDto of(CustomRoadmap roadmap, int processingNum, List<CustomRoadmapSpaceDetailResponseDto> roadmapDetailList) {
         return CustomRoadmapDetailResponseDto.builder()
                 .roadmapId(roadmap.getId())
                 .title(roadmap.getTitle())
                 .roadmapType(roadmap.getRoadmapType())
+                .processingNum(processingNum)
                 .startTime(roadmap.getStartDate())
                 .endTime(roadmap.getEndDate())
                 .roadmapList(roadmapDetailList)
