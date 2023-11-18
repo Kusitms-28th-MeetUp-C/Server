@@ -23,6 +23,7 @@ public class UserChatResponseDto {
                 .sessionId(user.getSessionId())
                 .profile(user.getProfile())
                 .userName(user.getName())
+                .userType(user.getType())
                 .content(content)
                 .time(time.toString())
                 .build();
