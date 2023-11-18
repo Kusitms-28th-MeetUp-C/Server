@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 import static com.kusitms.mainservice.domain.roadmap.domain.RoadmapType.getEnumRoadmapTypeFromStringRoadmapType;
+import static com.kusitms.mainservice.global.error.ErrorCode.TEMPLATE_NOT_FOUND;
 import static com.kusitms.mainservice.global.error.ErrorCode.USER_NOT_FOUND;
 
 @RequiredArgsConstructor
@@ -58,8 +59,8 @@ public class RoadmapManageService {
         roadmapTemplateRepository.save(createRoadmapTemplate);
     }
     private Template getTemplateById(Long templateId){
-        Optional<Template> optemplate = templateRepository.findById(templateId);
-        return optemplate.get();
+        return templateRepository.findById(templateId)
+                .orElseThrow(() -> new EntityNotFoundException(TEMPLATE_NOT_FOUND));
     }
     private void saveRoadmap(Roadmap createdRoadmap){
         roadmapRepository.save(createdRoadmap);
