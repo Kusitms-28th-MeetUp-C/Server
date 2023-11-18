@@ -37,22 +37,25 @@ public class RoadmapManageService {
         RoadmapType roadmapType = getEnumRoadmapTypeFromStringRoadmapType(roadmapSharingRequestDto.getRoadmapType());
         Roadmap createdRoadmap = Roadmap.createRoadmap(roadmapSharingRequestDto, roadmapType, user);
         saveRoadmap(createdRoadmap);
+        saveRoadmapSpace(roadmapSharingRequestDto,createdRoadmap);
+    }
+    private void saveRoadmapSpace(RoadmapSharingRequestDto roadmapSharingRequestDto,Roadmap createdRoadmap){
         for (int i = 0; i < roadmapSharingRequestDto.getSteps().size(); i++) {
             StepDto stepDto = roadmapSharingRequestDto.getSteps().get(i);
             RoadmapSpace createdRoadmapSpace = RoadmapSpace.createRoadmapSpace(stepDto, createdRoadmap, i+1);
             saveRoadmapSpace(createdRoadmapSpace);
-            for(Long templateId : stepDto.getTemplateIdList()){
-                Template template = getTemplateById(templateId);
-                RoadmapTemplate createRoadmapTemplate = RoadmapTemplate.createRoadmapTemplate(createdRoadmapSpace,template);
-                roadmapTemplateRepository.save(createRoadmapTemplate);
-            }
-            // 반복문 => step에 해당하는 template List 수 만큼
-                // template 객체 생성
-                // template 저장
-                // roadmap_template 관계 만들기 => roadmap, template
-                // roadmap_template 저장
+            saveRoadmapTemplate(stepDto, createdRoadmapSpace);
         }
-
+    }
+    private void saveRoadmapTemplate(StepDto stepDto, RoadmapSpace createdRoadmapSpace){
+        for(Long templateId : stepDto.getTemplateIdList()){
+            Template template = getTemplateById(templateId);
+            RoadmapTemplate createRoadmapTemplate = RoadmapTemplate.createRoadmapTemplate(createdRoadmapSpace,template);
+            saveRoadmapTemplate(createRoadmapTemplate);
+        }
+    }
+    private void saveRoadmapTemplate(RoadmapTemplate createRoadmapTemplate){
+        roadmapTemplateRepository.save(createRoadmapTemplate);
     }
     private Template getTemplateById(Long templateId){
         Optional<Template> optemplate = templateRepository.findById(templateId);
@@ -60,7 +63,6 @@ public class RoadmapManageService {
     }
     private void saveRoadmap(Roadmap createdRoadmap){
         roadmapRepository.save(createdRoadmap);
-//        roadmapSpaceRepository.save(createdRoadmapSpace);
     }
     private void saveRoadmapSpace(RoadmapSpace createdRoadmapSpace){
         roadmapSpaceRepository.save(createdRoadmapSpace);
