@@ -123,7 +123,8 @@ public class TemplateManageService {
     private CustomRoadmapDetailResponseDto createCustomRoadmapDetailResponseDto(CustomRoadmap relatedRoadmap) {
         List<CustomRoadmapSpaceDetailResponseDto> customRoadmapSpaceDetailList
                 = createTeamRoadmapSpaceDetailResponseDto(relatedRoadmap.getCustomRoadmapSpaceList());
-        return CustomRoadmapDetailResponseDto.of(relatedRoadmap, customRoadmapSpaceDetailList);
+        Long processingNum = getProcessingNum(relatedRoadmap);
+        return CustomRoadmapDetailResponseDto.of(relatedRoadmap, processingNum.intValue(), customRoadmapSpaceDetailList);
     }
 
     private List<CustomRoadmapSpaceDetailResponseDto> createTeamRoadmapSpaceDetailResponseDto(List<CustomRoadmapSpace> teamRoadmapSpaceList) {
@@ -131,6 +132,11 @@ public class TemplateManageService {
                 .map(customRoadmapSpace ->
                         CustomRoadmapSpaceDetailResponseDto.of(customRoadmapSpace, BaseCustomTemplateResponseDto.listOf(customRoadmapSpace)))
                 .collect(Collectors.toList());
+    }
+
+    private Long getProcessingNum(CustomRoadmap relatedRoadmap){
+        return relatedRoadmap.getCustomRoadmapSpaceList().stream()
+                .filter(CustomRoadmapSpace::isCompleted).count();
     }
 
     private CustomRoadmapSpace getCustomRoadmapSpaceFromStepId(Long stepId) {
