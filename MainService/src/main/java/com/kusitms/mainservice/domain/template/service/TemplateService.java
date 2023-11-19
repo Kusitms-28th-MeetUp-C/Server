@@ -78,12 +78,11 @@ public class TemplateService {
         return GetTeamForSaveTemplateResponseDto.of(teamTitleResponseDtoList);
     }
 
-    public String saveTemplateByUserId(Long userId, Long templateId) {
+    public void saveTemplateByUserId(Long userId, Long templateId) {
         Template template = getTemplateByTemplateId(templateId);
         Optional<User> user = userRepository.findById(userId);
         TemplateDownload templateDownload = TemplateDownload.createTemplateDownload(user.get(), template);
         templateDownloadRepository.save(templateDownload);
-        return "저장";
     }
 
     private List<TemplateDetailBaseRelateDto> createTemplateDetailRelateTemplateDto(Template template) {

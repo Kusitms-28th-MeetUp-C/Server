@@ -32,7 +32,6 @@ public class MyPageController {
     }
     @PostMapping("/uploadProfile")
     public ResponseEntity<SuccessResponse<?>> uploadProfile(@RequestPart("file") MultipartFile file,@UserId Long userId) throws IOException {
-
         final String url = myPageService.uploadProfile(file, userId);
         return SuccessResponse.ok(url);
     }
@@ -47,12 +46,10 @@ public class MyPageController {
     public ResponseEntity<SuccessResponse<?>> getAnotherUserTemplate(@RequestParam Long userId, @PageableDefault(size=12) Pageable pageable){
         final NotMyPageTemplateResponseDto notMyPageTemplateResponseDto = myPageService.getNotMyPageTemplateResponse(userId,pageable);
         return SuccessResponse.ok(notMyPageTemplateResponseDto);
-
     }
     @GetMapping("/another/roadmap")
     public ResponseEntity<SuccessResponse<?>> getAnotherUserRoadmap(@RequestParam Long userId, @PageableDefault(size=12) Pageable pageable){
         final NotMyPageRoadmapResponseDto notMyPageRoadmapResponseDto = myPageService.getNotMyPageRoadmapResponse(userId, pageable);
         return SuccessResponse.ok(notMyPageRoadmapResponseDto);
-
     }
 }

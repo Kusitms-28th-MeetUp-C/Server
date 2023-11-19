@@ -32,9 +32,9 @@ public class TemplateController {
         return SuccessResponse.ok(templateDetailResponseDto);
     }
 
-    @PostMapping("/save/user")
-    public ResponseEntity<SuccessResponse<?>> saveTemplateForUser(@UserId Long userId, @RequestBody Long templateId) {
-        final String dd = templateService.saveTemplateByUserId(userId, templateId);
-        return SuccessResponse.ok(dd);
+    @GetMapping("/save/user")
+    public ResponseEntity<SuccessResponse<?>> saveTemplateForUser(@UserId final Long userId, @RequestParam Long templateId) {
+        templateService.saveTemplateByUserId(userId, templateId);
+        return SuccessResponse.ok(null);
     }
 }
