@@ -43,11 +43,10 @@ public class AuthService {
     public UserAuthResponseDto signIn(UserSignInRequestDto userSignInRequestDto, String authToken) {
         Platform platform = getEnumPlatformFromStringPlatform(userSignInRequestDto.getPlatform());
         PlatformUserInfo platformUser = getPlatformUserInfoFromRestTemplate(platform, authToken);
-        User getUser = getUserByPlatformUserInfo(platformUser, platform);
+        User getUser = saveUser(platformUser, platform);
         Boolean isFistLogin = Objects.isNull(getUser.getUserType()) ? Boolean.TRUE : Boolean.FALSE;
         TokenInfo tokenInfo = issueAccessTokenAndRefreshToken(getUser);
         updateRefreshToken(tokenInfo.getRefreshToken(), getUser);
-        saveUser(getUser);
         return UserAuthResponseDto.of(getUser, tokenInfo, isFistLogin);
     }
 
@@ -69,8 +68,9 @@ public class AuthService {
         refreshTokenRepository.deleteById(user.getId());
     }
 
-    private void saveUser(User createdUser) {
-        userRepository.save(createdUser);
+    private User saveUser(PlatformUserInfo platformUserInfo, Platform platform) {
+        User createdUser = getUserByPlatformUserInfo(platformUserInfo, platform);
+        return userRepository.save(createdUser);
     }
 
     private void updateRefreshToken(String refreshToken, User user) {
