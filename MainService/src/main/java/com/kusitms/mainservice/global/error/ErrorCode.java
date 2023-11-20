@@ -18,6 +18,7 @@ public enum ErrorCode {
     INVALID_SHARED_TYPE(HttpStatus.BAD_REQUEST,"유효하지않은 공유된 템플릿,로드맵 타입 입니다."),
     INVALID_TEAM_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 팀 타입입니다."),
     INVALID_TEAM_SPACE_SIZE(HttpStatus.BAD_REQUEST, "유효하지 않은 팀 스페이스 크기입니다."),
+    INVALID_USER_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 유저 타입니다."),
     EMPTY_TEAM_SPACE(HttpStatus.BAD_REQUEST, "요청에 팀 스페이스 정보가 없습니다."),
 
     /**

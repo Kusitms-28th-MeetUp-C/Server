@@ -136,13 +136,8 @@ public class TeamService {
     }
 
     private void deleteTeamSpaceList(Team team) {
-        team.getTeamSpaceList()
-                .forEach(teamSpace -> deleteTeamSpace(teamSpace.getId()));
+        team.getTeamSpaceList().forEach(teamSpace -> deleteTeamSpace(teamSpace.getId()));
         team.resetTeamSpaceList();
-//        spaceList.forEach(space -> {
-//            if (!Objects.isNull(space.getTeamSpaceId()))
-//                deleteTeamSpace(space.getTeamSpaceId());
-//        });
     }
 
     private List<Team> getTeamListFromUserId(Long userId) {
