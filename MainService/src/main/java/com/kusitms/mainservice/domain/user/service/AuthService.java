@@ -70,7 +70,6 @@ public class AuthService {
     }
 
     private void saveUser(User createdUser, Platform platform) {
-        createdUser.updatePlatform(platform);
         userRepository.save(createdUser);
     }
 
