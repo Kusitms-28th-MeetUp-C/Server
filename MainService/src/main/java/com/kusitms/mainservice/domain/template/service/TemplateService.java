@@ -137,9 +137,9 @@ public class TemplateService {
         String title = searchTemplateRequsetDto.getTitle();
         TemplateType templateType = getEnumTemplateTypeFromStringTemplateType(searchTemplateRequsetDto.getTemplateType());
         if (TemplateType.ALL.equals(templateType)) {
-            return templateRepository.findByTitleContaining(searchTemplateRequsetDto.getTitle(), pageable);
+            return templateRepository.findByTitleContainingOrderByCreateDateDesc(searchTemplateRequsetDto.getTitle(), pageable);
         } else {
-            return templateRepository.findByTitleContainingAndTemplateType(title, templateType, pageable);
+            return templateRepository.findByTitleContainingAndTemplateTypeOrderByCreateDateDesc(title, templateType, pageable);
         }
     }
 
@@ -151,9 +151,9 @@ public class TemplateService {
         TemplateType templateType = getEnumTemplateTypeFromStringTemplateType(stringTemplateType);
 
         if (TemplateType.ALL.equals(templateType)) {
-            return templateRepository.findAll(pageable);
+            return templateRepository.findAllByOrderByCreateDateDesc(pageable);
         } else {
-            return templateRepository.findByTemplateType(templateType, pageable);
+            return templateRepository.findByTemplateTypeOrderByCreateDateDesc(templateType, pageable);
         }
     }
 
@@ -186,7 +186,7 @@ public class TemplateService {
     }
 
     private Page<Template> getTemplateByTitle(String title, Pageable pageable) {
-        return templateRepository.findByTitleContaining(title, pageable);
+        return templateRepository.findByTitleContainingOrderByCreateDateDesc(title, pageable);
     }
 
     private TemplateReviewResponseDto getRatingAndReviewCount(Template template) {

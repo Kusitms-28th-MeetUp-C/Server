@@ -16,13 +16,14 @@ import java.util.Optional;
 
 public interface RoadmapRepository extends JpaRepository<Roadmap, Long> {
     List<Roadmap> findTop6ByRoadmapTypeAndIdNot(RoadmapType roadmapType, Long Id);
-    Page<Roadmap> findByTitleContainingAndRoadmapType(String title, RoadmapType roadmapType, Pageable pageable);
+    Page<Roadmap> findByTitleContainingAndRoadmapTypeOrderByCreateDateDesc(String title, RoadmapType roadmapType, Pageable pageable);
 
-    Page<Roadmap> findByTitleContaining(String title, Pageable pageable);
+    Page<Roadmap> findByTitleContainingOrderByCreateDateDesc(String title, Pageable pageable);
 
-    Page<Roadmap> findByRoadmapType(RoadmapType roadmapType, Pageable pageable);
+    Page<Roadmap> findByRoadmapTypeOrderByCreateDateDesc(RoadmapType roadmapType, Pageable pageable);
 
-    Page<Roadmap> findAll(Pageable pageable);
+    Page<Roadmap> findAllByOrderByCreateDateDesc(Pageable pageable);
+
 
     List<Roadmap> findTop6ByRoadmapType(RoadmapType roadmapType);
 
