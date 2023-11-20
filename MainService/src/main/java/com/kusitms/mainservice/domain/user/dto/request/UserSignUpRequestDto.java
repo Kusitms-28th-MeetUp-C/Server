@@ -7,5 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class UserSignUpRequestDto {
-    private String platform;
+    private String userName;
+    private String userType;
+    private String teamName;
 }
