@@ -19,21 +19,21 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final AuthService authService;
 
-    @PostMapping("/signIn")
+    @PostMapping("/signin")
     public ResponseEntity<SuccessResponse<?>> signIn(@RequestHeader("Authorization") final String authToken,
                                                      @RequestBody final UserSignInRequestDto requestDto) {
         final UserAuthResponseDto responseDto = authService.signIn(requestDto, authToken);
         return SuccessResponse.ok(responseDto);
     }
 
-//    @PostMapping("/signUp")
-//    public ResponseEntity<SuccessResponse<?>> signUp(@RequestHeader("Authorization") final String authToken,
-//                                                     @RequestBody final UserSignUpRequestDto requestDto) {
-//        final UserAuthResponseDto responseDto = authService.signUp(requestDto, authToken);
-//        return SuccessResponse.ok(responseDto);
-//    }
+    @PostMapping("/signup")
+    public ResponseEntity<SuccessResponse<?>> signUp(@UserId final Long userId,
+                                                     @RequestBody final UserSignUpRequestDto requestDto) {
+        authService.signUp(userId, requestDto);
+        return SuccessResponse.ok(null);
+    }
 
-    @PatchMapping("/signOut")
+    @PatchMapping("/signout")
     public ResponseEntity<SuccessResponse<?>> signOut(@UserId final Long userId) {
         authService.signOut(userId);
         return SuccessResponse.ok(null);
