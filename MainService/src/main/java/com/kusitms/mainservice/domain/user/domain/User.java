@@ -29,6 +29,7 @@ public class User {
     private Platform platform;
     @Enumerated(EnumType.STRING)
     private UserType userType;
+    @Column(unique = true)
     private String platformId;
     private String email;
     private String name;
