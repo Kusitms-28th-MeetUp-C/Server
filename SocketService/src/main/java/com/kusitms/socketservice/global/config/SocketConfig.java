@@ -1,7 +1,7 @@
 package com.kusitms.socketservice.global.config;
 
 import com.kusitms.socketservice.global.common.AuthenticationInterceptor;
-import com.kusitms.socketservice.global.config.auth.SessionIdArgumentResolver;
+import com.kusitms.socketservice.global.config.auth.UserIdArgumentResolver;
 import com.kusitms.socketservice.global.error.handler.MessageErrorHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +23,7 @@ import java.util.List;
 public class SocketConfig implements WebSocketMessageBrokerConfigurer {
     private final AuthenticationInterceptor authenticationInterceptor;
     private final MessageErrorHandler messageErrorHandler;
-    private final SessionIdArgumentResolver sessionIdArgumentResolver;
+    private final UserIdArgumentResolver userIdArgumentResolver;
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
@@ -45,6 +45,6 @@ public class SocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-        argumentResolvers.add(sessionIdArgumentResolver);
+        argumentResolvers.add(userIdArgumentResolver);
     }
 }

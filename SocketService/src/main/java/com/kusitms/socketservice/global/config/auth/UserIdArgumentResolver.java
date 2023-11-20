@@ -7,10 +7,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SessionIdArgumentResolver implements HandlerMethodArgumentResolver {
+public class UserIdArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        boolean hasUserIdAnnotation = parameter.hasParameterAnnotation(SessionId.class);
+        boolean hasUserIdAnnotation = parameter.hasParameterAnnotation(UserId.class);
         boolean hasLongType = Long.class.isAssignableFrom(parameter.getParameterType());
         return hasUserIdAnnotation && hasLongType;
     }

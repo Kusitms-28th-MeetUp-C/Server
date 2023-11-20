@@ -9,14 +9,12 @@ import com.kusitms.socketservice.domain.chat.dto.response.ChatMessageResponseDto
 import com.kusitms.socketservice.domain.chat.service.ChatService;
 import com.kusitms.socketservice.global.common.MessageSuccessCode;
 import com.kusitms.socketservice.global.common.MessageSuccessResponse;
-import com.kusitms.socketservice.global.config.auth.SessionId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
