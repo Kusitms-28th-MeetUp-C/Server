@@ -11,7 +11,7 @@
 ## Architecture 🍀
 <img width="829" alt="image" src="https://github.com/Kusitms-28th-MeetUp-C/Server/assets/97783148/8e70644c-a999-43e3-9e2a-011e522349d8">
 
-<br>
+<br><br>
 
 ## Main Server Foldering 📂
 ```
