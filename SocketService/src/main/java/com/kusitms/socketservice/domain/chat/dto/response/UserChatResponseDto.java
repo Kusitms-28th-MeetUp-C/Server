@@ -1,8 +1,6 @@
 package com.kusitms.socketservice.domain.chat.dto.response;
 
 import com.kusitms.socketservice.domain.chat.domain.ChatUser;
-import com.kusitms.socketservice.domain.chat.domain.User;
-import com.kusitms.socketservice.domain.chat.domain.UserType;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -14,7 +12,7 @@ public class UserChatResponseDto {
     private Long sessionId;
     private String profile;
     private String userName;
-    private UserType userType;
+    private String userType;
     private String content;
     private String time;
 
@@ -23,7 +21,7 @@ public class UserChatResponseDto {
                 .sessionId(user.getSessionId())
                 .profile(user.getProfile())
                 .userName(user.getName())
-                .userType(user.getType())
+                .userType(user.getType().getStringUserType())
                 .content(content)
                 .time(time.toString())
                 .build();
