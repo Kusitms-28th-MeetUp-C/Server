@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 public class UserChatResponseDto {
-    private Long sessionId;
+    private String sessionId;
     private String profile;
     private String userName;
     private String userType;

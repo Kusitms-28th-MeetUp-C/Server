@@ -21,4 +21,5 @@ public class User {
     private String name;
     private String profile;
     private String refreshToken;
+    private String sessionId;
 }
