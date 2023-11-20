@@ -25,7 +25,7 @@ public class MyPageController {
         final MyPageResponseDto myPageResponseDto = myPageService.getMyPageResponse(userId,pageable);
         return SuccessResponse.ok(myPageResponseDto);
     }
-    @PostMapping("/shared")
+    @GetMapping("/shared")
     public ResponseEntity<SuccessResponse<?>> getSharedContent(@UserId Long userId, @RequestParam String sharedType, @PageableDefault(size=6) Pageable pageable){
         final Page<MySharedContentDto> mySharedContentDtoPage = myPageService.getSharedContentBySharedType(userId, sharedType,pageable);
         return SuccessResponse.ok(mySharedContentDtoPage);

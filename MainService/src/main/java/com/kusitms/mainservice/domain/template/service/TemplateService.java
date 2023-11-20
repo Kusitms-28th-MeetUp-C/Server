@@ -162,7 +162,7 @@ public class TemplateService {
         return templatePage.map(template ->
                 SearchBaseTemplateResponseDto.of(
                         template,
-                        template.getCount(),
+                        template.getCount(),//getTeamCount(template),
                         getRoadmapTitleResponseDto(template).getConnectedRoadmap()
                 )
         );
