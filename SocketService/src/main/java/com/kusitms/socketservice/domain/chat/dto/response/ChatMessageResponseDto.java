@@ -10,10 +10,10 @@ import java.util.List;
 @Getter
 public class ChatMessageResponseDto {
     private String receivedUser;
-    private List<Long> sessionList;
+    private List<String> sessionList;
     private ChatMessageElementResponseDto message;
 
-    public static ChatMessageResponseDto of(String receivedUser, List<Long> sessionList, ChatMessageElementResponseDto message) {
+    public static ChatMessageResponseDto of(String receivedUser, List<String> sessionList, ChatMessageElementResponseDto message) {
         return ChatMessageResponseDto.builder()
                 .receivedUser(receivedUser)
                 .sessionList(sessionList)

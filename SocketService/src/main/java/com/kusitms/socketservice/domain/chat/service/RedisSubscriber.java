@@ -45,7 +45,7 @@ public class RedisSubscriber implements MessageListener {
         return (String) redisTemplate.getStringSerializer().deserialize(message.getBody());
     }
 
-    private void sendChatMessage(Long sessionId, SendMessageResponseDto publishMessage) {
+    private void sendChatMessage(String sessionId, SendMessageResponseDto publishMessage) {
         messagingTemplate.convertAndSend("/sub/chat/" + sessionId,
                 MessageSuccessResponse.of(MessageSuccessCode.RECEIVED, publishMessage));
     }
