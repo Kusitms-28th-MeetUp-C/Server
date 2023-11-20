@@ -3,6 +3,8 @@ name: Main Service CICD
 on:
   push:
     branches: [ "develop" ]
+  pull_request:
+    branches: [ "develop" ]
 
 jobs:
   check-skip:
