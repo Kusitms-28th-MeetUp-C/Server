@@ -47,7 +47,7 @@ public class AuthService {
         Boolean isFistLogin = Objects.isNull(getUser.getUserType()) ? Boolean.TRUE : Boolean.FALSE;
         TokenInfo tokenInfo = issueAccessTokenAndRefreshToken(getUser);
         updateRefreshToken(tokenInfo.getRefreshToken(), getUser);
-        saveUser(getUser, platform);
+        saveUser(getUser);
         return UserAuthResponseDto.of(getUser, tokenInfo, isFistLogin);
     }
 
@@ -69,7 +69,7 @@ public class AuthService {
         refreshTokenRepository.deleteById(user.getId());
     }
 
-    private void saveUser(User createdUser, Platform platform) {
+    private void saveUser(User createdUser) {
         userRepository.save(createdUser);
     }
 
