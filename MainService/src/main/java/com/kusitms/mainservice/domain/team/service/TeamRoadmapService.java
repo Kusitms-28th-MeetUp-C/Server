@@ -9,10 +9,11 @@ import com.kusitms.mainservice.domain.team.dto.request.TeamRoadmapRequestDto;
 import com.kusitms.mainservice.domain.team.dto.response.TeamRoadmapDetailResponseDto;
 import com.kusitms.mainservice.domain.team.dto.response.TeamSpaceResponseDto;
 import com.kusitms.mainservice.domain.team.repository.TeamRepository;
-import com.kusitms.mainservice.domain.template.domain.CustomTemplate;
-import com.kusitms.mainservice.domain.template.domain.Template;
-import com.kusitms.mainservice.domain.template.domain.TemplateDownload;
+import com.kusitms.mainservice.domain.template.domain.*;
 import com.kusitms.mainservice.domain.template.dto.response.BaseCustomTemplateResponseDto;
+import com.kusitms.mainservice.domain.template.mongoRepository.CustomTemplateContentRepository;
+import com.kusitms.mainservice.domain.template.mongoRepository.SearchUserTemplateRepository;
+import com.kusitms.mainservice.domain.template.mongoRepository.TemplateContentRepository;
 import com.kusitms.mainservice.domain.template.repository.CustomTemplateRepository;
 import com.kusitms.mainservice.domain.template.repository.TemplateDownloadRepository;
 import com.kusitms.mainservice.domain.user.domain.User;
@@ -40,8 +41,11 @@ public class TeamRoadmapService {
     private final CustomRoadmapRepository customRoadmapRepository;
     private final RoadmapRepository roadmapRepository;
     private final TemplateDownloadRepository templateDownloadRepository;
+    private final TemplateContentRepository templateContentRepository;
     private final CustomTemplateRepository customTemplateRepository;
     private final CustomRoadmapTemplateRepository customRoadmapTemplateRepository;
+    private final CustomTemplateContentRepository customTemplateContentRepository;
+    private final SearchUserTemplateRepository searchUserTemplateRepository;
 
     public TeamRoadmapDetailResponseDto getTeamRoadmapDetail(Long teamId) {
         Team team = getTeamFromTeamId(teamId);
@@ -61,7 +65,7 @@ public class TeamRoadmapService {
         Roadmap roadmap = getRoadmapFromRoadmapId(teamRoadmapRequestDto.getRoadmapId());
         RoadmapDownload roadmapDownload = createRoadmapDownload(user, roadmap, team);
         CustomRoadmap createCustomRoadmap = createCustomRoadmap(roadmap, roadmapDownload);
-        List<CustomRoadmapSpace> createCustomRoadmapSpace = createCustomRoadmapSpaceList(roadmap, createCustomRoadmap, user);
+        List<CustomRoadmapSpace> createCustomRoadmapSpace = createCustomRoadmapSpaceList(roadmap, createCustomRoadmap, user, team);
         saveCustomRoadmapSpaceList(createCustomRoadmapSpace);
     }
 
@@ -78,39 +82,60 @@ public class TeamRoadmapService {
         return createCustomRoadmap;
     }
 
-    private List<CustomRoadmapSpace> createCustomRoadmapSpaceList(Roadmap roadmap, CustomRoadmap customRoadmap, User user) {
+    private List<CustomRoadmapSpace> createCustomRoadmapSpaceList(Roadmap roadmap, CustomRoadmap customRoadmap, User user, Team team) {
         List<RoadmapSpace> roadmapSpaceList = roadmap.getRoadmapSpaceList();
         return roadmapSpaceList.stream()
-                .map(roadmapSpace -> createCustomRoadmapSpace(roadmapSpace, customRoadmap, user))
+                .map(roadmapSpace -> createCustomRoadmapSpace(roadmapSpace, customRoadmap, user, team))
                 .collect(Collectors.toList());
     }
 
-    private CustomRoadmapSpace createCustomRoadmapSpace(RoadmapSpace roadmapSpace, CustomRoadmap customRoadmap, User user) {
+    private CustomRoadmapSpace createCustomRoadmapSpace(RoadmapSpace roadmapSpace, CustomRoadmap customRoadmap, User user, Team team) {
         CustomRoadmapSpace customRoadmapSpace = CustomRoadmapSpace.createCustomRoadmapSpace(roadmapSpace, customRoadmap);
         List<Template> templateList = getTemplateListFromRoadmapTemplate(roadmapSpace.getRoadmapTemplateList());
-        List<CustomTemplate> customTemplateList = createCustomTemplateList(templateList, user);
+        List<CustomTemplate> customTemplateList = createCustomTemplateList(templateList, user, team);
         List<CustomRoadmapTemplate> customRoadmapTemplate = createCustomRoadmapTemplateList(customTemplateList, customRoadmapSpace);
         saveCustomRoadmapTemplateList(customRoadmapTemplate);
         return customRoadmapSpace;
     }
 
-    private Long getProcessingNum(CustomRoadmap relatedRoadmap){
+    private Long getProcessingNum(CustomRoadmap relatedRoadmap) {
         return relatedRoadmap.getCustomRoadmapSpaceList().stream()
                 .filter(CustomRoadmapSpace::isCompleted).count();
     }
 
-    private List<CustomTemplate> createCustomTemplateList(List<Template> templateList, User user) {
+    private List<CustomTemplate> createCustomTemplateList(List<Template> templateList, User user, Team team) {
         return templateList.stream()
-                .map(template -> createCustomTemplate(template, user))
+                .map(template -> createCustomTemplate(template, user, team))
                 .collect(Collectors.toList());
     }
 
-    private CustomTemplate createCustomTemplate(Template template, User user) {
+    private CustomTemplate createCustomTemplate(Template template, User user, Team team) {
         TemplateDownload templateDownload = TemplateDownload.createTemplateDownload(user, template);
         CustomTemplate customTemplate = CustomTemplate.createCustomTemplate(template, templateDownload);
+        TemplateContent templateContent = getTemplateContent(template.getId());
         saveTemplateDownload(templateDownload);
         saveCustomTemplate(customTemplate);
+        saveCustomTemplateContent(template, templateContent);
+        saveSearchTemplate(user, template);
+        saveSearchCustomTemplate(user, customTemplate, team);
         return customTemplate;
+    }
+
+    private void saveCustomTemplateContent(Template template, TemplateContent templateContent) {
+        CustomTemplateContent customTemplateContent = CustomTemplateContent.createCustomTemplateContent(template.getId(), templateContent.getContent());
+        customTemplateContentRepository.save(customTemplateContent);
+    }
+
+    private void saveSearchCustomTemplate(User user, CustomTemplate customTemplate, Team team) {
+        SearchUserTemplate searchCustomTemplate
+                = SearchUserTemplate.of(user, customTemplate.getId(), customTemplate.getTitle(), team.getTitle(), customTemplate.getTemplateType(), false);
+        searchUserTemplateRepository.save(searchCustomTemplate);
+    }
+
+    private void saveSearchTemplate(User user, Template template) {
+        SearchUserTemplate searchTemplate
+                = SearchUserTemplate.of(user, template.getId(), template.getTitle(), null, template.getTemplateType(), true);
+        searchUserTemplateRepository.save(searchTemplate);
     }
 
     private List<CustomRoadmapTemplate> createCustomRoadmapTemplateList(List<CustomTemplate> customTemplateList, CustomRoadmapSpace customRoadmapSpace) {
@@ -142,6 +167,11 @@ public class TeamRoadmapService {
 
     private void saveTemplateDownload(TemplateDownload templateDownload) {
         templateDownloadRepository.save(templateDownload);
+    }
+
+    private TemplateContent getTemplateContent(Long templateId) {
+        return templateContentRepository.findByTemplateId(templateId)
+                .orElseThrow(() -> new EntityNotFoundException(TEMPLATE_CONTENT_NOT_FOUND));
     }
 
     private void saveCustomTemplate(CustomTemplate customTemplate) {
