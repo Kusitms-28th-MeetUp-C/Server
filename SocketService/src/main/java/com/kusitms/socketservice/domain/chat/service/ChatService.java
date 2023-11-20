@@ -47,7 +47,7 @@ public class ChatService {
     public ChatMessageListResponseDto sendChatDetailMessage(Long sessionId, ChatMessageListRequestDto chatMessageListRequestDto) {
         Chat chat = getChatBySessions(sessionId, chatMessageListRequestDto.getChatSession(),
                 chatMessageListRequestDto.getFromUserName(), chatMessageListRequestDto.getToUserName());
-        ChatUserResponseDto chatUserResponseDto = getChatUserResponseDto(chat, chatMessageListRequestDto.getToUserName());
+        ChatUserResponseDto chatUserResponseDto = getChatUserResponseDto(chat, chatMessageListRequestDto.getFromUserName());
         List<ChatMessageElementResponseDto> chatMessageList = ChatMessageElementResponseDto.listOf(chat.getChatContentList());
         saveChat(chat);
         return ChatMessageListResponseDto.of(chatUserResponseDto, chatMessageList);
@@ -82,6 +82,7 @@ public class ChatService {
     }
 
     private ChatUser getChatUserReceivedUser(Chat chat, String name) {
+        System.out.println(chat.getChatUserList().get(0).getName() + " +" + name);
         if (!Objects.equals(chat.getChatUserList().get(0).getName(), name))
             return chat.getChatUserList().get(0);
         else
