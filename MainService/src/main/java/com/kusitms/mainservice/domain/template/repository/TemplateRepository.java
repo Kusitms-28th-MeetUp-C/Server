@@ -19,24 +19,14 @@ import java.util.Optional;
 @Repository
 public interface TemplateRepository extends JpaRepository<Template, Long> {
     List<Template> findTop4ByTemplateTypeAndIdNot(TemplateType templateType, Long Id);
-    List<Template> findTop4ByTemplateType(TemplateType templateType);
-    List<Template> findFirst4ByTemplateTypeAndIdNotIn(TemplateType templateType,List<Long> list);
-    List<Template> findTop5ByTemplateType(TemplateType templateType);
-    Page<Template> findAll(Pageable pageable);
-    Page<Template> findByTitleContaining(String keyword,Pageable pageable);
+    Page<Template> findAllByOrderByCreateDateDesc(Pageable pageable);
+    Page<Template> findByTitleContainingOrderByCreateDateDesc(String keyword,Pageable pageable);
     Optional<Template> findById(Long Id);
     int countByUser(User user);
-    int countByUserId(Long userId);
 
-    Page<Template> findByTitleContainingAndTemplateType(String title, TemplateType templateType,Pageable pageable);
+    Page<Template> findByTitleContainingAndTemplateTypeOrderByCreateDateDesc(String title, TemplateType templateType,Pageable pageable);
 
-
-    //List<Template> findByTemplateType(TemplateType templateType);
-
-    Page<Template> findByTemplateType(TemplateType templateType, Pageable pageable);
+    Page<Template> findByTemplateTypeOrderByCreateDateDesc(TemplateType templateType, Pageable pageable);
     Page<Template> findAllByUserId(Long userId, Pageable pageable);
     List<Template> findAllByUserId(Long userId);
-
-    Template findByTitle(String title);
-    void deleteByIdAndUserId(Long templateId, Long userId);
 }

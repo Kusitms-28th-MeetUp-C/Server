@@ -95,25 +95,25 @@ public class RoadmapService {
         return rc;
     }
     private Page<Roadmap> getRoadmapByTitle(String title, Pageable pageable){
-        return roadmapRepository.findByTitleContaining(title,pageable);
+        return roadmapRepository.findByTitleContainingOrderByCreateDateDesc(title,pageable);
     }
     private Page<Roadmap> getRoadmapByRoadmapType(String stringRoadmapType,Pageable pageable){
         RoadmapType roadmapType = getEnumRoadmapTypeFromStringRoadmapType(stringRoadmapType);
         if(RoadmapType.ALL.equals(roadmapType)) {
-             return roadmapRepository.findAll(pageable);
+             return roadmapRepository.findAllByOrderByCreateDateDesc(pageable);
         }
         else {
-            return roadmapRepository.findByRoadmapType(roadmapType,pageable);
+            return roadmapRepository.findByRoadmapTypeOrderByCreateDateDesc(roadmapType,pageable);
         }
     }
     private Page<Roadmap> getRoadmapByTitleAndRoadmapType(SearchRoadmapRequestDto searchRoadmapRequestDto,Pageable pageable){
         String title = searchRoadmapRequestDto.getTitle();
         RoadmapType roadmapType = getEnumRoadmapTypeFromStringRoadmapType(searchRoadmapRequestDto.getRoadmapType());
         if(RoadmapType.ALL.equals(roadmapType)) {
-            return roadmapRepository.findByTitleContaining(title, pageable);
+            return roadmapRepository.findByTitleContainingOrderByCreateDateDesc(title, pageable);
         }
         else {
-            Page<Roadmap> roadmapList = roadmapRepository.findByTitleContainingAndRoadmapType(title,roadmapType,pageable);
+            Page<Roadmap> roadmapList = roadmapRepository.findByTitleContainingAndRoadmapTypeOrderByCreateDateDesc(title,roadmapType,pageable);
             return  roadmapList;
 
         }
