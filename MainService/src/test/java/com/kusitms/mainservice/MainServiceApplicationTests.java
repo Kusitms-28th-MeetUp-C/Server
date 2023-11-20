@@ -1,6 +1,8 @@
 package com.kusitms.mainservice;
 
+import com.kusitms.mainservice.domain.template.domain.CustomTemplateContent;
 import com.kusitms.mainservice.domain.template.domain.TemplateContent;
+import com.kusitms.mainservice.domain.template.mongoRepository.CustomTemplateContentRepository;
 import com.kusitms.mainservice.domain.template.mongoRepository.TemplateContentRepository;
 import com.mongodb.client.MongoClient;
 import org.junit.jupiter.api.Test;
@@ -11,6 +13,8 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 class MainServiceApplicationTests {
     @Autowired
     TemplateContentRepository templateContentRepository;
+    @Autowired
+    CustomTemplateContentRepository customTemplateContentRepository;
     @Autowired
     private MongoClient mongoClient;
     @Test
@@ -30,13 +34,13 @@ class MainServiceApplicationTests {
 //            System.out.println("MongoDB Port: " + port);
 //            System.out.println("Database Name: " + databaseName);
 
-        TemplateContent templateContent = new TemplateContent();
+        CustomTemplateContent templateContent = new CustomTemplateContent();
 
 
-        templateContent.setTemplateId(1L);
+        templateContent.setTemplateId(57L);
         templateContent.setContent("내용2");
 
-        templateContentRepository.save(templateContent);
+        customTemplateContentRepository.save(templateContent);
     }
 
 }
