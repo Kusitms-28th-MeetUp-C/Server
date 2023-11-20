@@ -54,14 +54,20 @@ public class User {
     @Builder.Default
     private List<Reviewer> reviewerList = new ArrayList<>();
 
-    public static User createUser(PlatformUserInfo platformUserInfo, String sessionId) {
+    public static User createUser(PlatformUserInfo platformUserInfo, Platform platform, String sessionId) {
         return User.builder()
                 .platformId(platformUserInfo.getId())
+                .platform(platform)
                 .email(platformUserInfo.getEmail())
                 .name(platformUserInfo.getName())
                 .profile(platformUserInfo.getPicture())
                 .sessionId(sessionId)
                 .build();
+    }
+
+    public void updateSignUpUserInfo(String name, UserType userType){
+        this.name = name;
+        this.userType = userType;
     }
 
     public void updatePlatform(Platform platform) {
