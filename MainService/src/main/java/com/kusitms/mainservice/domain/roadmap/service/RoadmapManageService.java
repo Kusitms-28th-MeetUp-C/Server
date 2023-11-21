@@ -4,6 +4,7 @@ import com.kusitms.mainservice.domain.roadmap.domain.*;
 import com.kusitms.mainservice.domain.roadmap.dto.request.RoadmapSharingRequestDto;
 import com.kusitms.mainservice.domain.roadmap.dto.request.StepDto;
 import com.kusitms.mainservice.domain.roadmap.dto.response.CustomRoadmapStepDto;
+import com.kusitms.mainservice.domain.roadmap.dto.response.CustomRoadmapTitleAndStep;
 import com.kusitms.mainservice.domain.roadmap.repository.*;
 import com.kusitms.mainservice.domain.team.repository.TeamRepository;
 import com.kusitms.mainservice.domain.template.domain.Template;
@@ -41,11 +42,11 @@ public class RoadmapManageService {
         saveRoadmap(createdRoadmap);
         saveRoadmapSpace(roadmapSharingRequestDto,createdRoadmap);
     }
-    public List<CustomRoadmapStepDto> getCustomRoadmapStepDto(Long userId, String title){
+    public CustomRoadmapTitleAndStep getCustomRoadmapStepDto(Long userId, String title){
         String customRoadmapTitle = teamRepository.findCustomRoadmapTitleByTeamTitle(title).orElseThrow(()->new EntityNotFoundException(TEAM_NOT_FOUND));
         CustomRoadmap customRoadmap = customRoadmapRepository.findByUserIdAndTitle(userId, customRoadmapTitle).orElseThrow(()->new EntityNotFoundException(ROADMAP_NOT_FOUND));
         List<CustomRoadmapStepDto> customRoadmapStepDtoList = createCustomRoadmapStepDto(customRoadmap);
-        return customRoadmapStepDtoList;
+        return CustomRoadmapTitleAndStep.of(customRoadmapStepDtoList,customRoadmapTitle);
     }
     private List<CustomRoadmapStepDto> createCustomRoadmapStepDto(CustomRoadmap customRoadmap){
         List<CustomRoadmapSpace> customRoadmapSpaces = customRoadmapSpaceRepository.findAllByCustomRoadmapId(customRoadmap.getId());
