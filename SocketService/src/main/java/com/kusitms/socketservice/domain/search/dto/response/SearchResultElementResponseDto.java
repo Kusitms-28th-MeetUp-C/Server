@@ -13,7 +13,6 @@ public class SearchResultElementResponseDto {
     private Long templateId;
     private String title;
     private String teamTitle;
-    private boolean isOpen;
     private String category;
 
     public static List<SearchResultElementResponseDto> listOf(List<SearchUserTemplate> searchUserTemplateList){
@@ -23,18 +22,16 @@ public class SearchResultElementResponseDto {
                                 searchUserTemplate.getTemplateId(),
                                 searchUserTemplate.getTitle(),
                                 searchUserTemplate.getRelatedTeamTitle(),
-                                searchUserTemplate.isOpened(),
                                 searchUserTemplate.getTemplateType().toString()
                         )).collect(Collectors.toList());
     }
 
     public static SearchResultElementResponseDto of(Long templateId, String title,
-                                                    String teamTitle, boolean isOpen, String category){
+                                                    String teamTitle, String category){
         return SearchResultElementResponseDto.builder()
                 .templateId(templateId)
                 .title(title)
                 .teamTitle(teamTitle)
-                .isOpen(isOpen)
                 .category(category)
                 .build();
     }
