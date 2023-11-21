@@ -3,6 +3,7 @@ package com.kusitms.mainservice.domain.template.controller;
 import com.kusitms.mainservice.domain.template.dto.request.SearchTemplateRequsetDto;
 import com.kusitms.mainservice.domain.template.dto.response.SearchBaseTemplateResponseDto;
 import com.kusitms.mainservice.domain.template.dto.response.TemplateDetailResponseDto;
+import com.kusitms.mainservice.domain.template.service.TemplateManageService;
 import com.kusitms.mainservice.domain.template.service.TemplateService;
 import com.kusitms.mainservice.global.common.SuccessResponse;
 import com.kusitms.mainservice.global.config.auth.UserId;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class TemplateController {
     private final TemplateService templateService;
+    private final TemplateManageService templateManageService;
 
     @PostMapping
     public ResponseEntity<SuccessResponse<?>> getTemplateByTitleAndTemplateType(@RequestBody SearchTemplateRequsetDto searchTemplateRequsetDto, @PageableDefault(size = 12) Pageable pageable) {
@@ -31,6 +33,10 @@ public class TemplateController {
         final TemplateDetailResponseDto templateDetailResponseDto = templateService.getTemplateDetail(templateId);
         return SuccessResponse.ok(templateDetailResponseDto);
     }
-
+    @GetMapping("/save/user")
+    public ResponseEntity<SuccessResponse<?>> saveTemplateForUser(@UserId final Long userId, @RequestParam Long templateId) {
+        templateManageService.saveTemplateByUserId(userId, templateId);
+        return SuccessResponse.ok(null);
+    }
 
 }

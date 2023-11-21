@@ -119,8 +119,8 @@ public class TemplateManageService {
         deleteTemplate(templateId);
     }
     public void updateTemplate(UpdateTemplateRequestDto updateTemplateRequestDto){
-       TemplateContent templateContent = getTemplateContentFromTemplateId(updateTemplateRequestDto.getTemplateId());
-        templateContent.updateCustomTemplateContent(updateTemplateRequestDto.getContent());
+       CustomTemplateContent customtemplateContent = getCustomTemplateContentFromTemplateId(updateTemplateRequestDto.getTemplateId());
+        customtemplateContent.updateCustomTemplateContent(updateTemplateRequestDto.getContent());
     }
     public void saveTemplateByUserId(Long userId, Long templateId) {
         Template template = getTemplateByTemplateId(templateId);
