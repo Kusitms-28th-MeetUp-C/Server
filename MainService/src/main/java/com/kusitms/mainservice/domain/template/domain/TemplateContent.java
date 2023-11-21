@@ -19,6 +19,9 @@ public class TemplateContent {
     @Field(name = "template_id")
     private Long templateId;
     private String content;
+    public void updateCustomTemplateContent(String content){
+        this.content=content;
+    }
     public static TemplateContent createTemplateContent(Long templateId, String content){
         return TemplateContent.builder()
                 .templateId(templateId)

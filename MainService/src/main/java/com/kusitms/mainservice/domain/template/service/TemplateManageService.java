@@ -118,12 +118,11 @@ public class TemplateManageService {
     public void deleteTemplateByTemplateId(Long templateId){
         deleteTemplate(templateId);
     }
-    public void updateTemplate(Long userId,UpdateTemplateRequestDto updateTemplateRequestDto){
-        TemplateDownload templateDownload = getTemplateDownloadFromUserIdAndTemplateId(userId, updateTemplateRequestDto.getTemplateId());
-        CustomTemplate customTemplate = getCustomTemplateFromTemplateId(updateTemplateRequestDto.getTemplateId());
+    public void updateTemplate(UpdateTemplateRequestDto updateTemplateRequestDto){
+       CustomTemplate customTemplate = getCustomTemplateFromTemplateId(updateTemplateRequestDto.getTemplateId());
         customTemplate.updateCustomTemplate(updateTemplateRequestDto);
         TemplateContent templateContent = getTemplateContentFromTemplateId(updateTemplateRequestDto.getTemplateId());
-        //templateContent.updateCustomTemplateContent(updateTemplateRequestDto.getContent());
+        templateContent.updateCustomTemplateContent(updateTemplateRequestDto.getContent());
     }
     public void saveTemplateByUserId(Long userId, Long templateId) {
         Template template = getTemplateByTemplateId(templateId);

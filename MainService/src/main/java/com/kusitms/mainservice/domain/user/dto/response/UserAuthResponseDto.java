@@ -8,6 +8,7 @@ import lombok.Getter;
 @Builder
 @Getter
 public class UserAuthResponseDto {
+    private Long userId;
     private String email;
     private String name;
     private String picture;
@@ -18,6 +19,7 @@ public class UserAuthResponseDto {
 
     public static UserAuthResponseDto of(User user, TokenInfo token, Boolean isFirst) {
         return UserAuthResponseDto.builder()
+                .userId(user.getId())
                 .email(user.getEmail())
                 .name(user.getName())
                 .picture(user.getProfile())

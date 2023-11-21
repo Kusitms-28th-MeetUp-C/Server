@@ -27,7 +27,7 @@ public class TemplateManageController {
     }
     @PostMapping("/update")
     public ResponseEntity<SuccessResponse<?>> update(@UserId final Long userId,@RequestBody final UpdateTemplateRequestDto updateTemplateRequestDto ){
-        templateManageService.updateTemplate(userId,updateTemplateRequestDto );
+        templateManageService.updateTemplate(updateTemplateRequestDto );
         return SuccessResponse.ok(null);
     }
     @PostMapping("/team")
