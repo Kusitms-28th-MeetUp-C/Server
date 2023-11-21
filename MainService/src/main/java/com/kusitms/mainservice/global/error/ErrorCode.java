@@ -51,6 +51,7 @@ public enum ErrorCode {
     ROADMAP_DOWNLOAD_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 로드맵 다운로드 기록입니다."),
     ROADMAP_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 로드맵입니다."),
     ROADMAP_SPACE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 로드맵 딘계입니다."),
+    SEARCH_TEMPLATE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 검색 템플릿입니다."),
 
     /**
      * 405 Method Not Allowed
