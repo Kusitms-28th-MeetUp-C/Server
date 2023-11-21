@@ -42,11 +42,17 @@ public class RoadmapManageService {
         saveRoadmap(createdRoadmap);
         saveRoadmapSpace(roadmapSharingRequestDto,createdRoadmap);
     }
-    public CustomRoadmapTitleAndStep getCustomRoadmapStepDto(Long userId, String title){
-        String customRoadmapTitle = teamRepository.findCustomRoadmapTitleByTeamTitle(title).orElseThrow(()->new EntityNotFoundException(TEAM_NOT_FOUND));
-        CustomRoadmap customRoadmap = customRoadmapRepository.findByUserIdAndTitle(userId, customRoadmapTitle).orElseThrow(()->new EntityNotFoundException(ROADMAP_NOT_FOUND));
+    public CustomRoadmapTitleAndStep getCustomRoadmapStepDto(Long userId, Long teamId){
+        Long customRoadmapId = getCustomRoadmapId(userId, teamId);
+        CustomRoadmap customRoadmap = getCustomRoadmap(customRoadmapId);
         List<CustomRoadmapStepDto> customRoadmapStepDtoList = createCustomRoadmapStepDto(customRoadmap);
-        return CustomRoadmapTitleAndStep.of(customRoadmapStepDtoList,customRoadmapTitle);
+        return CustomRoadmapTitleAndStep.of(customRoadmapStepDtoList,customRoadmap.getTitle());
+    }
+    private Long getCustomRoadmapId(Long userId, Long teamId){
+        return teamRepository.findCustomRoadmapIdByTeamIdAndUserId(userId, teamId).orElseThrow(()->new EntityNotFoundException(TEAM_NOT_FOUND));
+    }
+    private CustomRoadmap getCustomRoadmap(Long id){
+        return customRoadmapRepository.findById(id).orElseThrow(()->new EntityNotFoundException(ROADMAP_NOT_FOUND));
     }
     private List<CustomRoadmapStepDto> createCustomRoadmapStepDto(CustomRoadmap customRoadmap){
         List<CustomRoadmapSpace> customRoadmapSpaces = customRoadmapSpaceRepository.findAllByCustomRoadmapId(customRoadmap.getId());
