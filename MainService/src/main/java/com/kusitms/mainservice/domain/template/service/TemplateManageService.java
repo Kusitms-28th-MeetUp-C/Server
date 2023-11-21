@@ -30,6 +30,9 @@ import com.kusitms.mainservice.domain.user.repository.UserRepository;
 import com.kusitms.mainservice.global.error.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -78,10 +81,10 @@ public class TemplateManageService {
         return CreateTemplateResponseDto.of(createdTemplate);
     }
 
-    public CustomTemplateDetailResponseDto getTeamTemplateDetailInfo(Long userId, String roadmapTitle, String teamTitle, Long templateId) {
+    public CustomTemplateDetailResponseDto getTeamTemplateDetailInfo(Long userId, Long roadmapId, String teamTitle, Long templateId) {
         CustomTemplate customTemplate = getCustomTemplateFromTemplateId(templateId);
         CustomTemplateContent templateContent = getCustomTemplateContentFromTemplateId(templateId);
-        CustomRoadmap relatedRoadmap = getCustomRoadmapFromUserIdAndTitle(userId, roadmapTitle);
+        CustomRoadmap relatedRoadmap = getCustomRoadmapFromCustomRoadmapId(roadmapId);
         CustomRoadmapDetailResponseDto baseRoadmapResponseDto = createCustomRoadmapDetailResponseDto(relatedRoadmap);
         Team team = getTeamFromTitleAndUserId(userId, teamTitle);
         TeamResponseDto teamResponseDto = createTeamResponseDto(team);
@@ -203,12 +206,11 @@ public class TemplateManageService {
     }
 
     private CustomTemplateContent getCustomTemplateContentFromTemplateId(Long templateId) {
-        return customTemplateContentRepository.findByTemplateId(templateId)
-                .orElseThrow(() -> new EntityNotFoundException(TEMPLATE_CONTENT_NOT_FOUND));
+        return customTemplateContentRepository.findByTemplateId(templateId).orElseThrow(() -> new EntityNotFoundException(TEMPLATE_NOT_FOUND));
     }
 
-    private CustomRoadmap getCustomRoadmapFromUserIdAndTitle(Long userId, String title) {
-        return customRoadmapRepository.findByUserIdAndTitle(userId, title)
+    private CustomRoadmap getCustomRoadmapFromCustomRoadmapId(Long roadmapId) {
+        return customRoadmapRepository.findById(roadmapId)
                 .orElseThrow(() -> new EntityNotFoundException(ROADMAP_NOT_FOUND));
     }
 

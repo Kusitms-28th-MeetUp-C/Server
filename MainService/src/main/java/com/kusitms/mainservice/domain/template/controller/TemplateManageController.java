@@ -55,9 +55,9 @@ public class TemplateManageController {
     @GetMapping("/team")
     public ResponseEntity<SuccessResponse<?>> getTeamTemplateDetailInfo(@UserId final Long userId,
                                                                         @RequestParam final Long templateId,
-                                                                        @RequestParam final String roadmapTitle,
+                                                                        @RequestParam final Long roadmapId,
                                                                         @RequestParam final String teamTitle) {
-        final CustomTemplateDetailResponseDto responseDto = templateManageService.getTeamTemplateDetailInfo(userId, roadmapTitle, teamTitle, templateId);
+        final CustomTemplateDetailResponseDto responseDto = templateManageService.getTeamTemplateDetailInfo(userId, roadmapId, teamTitle, templateId);
         return SuccessResponse.ok(responseDto);
     }
 
