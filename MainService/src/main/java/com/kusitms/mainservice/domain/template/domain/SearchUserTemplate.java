@@ -14,18 +14,18 @@ public class SearchUserTemplate {
     private String title;
     private String relatedTeamTitle;
     private TemplateType templateType;
-    private boolean isOpened;
 
-    public static SearchUserTemplate of(User user, Long templateId, String title,
-                                        String relatedTeamTitle, TemplateType templateType,
-                                        boolean isOpened){
+    public static SearchUserTemplate of(User user, CustomTemplate customTemplate, String relatedTeamTitle){
         return SearchUserTemplate.builder()
                 .userId(user.getId().toString())
-                .templateId(templateId)
-                .title(title)
+                .templateId(customTemplate.getId())
+                .title(customTemplate.getTitle())
                 .relatedTeamTitle(relatedTeamTitle)
-                .templateType(templateType)
-                .isOpened(isOpened)
+                .templateType(customTemplate.getTemplateType())
                 .build();
+    }
+
+    public void updateTeamTitle(String title){
+        this.relatedTeamTitle = title;
     }
 }
