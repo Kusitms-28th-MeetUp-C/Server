@@ -4,7 +4,9 @@ import com.kusitms.mainservice.domain.roadmap.domain.*;
 import com.kusitms.mainservice.domain.roadmap.dto.request.RoadmapSharingRequestDto;
 import com.kusitms.mainservice.domain.roadmap.dto.request.StepDto;
 import com.kusitms.mainservice.domain.roadmap.dto.response.CustomRoadmapStepDto;
+import com.kusitms.mainservice.domain.roadmap.dto.response.CustomRoadmapTitleAndStep;
 import com.kusitms.mainservice.domain.roadmap.repository.*;
+import com.kusitms.mainservice.domain.team.repository.TeamRepository;
 import com.kusitms.mainservice.domain.template.domain.Template;
 import com.kusitms.mainservice.domain.template.repository.TemplateRepository;
 import com.kusitms.mainservice.domain.user.domain.User;
@@ -32,6 +34,7 @@ public class RoadmapManageService {
     private final RoadmapTemplateRepository roadmapTemplateRepository;
     private final CustomRoadmapRepository customRoadmapRepository;
     private final CustomRoadmapSpaceRepository customRoadmapSpaceRepository;
+    private final TeamRepository teamRepository;
     public void createSharingRoadmap(Long userId, RoadmapSharingRequestDto roadmapSharingRequestDto) {
         User user = getUserFromUserId(userId);
         RoadmapType roadmapType = getEnumRoadmapTypeFromStringRoadmapType(roadmapSharingRequestDto.getRoadmapType());
@@ -39,10 +42,11 @@ public class RoadmapManageService {
         saveRoadmap(createdRoadmap);
         saveRoadmapSpace(roadmapSharingRequestDto,createdRoadmap);
     }
-    public List<CustomRoadmapStepDto> getTeamRoadmapTitle(Long userId, String title){
-        CustomRoadmap customRoadmap = customRoadmapRepository.findByUserIdAndTitle(userId, title).orElseThrow(()->new EntityNotFoundException(ROADMAP_NOT_FOUND));
+    public CustomRoadmapTitleAndStep getCustomRoadmapStepDto(Long userId, String title){
+        String customRoadmapTitle = teamRepository.findCustomRoadmapTitleByTeamTitle(title).orElseThrow(()->new EntityNotFoundException(TEAM_NOT_FOUND));
+        CustomRoadmap customRoadmap = customRoadmapRepository.findByUserIdAndTitle(userId, customRoadmapTitle).orElseThrow(()->new EntityNotFoundException(ROADMAP_NOT_FOUND));
         List<CustomRoadmapStepDto> customRoadmapStepDtoList = createCustomRoadmapStepDto(customRoadmap);
-        return customRoadmapStepDtoList;
+        return CustomRoadmapTitleAndStep.of(customRoadmapStepDtoList,customRoadmapTitle);
     }
     private List<CustomRoadmapStepDto> createCustomRoadmapStepDto(CustomRoadmap customRoadmap){
         List<CustomRoadmapSpace> customRoadmapSpaces = customRoadmapSpaceRepository.findAllByCustomRoadmapId(customRoadmap.getId());
