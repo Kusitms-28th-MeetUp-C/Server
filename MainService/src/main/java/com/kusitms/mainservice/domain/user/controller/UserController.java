@@ -4,6 +4,7 @@ package com.kusitms.mainservice.domain.user.controller;
 import com.kusitms.mainservice.domain.user.dto.request.UserSignInRequestDto;
 import com.kusitms.mainservice.domain.user.dto.request.UserSignUpRequestDto;
 import com.kusitms.mainservice.domain.user.dto.response.UserAuthResponseDto;
+import com.kusitms.mainservice.domain.user.dto.response.UserSignUpResponseDto;
 import com.kusitms.mainservice.domain.user.service.AuthService;
 import com.kusitms.mainservice.domain.user.service.UserService;
 import com.kusitms.mainservice.global.common.SuccessResponse;
@@ -29,8 +30,8 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<SuccessResponse<?>> signUp(@UserId final Long userId,
                                                      @RequestBody final UserSignUpRequestDto requestDto) {
-        authService.signUp(userId, requestDto);
-        return SuccessResponse.ok(null);
+        final UserSignUpResponseDto responseDto = authService.signUp(userId, requestDto);
+        return SuccessResponse.ok(responseDto);
     }
 
     @PatchMapping("/signout")
