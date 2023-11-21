@@ -5,8 +5,9 @@ import com.kusitms.socketservice.domain.search.dto.response.SearchResultResponse
 import com.kusitms.socketservice.domain.search.service.SearchService;
 import com.kusitms.socketservice.global.common.MessageSuccessCode;
 import com.kusitms.socketservice.global.common.MessageSuccessResponse;
-import com.kusitms.socketservice.global.config.auth.SessionId;
+import com.kusitms.socketservice.global.config.auth.UserId;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,9 +19,10 @@ public class SearchController {
     private final SearchService searchService;
 
     @MessageMapping("/search")
-    public void getSearchResult(@SessionId final Long sessionId,
+    public void getSearchResult(@UserId Long userId,
+                                @Header("sessionId") final String sessionId,
                                 final SearchRequestDto searchRequestDto) {
-        final SearchResultResponseDto responseDto = searchService.getSearchResult(sessionId, searchRequestDto);
+        final SearchResultResponseDto responseDto = searchService.getSearchResult(userId, searchRequestDto);
         template.convertAndSend("/sub/search/" + sessionId, MessageSuccessResponse.of(MessageSuccessCode.SEARCH, responseDto));
     }
 }

@@ -9,9 +9,9 @@ import com.kusitms.socketservice.domain.chat.dto.response.ChatMessageResponseDto
 import com.kusitms.socketservice.domain.chat.service.ChatService;
 import com.kusitms.socketservice.global.common.MessageSuccessCode;
 import com.kusitms.socketservice.global.common.MessageSuccessResponse;
-import com.kusitms.socketservice.global.config.auth.SessionId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,21 +25,21 @@ public class ChatController {
     private final RedisTemplate redisTemplate;
 
     @MessageMapping("/chat")
-    public void sendChatMessage(@SessionId final Long sessionId,
+    public void sendChatMessage(@Header("sessionId") final String sessionId,
                                 @RequestBody final ChatMessageRequestDto chatMessageRequestDto) {
         final ChatMessageResponseDto responseDto = chatService.createSendMessageContent(sessionId, chatMessageRequestDto);
         redisTemplate.convertAndSend("meetingRoom", responseDto);
     }
 
     @MessageMapping("/chat/detail")
-    public void sendChatDetailMessage(@SessionId final Long sessionId,
+    public void sendChatDetailMessage(@Header("sessionId") final String sessionId,
                                       @RequestBody final ChatMessageListRequestDto chatMessageListRequestDto) {
         final ChatMessageListResponseDto responseDto = chatService.sendChatDetailMessage(sessionId, chatMessageListRequestDto);
         template.convertAndSend("/sub/chat/" + sessionId, MessageSuccessResponse.of(MessageSuccessCode.MESSAGE, responseDto));
     }
 
-    @MessageMapping("/chatList")
-    public void sendUserChatListMessage(@SessionId final Long sessionId,
+    @MessageMapping("/chat/all")
+    public void sendUserChatListMessage(@Header("sessionId") final String sessionId,
                                         @RequestBody final ChatListRequestDto chatListRequestDto) {
         final ChatListResponseDto responseDto = chatService.sendUserChatListMessage(sessionId, chatListRequestDto);
         template.convertAndSend("/sub/chat/" + sessionId, MessageSuccessResponse.of(MessageSuccessCode.CHATLIST, responseDto));

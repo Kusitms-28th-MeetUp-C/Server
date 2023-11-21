@@ -7,7 +7,7 @@ import lombok.Getter;
 @Builder
 @Getter
 public class ChatUserResponseDto {
-    private Long sessionId;
+    private String sessionId;
     private String name;
     private String type;
     private String profile;
