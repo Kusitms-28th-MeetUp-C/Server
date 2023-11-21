@@ -115,13 +115,13 @@ public class TeamRoadmapService {
         TemplateContent templateContent = getTemplateContent(template.getId());
         saveTemplateDownload(templateDownload);
         saveCustomTemplate(customTemplate);
-        saveCustomTemplateContent(template, templateContent);
+        saveCustomTemplateContent(customTemplate, templateContent);
         saveSearchCustomTemplate(user, customTemplate, team);
         return customTemplate;
     }
 
-    private void saveCustomTemplateContent(Template template, TemplateContent templateContent) {
-        CustomTemplateContent customTemplateContent = CustomTemplateContent.createCustomTemplateContent(template.getId(), templateContent.getContent());
+    private void saveCustomTemplateContent(CustomTemplate customTemplate, TemplateContent templateContent) {
+        CustomTemplateContent customTemplateContent = CustomTemplateContent.createCustomTemplateContent(customTemplate.getId(), templateContent.getContent());
         customTemplateContentRepository.save(customTemplateContent);
     }
 
