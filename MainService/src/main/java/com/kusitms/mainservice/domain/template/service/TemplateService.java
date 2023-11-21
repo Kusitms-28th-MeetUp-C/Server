@@ -9,6 +9,7 @@ import com.kusitms.mainservice.domain.team.dto.response.TeamTitleResponseDto;
 import com.kusitms.mainservice.domain.team.repository.TeamRepository;
 import com.kusitms.mainservice.domain.template.domain.*;
 import com.kusitms.mainservice.domain.template.dto.request.SearchTemplateRequsetDto;
+import com.kusitms.mainservice.domain.template.dto.request.UpdateTemplateRequestDto;
 import com.kusitms.mainservice.domain.template.dto.response.*;
 import com.kusitms.mainservice.domain.template.mongoRepository.TemplateContentRepository;
 import com.kusitms.mainservice.domain.template.repository.ReviewerRepository;
@@ -31,6 +32,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.kusitms.mainservice.domain.template.domain.CustomTemplate.createCustomTemplate;
 import static com.kusitms.mainservice.domain.template.domain.TemplateType.getEnumTemplateTypeFromStringTemplateType;
 import static com.kusitms.mainservice.global.error.ErrorCode.TEMPLATE_NOT_FOUND;
 
@@ -78,12 +80,15 @@ public class TemplateService {
         return GetTeamForSaveTemplateResponseDto.of(teamTitleResponseDtoList);
     }
 
-    public void saveTemplateByUserId(Long userId, Long templateId) {
-        Template template = getTemplateByTemplateId(templateId);
-        Optional<User> user = userRepository.findById(userId);
-        TemplateDownload templateDownload = TemplateDownload.createTemplateDownload(user.get(), template);
-        templateDownloadRepository.save(templateDownload);
-    }
+//    public void saveTemplateByUserId(Long userId, Long templateId) {
+//        Template template = getTemplateByTemplateId(templateId);
+//        Optional<User> user = userRepository.findById(userId);
+//        TemplateDownload templateDownload = TemplateDownload.createTemplateDownload(user.get(), template);
+//        templateDownloadRepository.save(templateDownload);
+//        TemplateDownload templateDownload = getTemplateDownloadFromUserIdAndTemplateId(userId, templateTeamRequestDto.getTemplateId());
+//        CustomTemplate customTemplate = CustomTemplate.createCustomTemplate(template, templateDownload);
+//        saveCustomTemplate(customTemplate);
+//    }
 
     private List<TemplateDetailBaseRelateDto> createTemplateDetailRelateTemplateDto(Template template) {
         List<Template> templateList = getTemplatesBySameCategoryAndId(template);
