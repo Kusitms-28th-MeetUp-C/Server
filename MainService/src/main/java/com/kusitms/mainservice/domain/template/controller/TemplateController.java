@@ -33,10 +33,5 @@ public class TemplateController {
         final TemplateDetailResponseDto templateDetailResponseDto = templateService.getTemplateDetail(templateId);
         return SuccessResponse.ok(templateDetailResponseDto);
     }
-    @GetMapping("/save/user")
-    public ResponseEntity<SuccessResponse<?>> saveTemplateForUser(@UserId final Long userId, @RequestParam Long templateId) {
-        templateManageService.saveTemplateByUserId(userId, templateId);
-        return SuccessResponse.ok(null);
-    }
 
 }
