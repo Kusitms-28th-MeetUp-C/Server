@@ -60,12 +60,12 @@ public class TemplateManageService {
     private final CustomRoadmapTemplateRepository customRoadmapTemplateRepository;
 
     public void addTemplateToTeam(Long userId, TemplateTeamRequestDto templateTeamRequestDto) {
-        Template template = getTemplateFromTemplateId(templateTeamRequestDto.getTemplateId());
+//        Template template = getTemplateFromTemplateId(templateTeamRequestDto.getTemplateId());
         CustomTemplate customTemplate = getCustomTemplateFromTemplateId(templateTeamRequestDto.getTemplateId());
         CustomRoadmapSpace customRoadmapSpace = getCustomRoadmapSpaceFromStepId(templateTeamRequestDto.getStepId());
         CustomRoadmapTemplate customRoadmapTemplate = CustomRoadmapTemplate.createCustomRoadmapTemplate(customRoadmapSpace, customTemplate);
         saveCustomRoadmapTemplate(customRoadmapTemplate);
-        saveCustomTemplateContent(template, customTemplate);
+//        saveCustomTemplateContent(template, customTemplate);
     }
 
     public CreateTemplateResponseDto createSharingTemplate(Long userId, TemplateSharingRequestDto templateSharingRequestDto) {
@@ -119,9 +119,7 @@ public class TemplateManageService {
         deleteTemplate(templateId);
     }
     public void updateTemplate(UpdateTemplateRequestDto updateTemplateRequestDto){
-       CustomTemplate customTemplate = getCustomTemplateFromTemplateId(updateTemplateRequestDto.getTemplateId());
-        customTemplate.updateCustomTemplate(updateTemplateRequestDto);
-        TemplateContent templateContent = getTemplateContentFromTemplateId(updateTemplateRequestDto.getTemplateId());
+       TemplateContent templateContent = getTemplateContentFromTemplateId(updateTemplateRequestDto.getTemplateId());
         templateContent.updateCustomTemplateContent(updateTemplateRequestDto.getContent());
     }
     public void saveTemplateByUserId(Long userId, Long templateId) {
@@ -131,6 +129,7 @@ public class TemplateManageService {
         saveTemplateDownload(templateDownload);
         CustomTemplate customTemplate = CustomTemplate.createCustomTemplate(template, templateDownload);
         saveCustomTemplate(customTemplate);
+        saveCustomTemplateContent(template, customTemplate);
     }
     private void saveTemplateDownload(TemplateDownload templateDownload){
         templateDownloadRepository.save(templateDownload);

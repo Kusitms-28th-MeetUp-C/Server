@@ -12,9 +12,5 @@ import lombok.NoArgsConstructor;
 @Getter
 public class UpdateTemplateRequestDto {
     private Long templateId;
-    private String title;
     private String content;
-    private String templateType;
-    private int estimatedTime;
-    private String introduction;
 }

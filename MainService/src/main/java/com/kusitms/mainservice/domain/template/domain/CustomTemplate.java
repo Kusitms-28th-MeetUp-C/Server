@@ -37,10 +37,6 @@ public class CustomTemplate {
         templateDownload.addCustomTemplate(customTemplate);
         return customTemplate;
     }
-    public void updateCustomTemplate(UpdateTemplateRequestDto updateTemplateRequestDto){
-        this.title = updateTemplateRequestDto.getTitle();
-        this.templateType =TemplateType.getEnumTemplateTypeFromStringTemplateType(updateTemplateRequestDto.getTemplateType());
-    }
 
     public void addCustomRoadmapTemplate(CustomRoadmapTemplate customRoadmapTemplate){
         this.customRoadmapTemplateList.add(customRoadmapTemplate);
