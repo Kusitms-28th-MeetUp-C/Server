@@ -121,8 +121,7 @@ public class TemplateManageService {
     public void updateTemplate(UpdateTemplateRequestDto updateTemplateRequestDto){
        CustomTemplateContent customtemplateContent = getCustomTemplateContentFromTemplateId(updateTemplateRequestDto.getTemplateId());
         customtemplateContent.updateCustomTemplateContent(updateTemplateRequestDto.getContent());
-        customTemplateContentRepository.save(customtemplateContent);
-    }
+        }
     public void saveTemplateByUserId(Long userId, Long templateId) {
         Template template = getTemplateByTemplateId(templateId);
         User user = getUserFromUserId(userId);
