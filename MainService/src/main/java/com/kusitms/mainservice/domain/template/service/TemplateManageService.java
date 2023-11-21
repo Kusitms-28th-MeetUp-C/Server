@@ -5,6 +5,7 @@ import com.kusitms.mainservice.domain.roadmap.domain.CustomRoadmapSpace;
 import com.kusitms.mainservice.domain.roadmap.domain.CustomRoadmapTemplate;
 import com.kusitms.mainservice.domain.roadmap.dto.response.CustomRoadmapDetailResponseDto;
 import com.kusitms.mainservice.domain.roadmap.dto.response.CustomRoadmapSpaceDetailResponseDto;
+import com.kusitms.mainservice.domain.roadmap.dto.response.CustomRoadmapStepDto;
 import com.kusitms.mainservice.domain.roadmap.repository.CustomRoadmapRepository;
 import com.kusitms.mainservice.domain.roadmap.repository.CustomRoadmapSpaceRepository;
 import com.kusitms.mainservice.domain.roadmap.repository.CustomRoadmapTemplateRepository;
@@ -32,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -131,6 +133,7 @@ public class TemplateManageService {
         saveCustomTemplate(customTemplate);
         saveCustomTemplateContent(template, customTemplate);
     }
+
     private void saveTemplateDownload(TemplateDownload templateDownload){
         templateDownloadRepository.save(templateDownload);
     }
