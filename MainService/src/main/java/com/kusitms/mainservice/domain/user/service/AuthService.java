@@ -10,6 +10,7 @@ import com.kusitms.mainservice.domain.user.domain.UserType;
 import com.kusitms.mainservice.domain.user.dto.request.UserSignInRequestDto;
 import com.kusitms.mainservice.domain.user.dto.request.UserSignUpRequestDto;
 import com.kusitms.mainservice.domain.user.dto.response.UserAuthResponseDto;
+import com.kusitms.mainservice.domain.user.dto.response.UserSignUpResponseDto;
 import com.kusitms.mainservice.domain.user.repository.RefreshTokenRepository;
 import com.kusitms.mainservice.domain.user.repository.UserRepository;
 import com.kusitms.mainservice.global.config.auth.JwtProvider;
@@ -44,18 +45,19 @@ public class AuthService {
         Platform platform = getEnumPlatformFromStringPlatform(userSignInRequestDto.getPlatform());
         PlatformUserInfo platformUser = getPlatformUserInfoFromRestTemplate(platform, authToken);
         User getUser = saveUser(platformUser, platform);
-        Boolean isFistLogin = Objects.isNull(getUser.getUserType()) ? Boolean.TRUE : Boolean.FALSE;
+        Boolean isFirstLogin = Objects.isNull(getUser.getUserType()) ? Boolean.TRUE : Boolean.FALSE;
         TokenInfo tokenInfo = issueAccessTokenAndRefreshToken(getUser);
         updateRefreshToken(tokenInfo.getRefreshToken(), getUser);
-        return UserAuthResponseDto.of(getUser, tokenInfo, isFistLogin);
+        return UserAuthResponseDto.of(getUser, tokenInfo, isFirstLogin);
     }
 
-    public void signUp(Long userId, UserSignUpRequestDto userSignUpRequestDto) {
+    public UserSignUpResponseDto signUp(Long userId, UserSignUpRequestDto userSignUpRequestDto) {
         User user = getUserFromUserId(userId);
         UserType userType = getEnumUserTypeFromStringUserType(userSignUpRequestDto.getUserType());
         user.updateSignUpUserInfo(userSignUpRequestDto.getUserName(), userType);
         Team team = Team.createTeam(userSignUpRequestDto.getTeamName(), null, null, user);
         saveTeam(team);
+        return UserSignUpResponseDto.of(user.getName());
     }
 
     public void signOut(Long userId) {
