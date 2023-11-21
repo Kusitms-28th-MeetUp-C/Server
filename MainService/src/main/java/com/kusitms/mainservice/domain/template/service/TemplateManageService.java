@@ -5,7 +5,6 @@ import com.kusitms.mainservice.domain.roadmap.domain.CustomRoadmapSpace;
 import com.kusitms.mainservice.domain.roadmap.domain.CustomRoadmapTemplate;
 import com.kusitms.mainservice.domain.roadmap.dto.response.CustomRoadmapDetailResponseDto;
 import com.kusitms.mainservice.domain.roadmap.dto.response.CustomRoadmapSpaceDetailResponseDto;
-import com.kusitms.mainservice.domain.roadmap.dto.response.CustomRoadmapStepDto;
 import com.kusitms.mainservice.domain.roadmap.repository.CustomRoadmapRepository;
 import com.kusitms.mainservice.domain.roadmap.repository.CustomRoadmapSpaceRepository;
 import com.kusitms.mainservice.domain.roadmap.repository.CustomRoadmapTemplateRepository;
@@ -23,6 +22,7 @@ import com.kusitms.mainservice.domain.template.dto.response.CreateTemplateRespon
 import com.kusitms.mainservice.domain.template.dto.response.CustomTemplateDetailResponseDto;
 import com.kusitms.mainservice.domain.template.dto.response.TemplateDownloadDetailResponseDto;
 import com.kusitms.mainservice.domain.template.mongoRepository.CustomTemplateContentRepository;
+import com.kusitms.mainservice.domain.template.mongoRepository.SearchUserTemplateRepository;
 import com.kusitms.mainservice.domain.template.mongoRepository.TemplateContentRepository;
 import com.kusitms.mainservice.domain.template.repository.*;
 import com.kusitms.mainservice.domain.user.domain.User;
@@ -33,12 +33,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.kusitms.mainservice.domain.template.domain.CustomTemplate.createCustomTemplate;
 import static com.kusitms.mainservice.domain.template.domain.TemplateContent.createTemplateContent;
 import static com.kusitms.mainservice.domain.template.domain.TemplateType.getEnumTemplateTypeFromStringTemplateType;
 import static com.kusitms.mainservice.global.error.ErrorCode.*;
@@ -60,14 +57,15 @@ public class TemplateManageService {
     private final ReviewerRepository reviewerRepository;
     private final CustomRoadmapSpaceRepository customRoadmapSpaceRepository;
     private final CustomRoadmapTemplateRepository customRoadmapTemplateRepository;
+    private final SearchUserTemplateRepository searchUserTemplateRepository;
 
     public void addTemplateToTeam(Long userId, TemplateTeamRequestDto templateTeamRequestDto) {
-//        Template template = getTemplateFromTemplateId(templateTeamRequestDto.getTemplateId());
         CustomTemplate customTemplate = getCustomTemplateFromTemplateId(templateTeamRequestDto.getTemplateId());
         CustomRoadmapSpace customRoadmapSpace = getCustomRoadmapSpaceFromStepId(templateTeamRequestDto.getStepId());
+        Team team = getTeamFromTitleAndUserId(userId, templateTeamRequestDto.getTeamTitle());
         CustomRoadmapTemplate customRoadmapTemplate = CustomRoadmapTemplate.createCustomRoadmapTemplate(customRoadmapSpace, customTemplate);
         saveCustomRoadmapTemplate(customRoadmapTemplate);
-//        saveCustomTemplateContent(template, customTemplate);
+        updateSearchUserTemplateTeam(team, customTemplate);
     }
 
     public CreateTemplateResponseDto createSharingTemplate(Long userId, TemplateSharingRequestDto templateSharingRequestDto) {
@@ -117,13 +115,16 @@ public class TemplateManageService {
                 = CustomTemplateContent.createCustomTemplateContent(customTemplate.getId(), templateContent.getContent());
         saveCustomTemplateContent(customTemplateContent);
     }
-    public void deleteTemplateByTemplateId(Long templateId){
+
+    public void deleteTemplateByTemplateId(Long templateId) {
         deleteTemplate(templateId);
     }
-    public void updateTemplate(UpdateTemplateRequestDto updateTemplateRequestDto){
-       CustomTemplateContent customtemplateContent = getCustomTemplateContentFromTemplateId(updateTemplateRequestDto.getTemplateId());
+
+    public void updateTemplate(UpdateTemplateRequestDto updateTemplateRequestDto) {
+        CustomTemplateContent customtemplateContent = getCustomTemplateContentFromTemplateId(updateTemplateRequestDto.getTemplateId());
         customtemplateContent.updateCustomTemplateContent(updateTemplateRequestDto.getContent());
-        }
+    }
+
     public void saveTemplateByUserId(Long userId, Long templateId) {
         Template template = getTemplateByTemplateId(templateId);
         User user = getUserFromUserId(userId);
@@ -132,16 +133,17 @@ public class TemplateManageService {
         CustomTemplate customTemplate = CustomTemplate.createCustomTemplate(template, templateDownload);
         saveCustomTemplate(customTemplate);
         saveCustomTemplateContent(template, customTemplate);
+        saveSearchUserTemplate(user, customTemplate);
     }
 
-    private void saveTemplateDownload(TemplateDownload templateDownload){
-        templateDownloadRepository.save(templateDownload);
+    private void updateSearchUserTemplateTeam(Team team, CustomTemplate customTemplate) {
+        SearchUserTemplate searchUserTemplate = getSearchUserTemplateFromTemplateId(customTemplate.getId());
+        searchUserTemplate.updateTeamTitle(team.getTitle());
     }
-    private Template getTemplateByTemplateId(Long templateId) {
-        return templateRepository.findById(templateId).orElseThrow(() -> new EntityNotFoundException(TEMPLATE_NOT_FOUND));
-    }
-    private void deleteTemplate(Long templateId){
-        templateRepository.deleteById(templateId);
+
+    private void saveSearchUserTemplate(User user, CustomTemplate customTemplate) {
+        SearchUserTemplate searchUserTemplate = SearchUserTemplate.of(user, customTemplate, null);
+        searchUserTemplateRepository.save(searchUserTemplate);
     }
 
     private TeamResponseDto createTeamResponseDto(Team team) {
@@ -163,19 +165,32 @@ public class TemplateManageService {
                 .collect(Collectors.toList());
     }
 
-    private Long getProcessingNum(CustomRoadmap relatedRoadmap){
+    private Long getProcessingNum(CustomRoadmap relatedRoadmap) {
         return relatedRoadmap.getCustomRoadmapSpaceList().stream()
                 .filter(CustomRoadmapSpace::isCompleted).count();
+    }
+
+    private SearchUserTemplate getSearchUserTemplateFromTemplateId(Long templateId) {
+        return searchUserTemplateRepository.findByTemplateId(templateId)
+                .orElseThrow(() -> new EntityNotFoundException(SEARCH_TEMPLATE_NOT_FOUND));
+    }
+
+    private void saveTemplateDownload(TemplateDownload templateDownload) {
+        templateDownloadRepository.save(templateDownload);
+    }
+
+    private Template getTemplateByTemplateId(Long templateId) {
+        return templateRepository.findById(templateId)
+                .orElseThrow(() -> new EntityNotFoundException(TEMPLATE_NOT_FOUND));
+    }
+
+    private void deleteTemplate(Long templateId) {
+        templateRepository.deleteById(templateId);
     }
 
     private CustomRoadmapSpace getCustomRoadmapSpaceFromStepId(Long stepId) {
         return customRoadmapSpaceRepository.findById(stepId)
                 .orElseThrow(() -> new EntityNotFoundException(ROADMAP_SPACE_NOT_FOUND));
-    }
-
-    private TemplateDownload getTemplateDownloadFromUserIdAndTemplateId(Long userId, Long templateId) {
-        return templateDownloadRepository.findByUserIdAndTemplateId(userId, templateId)
-                .orElseThrow(() -> new EntityNotFoundException(TEMPLATE_NOT_FOUND));
     }
 
     private Team getTeamFromTitleAndUserId(Long userId, String title) {

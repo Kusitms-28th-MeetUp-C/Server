@@ -4,8 +4,6 @@ import com.kusitms.mainservice.domain.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Optional;
-
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
@@ -27,14 +25,14 @@ public class TemplateDownload {
     @OneToOne
     private CustomTemplate customTemplate;
 
-    public static TemplateDownload createTemplateDownload(User user, Template template){
+    public static TemplateDownload createTemplateDownload(User user, Template template) {
         return TemplateDownload.builder()
                 .user(user)
                 .template(template)
                 .build();
     }
 
-    public void addCustomTemplate(CustomTemplate customTemplate){
+    public void addCustomTemplate(CustomTemplate customTemplate) {
         this.customTemplate = customTemplate;
     }
 }
