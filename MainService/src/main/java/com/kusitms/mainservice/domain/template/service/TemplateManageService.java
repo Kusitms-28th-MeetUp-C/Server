@@ -61,9 +61,7 @@ public class TemplateManageService {
 
     public void addTemplateToTeam(Long userId, TemplateTeamRequestDto templateTeamRequestDto) {
         Template template = getTemplateFromTemplateId(templateTeamRequestDto.getTemplateId());
-        TemplateDownload templateDownload = getTemplateDownloadFromUserIdAndTemplateId(userId, templateTeamRequestDto.getTemplateId());
-        CustomTemplate customTemplate = CustomTemplate.createCustomTemplate(template, templateDownload);
-        saveCustomTemplate(customTemplate);
+        CustomTemplate customTemplate = getCustomTemplateFromTemplateId(templateTeamRequestDto.getTemplateId());
         CustomRoadmapSpace customRoadmapSpace = getCustomRoadmapSpaceFromStepId(templateTeamRequestDto.getStepId());
         CustomRoadmapTemplate customRoadmapTemplate = CustomRoadmapTemplate.createCustomRoadmapTemplate(customRoadmapSpace, customTemplate);
         saveCustomRoadmapTemplate(customRoadmapTemplate);
@@ -125,7 +123,7 @@ public class TemplateManageService {
         CustomTemplate customTemplate = getCustomTemplateFromTemplateId(updateTemplateRequestDto.getTemplateId());
         customTemplate.updateCustomTemplate(updateTemplateRequestDto);
         TemplateContent templateContent = getTemplateContentFromTemplateId(updateTemplateRequestDto.getTemplateId());
-        templateContent.updateCustomTemplateContent(updateTemplateRequestDto.getContent());
+        //templateContent.updateCustomTemplateContent(updateTemplateRequestDto.getContent());
     }
     public void saveTemplateByUserId(Long userId, Long templateId) {
         Template template = getTemplateByTemplateId(templateId);
