@@ -47,7 +47,6 @@ public class TemplateService {
     private final TemplateDownloadRepository templateDownloadRepository;
     private final RoadmapRepository roadmapRepository;
     private final TeamRepository teamRepository;
-    private final UserRepository userRepository;
     private final TemplateManageService templateManageService;
 
     public Page<SearchBaseTemplateResponseDto> searchTemplateByTitleAndRoadmapType(SearchTemplateRequsetDto searchTemplateRequsetDto, Pageable pageable) {
@@ -100,7 +99,7 @@ public class TemplateService {
                 .map(template ->
                         TemplateDetailBaseRelateDto.of(
                                 template,
-                                template.getCount(),//getTeamCount(template),
+                                getTeamCount(template),
                                 getRatingAndReviewCount(template).getRatingAverage(),
                                 getRoadmapTitleResponseDto(template).getConnectedRoadmap()))
                 .collect(Collectors.toList());
@@ -114,7 +113,7 @@ public class TemplateService {
 
     private TemplateDetailIntroBaseResponseDto createTemplateDetailIntroBaseResponseDto(Template template) {
         TemplateReviewResponseDto templateReviewResponseDto = getRatingAndReviewCount(template);
-        int teamCount = template.getCount();//getTeamCount(template);
+        int teamCount = getTeamCount(template);
         return TemplateDetailIntroBaseResponseDto.of(templateReviewResponseDto.getRatingAverage(), template.getEstimatedTime(), teamCount, templateReviewResponseDto.getReviewCount());
     }
 
@@ -167,7 +166,7 @@ public class TemplateService {
         return templatePage.map(template ->
                 SearchBaseTemplateResponseDto.of(
                         template,
-                        template.getCount(),//getTeamCount(template),
+                        getTeamCount(template),
                         getRoadmapTitleResponseDto(template).getConnectedRoadmap()
                 )
         );

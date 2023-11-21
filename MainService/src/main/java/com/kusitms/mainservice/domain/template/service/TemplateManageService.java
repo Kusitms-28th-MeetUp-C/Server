@@ -123,13 +123,11 @@ public class TemplateManageService {
         deleteTemplate(templateId);
     }
 
-    public String updateTemplate(UpdateTemplateRequestDto updateTemplateRequestDto) {
+    public void updateTemplate(UpdateTemplateRequestDto updateTemplateRequestDto) {
         CustomTemplateContent customtemplateContent = getCustomTemplateContentFromTemplateId(updateTemplateRequestDto.getTemplateId());
-
         customtemplateContent.updateCustomTemplateContent(updateTemplateRequestDto.getContent());
-        customTemplateContentRepository.deleteByTemplateId(updateTemplateRequestDto.getTemplateId());
+        deleteCustomTemplateContent(updateTemplateRequestDto.getTemplateId());
         saveCustomTemplateContent(customtemplateContent);
-        return customtemplateContent.getContent();
     }
 
     public void saveTemplateByUserId(Long userId, Long templateId) {
@@ -142,7 +140,10 @@ public class TemplateManageService {
         saveCustomTemplateContent(template, customTemplate);
         saveSearchUserTemplate(user, customTemplate);
     }
+    private void deleteCustomTemplateContent(Long templateId){
+        customTemplateContentRepository.deleteByTemplateId(templateId);
 
+    }
     private void updateSearchUserTemplateTeam(Team team, CustomTemplate customTemplate) {
         SearchUserTemplate searchUserTemplate = getSearchUserTemplateFromTemplateId(customTemplate.getId());
         searchUserTemplate.updateTeamTitle(team.getTitle());

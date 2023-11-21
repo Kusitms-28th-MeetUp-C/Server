@@ -32,8 +32,8 @@ public class RestTemplateProvider {
             return PlatformUserInfo.createPlatformUserInfo(
                     Long.toString(kakaoUserInfo.getId()),
                     kakaoUserInfo.getKakaoAccount().getEmail(),
-                    kakaoUserInfo.getProperties().getNickname(),
-                    kakaoUserInfo.getProperties().getProfileImage());
+                    getNickName(kakaoUserInfo),
+                    getPicture(kakaoUserInfo));
         } else {
             GoogleUserInfo googleUserInfo = googleAuthProvider.getGoogleUserInfoFromPlatformInfo(platformInfo);
             return PlatformUserInfo.createPlatformUserInfo(
@@ -41,6 +41,20 @@ public class RestTemplateProvider {
                     googleUserInfo.getEmail(),
                     googleUserInfo.getName(),
                     googleUserInfo.getPicture());
+        }
+    }
+    private String getNickName(KakaoUserInfo kakaoUserInfo){
+        if (kakaoUserInfo.getProperties() != null) {
+            return kakaoUserInfo.getProperties().getNickname();
+        } else {
+            return "Unknown";
+        }
+    }
+    private String getPicture(KakaoUserInfo kakaoUserInfo){
+        if (kakaoUserInfo.getProperties() != null) {
+            return kakaoUserInfo.getProperties().getProfileImage();
+        } else {
+            return "Unknown";
         }
     }
 }
