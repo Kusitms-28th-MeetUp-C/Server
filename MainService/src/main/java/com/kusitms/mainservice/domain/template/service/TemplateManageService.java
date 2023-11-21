@@ -48,7 +48,6 @@ import static com.kusitms.mainservice.global.error.ErrorCode.*;
 @Transactional
 @Service
 public class TemplateManageService {
-    private final MongoTemplate mongoTemplate;
     private final TemplateRepository templateRepository;
     private final TemplateContentRepository templateContentRepository;
     private final CustomTemplateContentRepository customTemplateContentRepository;
@@ -85,7 +84,7 @@ public class TemplateManageService {
     public CustomTemplateDetailResponseDto getTeamTemplateDetailInfo(Long userId, Long roadmapId, String teamTitle, Long templateId) {
         CustomTemplate customTemplate = getCustomTemplateFromTemplateId(templateId);
         CustomTemplateContent templateContent = getCustomTemplateContentFromTemplateId(templateId);
-        CustomRoadmap relatedRoadmap = getCustomRoadmapFromUserIdAndTitle(userId, roadmapId);
+        CustomRoadmap relatedRoadmap = getCustomRoadmapFromCustomRoadmapId(roadmapId);
         CustomRoadmapDetailResponseDto baseRoadmapResponseDto = createCustomRoadmapDetailResponseDto(relatedRoadmap);
         Team team = getTeamFromTitleAndUserId(userId, teamTitle);
         TeamResponseDto teamResponseDto = createTeamResponseDto(team);
@@ -203,12 +202,10 @@ public class TemplateManageService {
     }
 
     private CustomTemplateContent getCustomTemplateContentFromTemplateId(Long templateId) {
-//        Query query = new Query(Criteria.where("template_id").is(templateId));
-//        return mongoTemplate.findOne(query, CustomTemplateContent.class);
         return customTemplateContentRepository.findByTemplateId(templateId).orElseThrow(() -> new EntityNotFoundException(TEMPLATE_NOT_FOUND));
     }
 
-    private CustomRoadmap getCustomRoadmapFromUserIdAndTitle(Long userId, Long roadmapId) {
+    private CustomRoadmap getCustomRoadmapFromCustomRoadmapId(Long roadmapId) {
         return customRoadmapRepository.findById(roadmapId)
                 .orElseThrow(() -> new EntityNotFoundException(ROADMAP_NOT_FOUND));
     }
