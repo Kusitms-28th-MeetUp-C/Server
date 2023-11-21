@@ -24,7 +24,7 @@ public class RoadmapManageController {
 
     @GetMapping
     public ResponseEntity<SuccessResponse<?>> getCustomSpaceStep(@UserId Long userId, @RequestParam String title){
-        final List<CustomRoadmapStepDto> customRoadmapStepDtoList = roadmapManageService.getTeamRoadmapTitle(userId, title);
+        final List<CustomRoadmapStepDto> customRoadmapStepDtoList = roadmapManageService.getCustomRoadmapStepDto(userId, title);
         return SuccessResponse.ok(customRoadmapStepDtoList);
 
     }
