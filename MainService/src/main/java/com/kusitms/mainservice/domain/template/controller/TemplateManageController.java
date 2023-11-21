@@ -26,7 +26,7 @@ public class TemplateManageController {
         return SuccessResponse.ok(null);
     }
     @PostMapping("/update")
-    public ResponseEntity<SuccessResponse<?>> update(@UserId final Long userId,@RequestBody final UpdateTemplateRequestDto updateTemplateRequestDto ){
+    public ResponseEntity<SuccessResponse<?>> updateTemplate(@UserId final Long userId,@RequestBody final UpdateTemplateRequestDto updateTemplateRequestDto ){
         templateManageService.updateTemplate(updateTemplateRequestDto );
         return SuccessResponse.ok(null);
     }

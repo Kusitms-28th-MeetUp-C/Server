@@ -126,11 +126,14 @@ public class TemplateManageService {
     }
     public void saveTemplateByUserId(Long userId, Long templateId) {
         Template template = getTemplateByTemplateId(templateId);
-        Optional<User> user = userRepository.findById(userId);
-        TemplateDownload templateDownload = TemplateDownload.createTemplateDownload(user.get(), template);
-        templateDownloadRepository.save(templateDownload);
+        User user = getUserFromUserId(userId);
+        TemplateDownload templateDownload = TemplateDownload.createTemplateDownload(user, template);
+        saveTemplateDownload(templateDownload);
         CustomTemplate customTemplate = CustomTemplate.createCustomTemplate(template, templateDownload);
         saveCustomTemplate(customTemplate);
+    }
+    private void saveTemplateDownload(TemplateDownload templateDownload){
+        templateDownloadRepository.save(templateDownload);
     }
     private Template getTemplateByTemplateId(Long templateId) {
         return templateRepository.findById(templateId).orElseThrow(() -> new EntityNotFoundException(TEMPLATE_NOT_FOUND));
