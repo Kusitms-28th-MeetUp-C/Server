@@ -21,14 +21,14 @@ public class TemplateReview {
     @OneToOne
     private Reviewer reviewer;
 
-    public static TemplateReview createTemplateReview(String content, int rating){
+    public static TemplateReview createTemplateReview(String content, int rating) {
         return TemplateReview.builder()
                 .rating(rating)
                 .content(content)
                 .build();
     }
 
-    public void addReviewer(Reviewer reviewer){
+    public void addReviewer(Reviewer reviewer) {
         this.reviewer = reviewer;
     }
 }

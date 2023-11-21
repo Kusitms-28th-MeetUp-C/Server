@@ -25,21 +25,23 @@ public class TemplateManageController {
         templateManageService.saveTemplateByUserId(userId, templateId);
         return SuccessResponse.ok(null);
     }
+
     @PostMapping("/update")
-    public ResponseEntity<SuccessResponse<?>> updateTemplate(@UserId final Long userId,@RequestBody final UpdateTemplateRequestDto updateTemplateRequestDto ){
-        templateManageService.updateTemplate(updateTemplateRequestDto );
+    public ResponseEntity<SuccessResponse<?>> updateTemplate(@UserId final Long userId, @RequestBody final UpdateTemplateRequestDto updateTemplateRequestDto) {
+        templateManageService.updateTemplate(updateTemplateRequestDto);
         return SuccessResponse.ok(null);
     }
+
     @PostMapping("/team")
     public ResponseEntity<SuccessResponse<?>> addTemplateToTeam(@UserId final Long userId,
-                                                                @RequestBody final TemplateTeamRequestDto requestDto){
+                                                                @RequestBody final TemplateTeamRequestDto requestDto) {
         templateManageService.addTemplateToTeam(userId, requestDto);
         return SuccessResponse.created(null);
     }
 
     @PostMapping
     public ResponseEntity<SuccessResponse<?>> createSharingTemplate(@UserId final Long userId,
-                                                                    @RequestBody final TemplateSharingRequestDto requestDto){
+                                                                    @RequestBody final TemplateSharingRequestDto requestDto) {
         CreateTemplateResponseDto createTemplateResponseDto = templateManageService.createSharingTemplate(userId, requestDto);
         return SuccessResponse.created(createTemplateResponseDto);
     }
@@ -60,11 +62,8 @@ public class TemplateManageController {
     }
 
     @GetMapping("/{templateId}")
-    public ResponseEntity<SuccessResponse<?>> getTemplateDetailInfo(@PathVariable final Long templateId,
-                                                                    @RequestParam final boolean isOpened) {
-        final TemplateDownloadDetailResponseDto responseDto;
-        if(isOpened) responseDto = templateManageService.getPreDownloadTemplateInfo(templateId);
-        else responseDto = templateManageService.getDownloadCustomTemplateDetailInfo(templateId);
+    public ResponseEntity<SuccessResponse<?>> getTemplateDetailInfo(@PathVariable final Long templateId) {
+        final TemplateDownloadDetailResponseDto responseDto = templateManageService.getDownloadCustomTemplateDetailInfo(templateId);
         return SuccessResponse.ok(responseDto);
     }
 

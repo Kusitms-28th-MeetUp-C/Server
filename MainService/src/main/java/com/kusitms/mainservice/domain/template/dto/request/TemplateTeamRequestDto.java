@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 public class TemplateTeamRequestDto {
     private Long stepId;
     private Long templateId;
+    private String teamTitle;
 }
