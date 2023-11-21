@@ -11,6 +11,8 @@ import com.kusitms.mainservice.domain.roadmap.repository.RoadmapSpaceRepository;
 import com.kusitms.mainservice.domain.template.repository.TemplateRepository;
 import com.kusitms.mainservice.domain.user.domain.User;
 import com.kusitms.mainservice.domain.user.dto.response.DetailUserResponseDto;
+import com.kusitms.mainservice.global.error.ErrorCode;
+import com.kusitms.mainservice.global.error.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -57,8 +59,7 @@ public class RoadmapService {
         return RoadmapDetailBaseIntro.of(roadmap, teamCount);
     }
     private Roadmap getRoadmapByRoadmapId(Long roadmapId){
-        Optional<Roadmap> roadmap = roadmapRepository.findById(roadmapId);
-        return roadmap.get();
+        return roadmapRepository.findById(roadmapId).orElseThrow(() -> new EntityNotFoundException(ErrorCode.ROADMAP_NOT_FOUND));
     }
     private BaseRoadmapResponseDto creatBaseRoadmapResponseDto(Roadmap roadmap){
         List<RoadmapDetailResponseDto> roadmapDetailResponseDtoList = creatRoadmapDetailResponseDtoList(roadmap);
@@ -86,7 +87,7 @@ public class RoadmapService {
                 .map(roadmap ->
                         RoadmapDetailBaseRelateRoadmapDto.of(
                                 roadmap,
-                                roadmap.getCount()//getTeamCount(roadmap)
+                                getTeamCount(roadmap)
                         ))
                 .collect(Collectors.toList());
     }
