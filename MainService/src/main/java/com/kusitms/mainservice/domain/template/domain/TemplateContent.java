@@ -1,5 +1,6 @@
 package com.kusitms.mainservice.domain.template.domain;
 
+import com.kusitms.mainservice.domain.template.dto.request.UpdateTemplateRequestDto;
 import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +19,9 @@ public class TemplateContent {
     @Field(name = "template_id")
     private Long templateId;
     private String content;
-
+    public void updateCustomTemplateContent(String content){
+    this.content=content;
+    }
     public static TemplateContent createTemplateContent(Long templateId, String content){
         return TemplateContent.builder()
                 .templateId(templateId)

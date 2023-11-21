@@ -16,6 +16,7 @@ import com.kusitms.mainservice.domain.template.domain.*;
 import com.kusitms.mainservice.domain.template.dto.request.TemplateReviewRequestDto;
 import com.kusitms.mainservice.domain.template.dto.request.TemplateSharingRequestDto;
 import com.kusitms.mainservice.domain.template.dto.request.TemplateTeamRequestDto;
+import com.kusitms.mainservice.domain.template.dto.request.UpdateTemplateRequestDto;
 import com.kusitms.mainservice.domain.template.dto.response.BaseCustomTemplateResponseDto;
 import com.kusitms.mainservice.domain.template.dto.response.CreateTemplateResponseDto;
 import com.kusitms.mainservice.domain.template.dto.response.CustomTemplateDetailResponseDto;
@@ -32,8 +33,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.kusitms.mainservice.domain.template.domain.CustomTemplate.createCustomTemplate;
 import static com.kusitms.mainservice.domain.template.domain.TemplateContent.createTemplateContent;
 import static com.kusitms.mainservice.domain.template.domain.TemplateType.getEnumTemplateTypeFromStringTemplateType;
 import static com.kusitms.mainservice.global.error.ErrorCode.*;
@@ -116,6 +119,24 @@ public class TemplateManageService {
     }
     public void deleteTemplateByTemplateId(Long templateId){
         deleteTemplate(templateId);
+    }
+    public void updateTemplate(Long userId,UpdateTemplateRequestDto updateTemplateRequestDto){
+        TemplateDownload templateDownload = getTemplateDownloadFromUserIdAndTemplateId(userId, updateTemplateRequestDto.getTemplateId());
+        CustomTemplate customTemplate = getCustomTemplateFromTemplateId(updateTemplateRequestDto.getTemplateId());
+        customTemplate.updateCustomTemplate(updateTemplateRequestDto);
+        TemplateContent templateContent = getTemplateContentFromTemplateId(updateTemplateRequestDto.getTemplateId());
+        templateContent.updateCustomTemplateContent(updateTemplateRequestDto.getContent());
+    }
+    public void saveTemplateByUserId(Long userId, Long templateId) {
+        Template template = getTemplateByTemplateId(templateId);
+        Optional<User> user = userRepository.findById(userId);
+        TemplateDownload templateDownload = TemplateDownload.createTemplateDownload(user.get(), template);
+        templateDownloadRepository.save(templateDownload);
+        CustomTemplate customTemplate = CustomTemplate.createCustomTemplate(template, templateDownload);
+        saveCustomTemplate(customTemplate);
+    }
+    private Template getTemplateByTemplateId(Long templateId) {
+        return templateRepository.findById(templateId).orElseThrow(() -> new EntityNotFoundException(TEMPLATE_NOT_FOUND));
     }
     private void deleteTemplate(Long templateId){
         templateRepository.deleteById(templateId);

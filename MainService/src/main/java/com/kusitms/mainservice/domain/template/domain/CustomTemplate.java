@@ -1,6 +1,7 @@
 package com.kusitms.mainservice.domain.template.domain;
 
 import com.kusitms.mainservice.domain.roadmap.domain.CustomRoadmapTemplate;
+import com.kusitms.mainservice.domain.template.dto.request.UpdateTemplateRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -35,6 +36,10 @@ public class CustomTemplate {
                 .build();
         templateDownload.addCustomTemplate(customTemplate);
         return customTemplate;
+    }
+    public void updateCustomTemplate(UpdateTemplateRequestDto updateTemplateRequestDto){
+        this.title = updateTemplateRequestDto.getTitle();
+        this.templateType =TemplateType.getEnumTemplateTypeFromStringTemplateType(updateTemplateRequestDto.getTemplateType());
     }
 
     public void addCustomRoadmapTemplate(CustomRoadmapTemplate customRoadmapTemplate){

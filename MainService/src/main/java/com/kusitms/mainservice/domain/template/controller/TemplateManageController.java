@@ -3,6 +3,7 @@ package com.kusitms.mainservice.domain.template.controller;
 import com.kusitms.mainservice.domain.template.dto.request.TemplateReviewRequestDto;
 import com.kusitms.mainservice.domain.template.dto.request.TemplateSharingRequestDto;
 import com.kusitms.mainservice.domain.template.dto.request.TemplateTeamRequestDto;
+import com.kusitms.mainservice.domain.template.dto.request.UpdateTemplateRequestDto;
 import com.kusitms.mainservice.domain.template.dto.response.CreateTemplateResponseDto;
 import com.kusitms.mainservice.domain.template.dto.response.CustomTemplateDetailResponseDto;
 import com.kusitms.mainservice.domain.template.dto.response.TemplateDownloadDetailResponseDto;
@@ -19,6 +20,16 @@ import org.springframework.web.bind.annotation.*;
 public class TemplateManageController {
     private final TemplateManageService templateManageService;
 
+    @GetMapping("/save/user")
+    public ResponseEntity<SuccessResponse<?>> saveTemplateForUser(@UserId final Long userId, @RequestParam Long templateId) {
+        templateManageService.saveTemplateByUserId(userId, templateId);
+        return SuccessResponse.ok(null);
+    }
+    @PostMapping("/update")
+    public ResponseEntity<SuccessResponse<?>> update(@UserId final Long userId,@RequestBody final UpdateTemplateRequestDto updateTemplateRequestDto ){
+        templateManageService.updateTemplate(userId,updateTemplateRequestDto );
+        return SuccessResponse.ok(null);
+    }
     @PostMapping("/team")
     public ResponseEntity<SuccessResponse<?>> addTemplateToTeam(@UserId final Long userId,
                                                                 @RequestBody final TemplateTeamRequestDto requestDto){
