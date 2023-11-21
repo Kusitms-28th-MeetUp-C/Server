@@ -70,12 +70,19 @@ public class ChatService {
     }
 
     private List<UserChatResponseDto> createUserChatResponseDto(List<Chat> chatList, String userName) {
-        return chatList.stream()
+        List<Chat> filterChat = getChatEmptyContentFilter(chatList);
+        return filterChat.stream()
                 .map(chat ->
                         UserChatResponseDto.of(
                                 getChatUserReceivedUser(chat, userName),
                                 getLastChatContent(chat.getChatContentList()).getContent(),
                                 getLastChatContent(chat.getChatContentList()).getTime()))
+                .collect(Collectors.toList());
+    }
+
+    private List<Chat> getChatEmptyContentFilter(List<Chat> chatList){
+        return chatList.stream()
+                .filter(chat -> (chat.getChatContentList().size() != 0))
                 .collect(Collectors.toList());
     }
 
