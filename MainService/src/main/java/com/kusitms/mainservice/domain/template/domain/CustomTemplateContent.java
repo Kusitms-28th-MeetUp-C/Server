@@ -21,7 +21,9 @@ public class CustomTemplateContent {
 
     @Field(name = "content")
     private String content;
-
+    public void updateCustomTemplateContent(String content){
+        this.content=content;
+    }
     public static CustomTemplateContent createCustomTemplateContent(Long templateId, String content){
         return CustomTemplateContent.builder()
                 .templateId(templateId)
