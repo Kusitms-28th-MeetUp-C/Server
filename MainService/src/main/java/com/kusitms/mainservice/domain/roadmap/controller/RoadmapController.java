@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class RoadmapController {
     private final RoadmapService roadmapService;
-    private final RoadmapManageService roadmapManageService;
-
     @PostMapping
     public ResponseEntity<SuccessResponse<?>> getRoadmapByTitleAndRoadmapType(@RequestBody SearchRoadmapRequestDto searchRoadmapRequestDto, @PageableDefault(size = 12) Pageable pageable){
         final Page<SearchBaseRoadmapResponseDto> searchRoadmapResponseDto = roadmapService.searchRoadmapByTitleAndRoadmapType(searchRoadmapRequestDto, pageable);

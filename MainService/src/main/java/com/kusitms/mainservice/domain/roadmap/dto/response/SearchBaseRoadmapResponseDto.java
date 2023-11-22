@@ -15,13 +15,13 @@ public class SearchBaseRoadmapResponseDto {
     private int step;
     private int count;
 
-    public static  SearchBaseRoadmapResponseDto of(Roadmap roadmap, int step ){
+    public static  SearchBaseRoadmapResponseDto of(Roadmap roadmap, int step,int count ){
         return SearchBaseRoadmapResponseDto.builder()
                 .roadmapId(roadmap.getId())
                 .type(roadmap.getRoadmapType())
                 .title(roadmap.getTitle())
                 .step(step)
-                .count(roadmap.getCount())
+                .count(count)
                 .build();
     }
 }

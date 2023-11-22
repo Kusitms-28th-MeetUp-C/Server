@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 public class ModifyUserProfileRequestDto {
     private String profile;
     private String name;
-    private UserType userType;
+    private String userType;
 
 }

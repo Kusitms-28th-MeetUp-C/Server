@@ -123,7 +123,8 @@ public class RoadmapService {
         return roadmapPage.map(roadmap ->
                         SearchBaseRoadmapResponseDto.of(
                                 roadmap,
-                                getRoadmapStep(roadmap)
+                                getRoadmapStep(roadmap),
+                                getTeamCount(roadmap)
                         )
                 );
     }
