@@ -24,6 +24,9 @@ public class SearchService {
                 = SearchResultElementResponseDto.listOf(searchUserTemplateList);
         return SearchResultResponseDto.of(searchResultElementResponseDtoList);
     }
+    public void update(Long templateId, String relatedTeamTitle){
+        searchRepository.updateRelatedTeamTitle(templateId, relatedTeamTitle);
+    }
 
     private List<SearchUserTemplate> getSearchResult(String searchText, String userId){
         if(!Objects.equals(searchText, EMPTY_STRING))
@@ -31,4 +34,5 @@ public class SearchService {
         else
             return searchRepository.findAllByUserId(userId);
     }
+
 }

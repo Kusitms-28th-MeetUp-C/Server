@@ -67,4 +67,15 @@ public class SearchRepositoryImpl implements SearchRepository {
                                                     .append("path", "userId"))))))
                         .append("sort",  new Document("unused", new Document("$meta", "searchScore"))))));
     }
+    @Override
+    public void updateRelatedTeamTitle(Long templateId, String newRelatedTeamTitle) {
+        MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
+        MongoCollection<Document> collection = database.getCollection(COLLECTION_NAME);
+
+        // Update query
+        Document updateQuery = new Document("$set", new Document("relatedTeamTitle", newRelatedTeamTitle));
+
+        // Find and update the document with the specified templateId
+        collection.updateOne(new Document("templateId", templateId), updateQuery);
+    }
 }

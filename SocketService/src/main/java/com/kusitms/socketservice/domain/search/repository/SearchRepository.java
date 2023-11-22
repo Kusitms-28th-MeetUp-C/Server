@@ -8,4 +8,5 @@ public interface SearchRepository {
     List<SearchUserTemplate> findAllBySearchText(String searchText, String userId);
 
     List<SearchUserTemplate> findAllByUserId(String userId);
+    void updateRelatedTeamTitle(Long templateId, String newTeamTitle);
 }
