@@ -1,7 +1,6 @@
 package com.kusitms.socketservice.domain.search.controller;
 
 import com.kusitms.socketservice.domain.search.dto.request.SearchRequestDto;
-import com.kusitms.socketservice.domain.search.dto.request.UpdateRequestDto;
 import com.kusitms.socketservice.domain.search.dto.response.SearchResultResponseDto;
 import com.kusitms.socketservice.domain.search.service.SearchService;
 import com.kusitms.socketservice.global.common.MessageSuccessCode;
@@ -28,9 +27,5 @@ public class SearchController {
                                 final SearchRequestDto searchRequestDto) {
         final SearchResultResponseDto responseDto = searchService.getSearchResult(userId, searchRequestDto);
         template.convertAndSend("/sub/search/" + sessionId, MessageSuccessResponse.of(MessageSuccessCode.SEARCH, responseDto));
-    }
-    @PutMapping("/update")
-    public void updateRelatedTeamTitle(@RequestBody UpdateRequestDto updateRequestDto) {
-            searchService.update(updateRequestDto.getTemplateId(), updateRequestDto.getTeamTitle());
     }
 }
