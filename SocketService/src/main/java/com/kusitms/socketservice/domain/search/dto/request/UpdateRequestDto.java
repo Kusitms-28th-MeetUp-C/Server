@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class UpdateRequestDto {
-    private String title;
+    private String teamTitle;
     private Long templateId;
 }
