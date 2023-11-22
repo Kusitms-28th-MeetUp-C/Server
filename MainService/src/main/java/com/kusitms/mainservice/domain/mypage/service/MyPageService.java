@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.kusitms.mainservice.domain.user.domain.User.getProfile;
 import static com.kusitms.mainservice.global.error.ErrorCode.USER_NOT_FOUND;
 
 @Slf4j
@@ -61,7 +60,6 @@ public class MyPageService {
     public MyPageUserResponseDto updateUserInfo( Long userId, ModifyUserProfileRequestDto modifyUserProfileRequestDto){
         User user = getUserByUserId(userId);
         user.updateMypage(modifyUserProfileRequestDto);
-
         return createMyPageUserResponseDto(user);
     }
     public NotMyPageTemplateResponseDto getNotMyPageTemplateResponse(Long userId, Pageable pageable){
@@ -94,7 +92,7 @@ public class MyPageService {
             Page<MySharedContentDto> mySharedContentDtoPage = createRoadmapContentpage(userId,pageable);
             return mySharedContentDtoPage;
         }
-        return createmySharedContentDtoList(userId,pageable);
+        return createMySharedContentDtoList(userId,pageable);
     }
     private Page<MySharedContentDto> createTemplateContentpage(Long userId,Pageable pageable){
         Page<Template> templatePage = templateRepository.findAllByUserId(userId, pageable);
@@ -127,11 +125,11 @@ public class MyPageService {
     private MyPageResponseDto createMyPageResponseDto(Long userId, Pageable pageable) {
        User user = getUserByUserId(userId);
         MyPageUserResponseDto myPageUserResponseDto = createMyPageUserResponseDto(user);
-        Page<MySharedContentDto> mySharedContentDtoList = createmySharedContentDtoList(userId, pageable);
+        Page<MySharedContentDto> mySharedContentDtoList = createMySharedContentDtoList(userId, pageable);
         return MyPageResponseDto.of(myPageUserResponseDto, mySharedContentDtoList);
     }
 
-    private Page<MySharedContentDto> createmySharedContentDtoList(Long userId, Pageable pageable) {
+    private Page<MySharedContentDto> createMySharedContentDtoList(Long userId, Pageable pageable) {
         List<Template> templateList = templateRepository.findAllByUserId(userId);
         List<Roadmap> roadmapList = roadmapRepository.findAllByUserId(userId);
         List<MySharedContentDto> contentList = new ArrayList<>();

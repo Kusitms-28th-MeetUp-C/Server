@@ -1,7 +1,6 @@
 package com.kusitms.mainservice.domain.roadmap.controller;
 
 import com.kusitms.mainservice.domain.roadmap.dto.request.RoadmapSharingRequestDto;
-import com.kusitms.mainservice.domain.roadmap.dto.response.CustomRoadmapStepDto;
 import com.kusitms.mainservice.domain.roadmap.dto.response.CustomRoadmapTitleAndStep;
 import com.kusitms.mainservice.domain.roadmap.service.RoadmapManageService;
 import com.kusitms.mainservice.global.common.SuccessResponse;
@@ -9,8 +8,6 @@ import com.kusitms.mainservice.global.config.auth.UserId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/manage/roadmap")

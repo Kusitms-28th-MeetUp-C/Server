@@ -1,7 +1,6 @@
 package com.kusitms.mainservice.domain.roadmap.domain;
 
 import com.kusitms.mainservice.domain.template.domain.Template;
-import com.kusitms.mainservice.domain.template.domain.TemplateDownload;
 import jakarta.persistence.*;
 import lombok.*;
 

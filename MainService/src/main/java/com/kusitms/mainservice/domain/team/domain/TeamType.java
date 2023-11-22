@@ -11,12 +11,16 @@ import static com.kusitms.mainservice.global.error.ErrorCode.INVALID_TEAM_TYPE;
 @RequiredArgsConstructor
 @Getter
 public enum TeamType {
-    CONFERENCE("conference"),
+    IT("it"),
+    SURVEY_DATA_ANALYSIS("survey_data_analysis"),
+    CORPORATE_ANALYSIS("corporate_analysis"),
+    PT("pt"),
+    DESIGN("design"),
+    MARKETING("marketing"),
+    ETC("etc"),
+    TEAM("team"),
     CLUB("club"),
-    SIDE_PROJECT("side_project"),
-    UNIVERSITY_TEAM_PLAY("university_team_play"),
-    VIDEO("video"),
-    MARKING("marking");
+    VIDEO("video");
 
     private final String stringTeamType;
 

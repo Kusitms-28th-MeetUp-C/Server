@@ -106,7 +106,7 @@ public class User {
     public void updateMypage(ModifyUserProfileRequestDto modifyUserProfileRequestDto) {
         this.profile = modifyUserProfileRequestDto.getProfile();
         this.name = modifyUserProfileRequestDto.getName();
-        this.userType = modifyUserProfileRequestDto.getUserType();
+        this.userType = UserType.getEnumUserTypeFromStringUserType(modifyUserProfileRequestDto.getUserType());
     }
 
     public static User getProfile(User user, String profile) {

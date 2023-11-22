@@ -1,9 +1,6 @@
 package com.kusitms.mainservice.domain.roadmap.domain;
 
 import com.kusitms.mainservice.domain.roadmap.dto.request.RoadmapSharingRequestDto;
-import com.kusitms.mainservice.domain.template.domain.Template;
-import com.kusitms.mainservice.domain.template.domain.TemplateType;
-import com.kusitms.mainservice.domain.template.dto.request.TemplateSharingRequestDto;
 import com.kusitms.mainservice.domain.user.domain.User;
 import com.kusitms.mainservice.global.common.BaseTimeEntity;
 import jakarta.persistence.*;

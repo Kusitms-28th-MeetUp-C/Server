@@ -1,6 +1,5 @@
 package com.kusitms.mainservice.domain.roadmap.domain;
 
-import com.kusitms.mainservice.domain.roadmap.dto.request.RoadmapSharingRequestDto;
 import com.kusitms.mainservice.domain.roadmap.dto.request.StepDto;
 import jakarta.persistence.*;
 import lombok.*;
