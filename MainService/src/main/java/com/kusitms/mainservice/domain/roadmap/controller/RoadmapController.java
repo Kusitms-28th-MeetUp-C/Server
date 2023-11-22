@@ -3,7 +3,6 @@ package com.kusitms.mainservice.domain.roadmap.controller;
 import com.kusitms.mainservice.domain.roadmap.dto.request.SearchRoadmapRequestDto;
 import com.kusitms.mainservice.domain.roadmap.dto.response.RoadmapDetailInfoResponseDto;
 import com.kusitms.mainservice.domain.roadmap.dto.response.SearchBaseRoadmapResponseDto;
-import com.kusitms.mainservice.domain.roadmap.service.RoadmapManageService;
 import com.kusitms.mainservice.domain.roadmap.service.RoadmapService;
 import com.kusitms.mainservice.global.common.SuccessResponse;
 import lombok.RequiredArgsConstructor;
