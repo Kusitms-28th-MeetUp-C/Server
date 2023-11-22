@@ -31,6 +31,6 @@ public class SearchController {
     }
     @PutMapping("/update")
     public void updateRelatedTeamTitle(@RequestBody UpdateRequestDto updateRequestDto) {
-            searchService.update(updateRequestDto.getTemplateId(), updateRequestDto.getTitle());
+            searchService.update(updateRequestDto.getTemplateId(), updateRequestDto.getTeamTitle());
     }
 }
