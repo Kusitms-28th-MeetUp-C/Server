@@ -53,7 +53,7 @@ public class TeamRoadmapService {
         CustomRoadmap teamRoadmap = team.getRoadmapDownload().getCustomRoadmap();
         List<CustomRoadmapSpaceDetailResponseDto> teamRoadmapSpaceDetailResponseDtoList
                 = createTeamRoadmapSpaceDetailResponseDto(teamRoadmap.getCustomRoadmapSpaceList());
-        Long processingNum = getProcessingNum(teamRoadmap);
+        Long processingNum = getProcessingNum(teamRoadmap)+1;
         CustomRoadmapDetailResponseDto teamRoadmapDetailResponseDto
                 = CustomRoadmapDetailResponseDto.of(teamRoadmap, processingNum.intValue(), teamRoadmapSpaceDetailResponseDtoList);
         return TeamRoadmapDetailResponseDto.of(team, teamSpaceResponseDtoList, teamRoadmapDetailResponseDto);

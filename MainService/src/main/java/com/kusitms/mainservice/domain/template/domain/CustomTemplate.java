@@ -17,7 +17,7 @@ import java.util.List;
 public class CustomTemplate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "custom_tamplate_id")
+    @Column(name = "custom_template_id")
     private Long id;
     private String title;
     @Enumerated(EnumType.STRING)
