@@ -1,6 +1,7 @@
 package com.kusitms.socketservice.domain.search.controller;
 
 import com.kusitms.socketservice.domain.search.dto.request.SearchRequestDto;
+import com.kusitms.socketservice.domain.search.dto.request.UpdateRequestDto;
 import com.kusitms.socketservice.domain.search.dto.response.SearchResultResponseDto;
 import com.kusitms.socketservice.domain.search.service.SearchService;
 import com.kusitms.socketservice.global.common.MessageSuccessCode;
@@ -11,6 +12,7 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,7 +30,7 @@ public class SearchController {
         template.convertAndSend("/sub/search/" + sessionId, MessageSuccessResponse.of(MessageSuccessCode.SEARCH, responseDto));
     }
     @PutMapping("/update")
-    public void updateRelatedTeamTitle(@RequestParam String teamTitle, @RequestParam Long templateId) {
-            searchService.update(templateId, teamTitle);
+    public void updateRelatedTeamTitle(@RequestBody UpdateRequestDto updateRequestDto) {
+            searchService.update(updateRequestDto.getTemplateId(), updateRequestDto.getTitle());
     }
 }
