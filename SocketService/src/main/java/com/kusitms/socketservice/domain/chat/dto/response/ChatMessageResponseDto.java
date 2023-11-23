@@ -1,6 +1,5 @@
 package com.kusitms.socketservice.domain.chat.dto.response;
 
-import com.kusitms.socketservice.domain.chat.domain.Chat;
 import lombok.Builder;
 import lombok.Getter;
 

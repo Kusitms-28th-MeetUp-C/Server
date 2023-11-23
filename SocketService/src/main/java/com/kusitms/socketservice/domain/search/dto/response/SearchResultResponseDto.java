@@ -10,7 +10,7 @@ import java.util.List;
 public class SearchResultResponseDto {
     private List<SearchResultElementResponseDto> searchResult;
 
-    public static SearchResultResponseDto of(List<SearchResultElementResponseDto> searchResult){
+    public static SearchResultResponseDto of(List<SearchResultElementResponseDto> searchResult) {
         return SearchResultResponseDto.builder()
                 .searchResult(searchResult)
                 .build();

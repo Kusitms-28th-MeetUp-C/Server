@@ -12,7 +12,7 @@ public class ChatUserResponseDto {
     private String type;
     private String profile;
 
-    public static ChatUserResponseDto of(ChatUser chatUser){
+    public static ChatUserResponseDto of(ChatUser chatUser) {
         return ChatUserResponseDto.builder()
                 .sessionId(chatUser.getSessionId())
                 .name(chatUser.getName())

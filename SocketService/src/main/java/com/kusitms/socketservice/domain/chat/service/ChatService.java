@@ -18,7 +18,10 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.kusitms.socketservice.domain.chat.domain.ChatContent.createChatContent;
@@ -56,7 +59,7 @@ public class ChatService {
         return ChatListResponseDto.of(userChatResponseDtoList);
     }
 
-    private List<String> getSessionIdList(String firstSessionId, String secondSessionId){
+    private List<String> getSessionIdList(String firstSessionId, String secondSessionId) {
         List<String> sessionList = new ArrayList<>();
         sessionList.add(firstSessionId);
         sessionList.add(secondSessionId);
@@ -79,7 +82,7 @@ public class ChatService {
                 .collect(Collectors.toList());
     }
 
-    private List<Chat> getChatEmptyContentFilter(List<Chat> chatList){
+    private List<Chat> getChatEmptyContentFilter(List<Chat> chatList) {
         return chatList.stream()
                 .filter(chat -> (chat.getChatContentList().size() != 0))
                 .collect(Collectors.toList());
