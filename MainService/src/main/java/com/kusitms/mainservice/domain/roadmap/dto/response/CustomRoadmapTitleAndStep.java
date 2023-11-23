@@ -11,7 +11,7 @@ public class CustomRoadmapTitleAndStep {
     private String title;
     private List<CustomRoadmapStepDto> stepList;
 
-    public static CustomRoadmapTitleAndStep of( List<CustomRoadmapStepDto> customRoadmapStepDtoList, String customRoadmapTitle){
+    public static CustomRoadmapTitleAndStep of(List<CustomRoadmapStepDto> customRoadmapStepDtoList, String customRoadmapTitle) {
         return CustomRoadmapTitleAndStep.builder()
                 .title(customRoadmapTitle)
                 .stepList(customRoadmapStepDtoList)

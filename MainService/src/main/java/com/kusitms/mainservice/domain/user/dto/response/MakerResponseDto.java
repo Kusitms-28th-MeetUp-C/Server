@@ -11,7 +11,7 @@ public class MakerResponseDto {
     int roadmapCount;
     Long sessionId;
 
-    public static MakerResponseDto of(String name, int templateCount, int roadmapCount, Long sessionId){
+    public static MakerResponseDto of(String name, int templateCount, int roadmapCount, Long sessionId) {
         return MakerResponseDto.builder()
                 .name(name)
                 .templateCount(templateCount)

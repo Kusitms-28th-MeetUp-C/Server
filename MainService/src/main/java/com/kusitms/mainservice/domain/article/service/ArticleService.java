@@ -17,14 +17,15 @@ import java.util.stream.Collectors;
 @Service
 public class ArticleService {
     private final ArticleRepository articleRepository;
-    public List<ArticleResponseDto> getArticleList(){
-        List<ArticleResponseDto> articleResponseDtoList = createArticleResponseDtoList();
-        return articleResponseDtoList;
+
+    public List<ArticleResponseDto> getArticleList() {
+        return createArticleResponseDtoList();
     }
-    private List<ArticleResponseDto> createArticleResponseDtoList(){
+
+    private List<ArticleResponseDto> createArticleResponseDtoList() {
         List<Article> articleList = articleRepository.findAll();
         return articleList.stream()
-                .map(article -> ArticleResponseDto.of(article))
+                .map(ArticleResponseDto::of)
                 .collect(Collectors.toList());
     }
 }

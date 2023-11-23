@@ -8,7 +8,7 @@ import lombok.Getter;
 public class TeamTitleResponseDto {
     private String title;
 
-    public static TeamTitleResponseDto of(String title){
+    public static TeamTitleResponseDto of(String title) {
         return TeamTitleResponseDto.builder()
                 .title(title)
                 .build();

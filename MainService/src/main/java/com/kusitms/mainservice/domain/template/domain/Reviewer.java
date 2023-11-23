@@ -24,7 +24,7 @@ public class Reviewer {
     @JoinColumn(name = "template_id")
     private Template template;
 
-    public static Reviewer createReviewer(User user, TemplateReview templateReview, Template template){
+    public static Reviewer createReviewer(User user, TemplateReview templateReview, Template template) {
         Reviewer reviewer = Reviewer.builder()
                 .user(user)
                 .templateReview(templateReview)

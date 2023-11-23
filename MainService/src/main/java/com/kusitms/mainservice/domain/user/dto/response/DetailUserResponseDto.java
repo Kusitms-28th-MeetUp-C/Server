@@ -16,7 +16,7 @@ public class DetailUserResponseDto {
     private int roadmapNum;
     private String sessionId;
 
-    public static DetailUserResponseDto of(User user, int templateNum, int roadmapNum){
+    public static DetailUserResponseDto of(User user, int templateNum, int roadmapNum) {
         return DetailUserResponseDto.builder()
                 .id(user.getId())
                 .profile(user.getProfile())

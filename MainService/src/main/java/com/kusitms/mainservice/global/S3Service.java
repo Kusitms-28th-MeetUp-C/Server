@@ -1,9 +1,7 @@
 package com.kusitms.mainservice.global;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,8 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 @Slf4j
@@ -24,7 +20,6 @@ import java.io.IOException;
 @Service
 public class S3Service {
     private final AmazonS3 amazonS3;
-
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
@@ -56,7 +51,7 @@ public class S3Service {
                 .body(urlResource);
     }
 
-    public void deleteImage(String originalFilename)  {
+    public void deleteImage(String originalFilename) {
         amazonS3.deleteObject(bucket, originalFilename);
     }
 }

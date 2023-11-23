@@ -17,14 +17,15 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class RoadmapController {
     private final RoadmapService roadmapService;
+
     @PostMapping
-    public ResponseEntity<SuccessResponse<?>> getRoadmapByTitleAndRoadmapType(@RequestBody SearchRoadmapRequestDto searchRoadmapRequestDto, @PageableDefault(size = 12) Pageable pageable){
+    public ResponseEntity<SuccessResponse<?>> getRoadmapByTitleAndRoadmapType(@RequestBody SearchRoadmapRequestDto searchRoadmapRequestDto, @PageableDefault(size = 12) Pageable pageable) {
         final Page<SearchBaseRoadmapResponseDto> searchRoadmapResponseDto = roadmapService.searchRoadmapByTitleAndRoadmapType(searchRoadmapRequestDto, pageable);
         return SuccessResponse.ok(searchRoadmapResponseDto);
     }
 
     @GetMapping("/detail")
-    public ResponseEntity<SuccessResponse<?>> getRoadmapDetailByRoadmapId(@RequestParam Long roadmapId){
+    public ResponseEntity<SuccessResponse<?>> getRoadmapDetailByRoadmapId(@RequestParam Long roadmapId) {
         final RoadmapDetailInfoResponseDto roadmapDetailInfoResponseDto = roadmapService.getRoadmapDetail(roadmapId);
         return SuccessResponse.ok(roadmapDetailInfoResponseDto);
     }

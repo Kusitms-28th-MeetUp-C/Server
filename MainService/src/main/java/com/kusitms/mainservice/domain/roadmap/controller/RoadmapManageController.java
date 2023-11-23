@@ -14,14 +14,15 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class RoadmapManageController {
     private final RoadmapManageService roadmapManageService;
+
     @PostMapping
-    public ResponseEntity<SuccessResponse<?>> createRoadmap(@UserId Long userId, @RequestBody RoadmapSharingRequestDto roadmapSharingRequestDto){
+    public ResponseEntity<SuccessResponse<?>> createRoadmap(@UserId Long userId, @RequestBody RoadmapSharingRequestDto roadmapSharingRequestDto) {
         roadmapManageService.createSharingRoadmap(userId, roadmapSharingRequestDto);
         return SuccessResponse.created(null);
     }
 
     @GetMapping
-    public ResponseEntity<SuccessResponse<?>> getCustomSpaceStep(@UserId Long userId, @RequestParam Long teamId){
+    public ResponseEntity<SuccessResponse<?>> getCustomSpaceStep(@UserId Long userId, @RequestParam Long teamId) {
         final CustomRoadmapTitleAndStep customRoadmapTitleAndStep = roadmapManageService.getCustomRoadmapStepDto(userId, teamId);
         return SuccessResponse.ok(customRoadmapTitleAndStep);
 

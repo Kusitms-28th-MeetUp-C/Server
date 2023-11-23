@@ -11,7 +11,8 @@ import org.springframework.data.domain.Page;
 public class NotMyPageTemplateResponseDto {
     private DetailUserResponseDto user;
     private Page<SearchBaseTemplateResponseDto> templateList;
-    public static NotMyPageTemplateResponseDto of(DetailUserResponseDto user, Page<SearchBaseTemplateResponseDto> templateList ){
+
+    public static NotMyPageTemplateResponseDto of(DetailUserResponseDto user, Page<SearchBaseTemplateResponseDto> templateList) {
         return NotMyPageTemplateResponseDto.builder()
                 .user(user)
                 .templateList(templateList)

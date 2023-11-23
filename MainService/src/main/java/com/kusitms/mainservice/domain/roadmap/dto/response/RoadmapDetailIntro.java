@@ -11,7 +11,7 @@ public class RoadmapDetailIntro {
     private RoadmapDetailBaseIntro simpleInfo;
     private String introduction;
 
-    public static RoadmapDetailIntro of(Roadmap roadmap, RoadmapDetailBaseIntro roadmapDetailBaseIntro){
+    public static RoadmapDetailIntro of(Roadmap roadmap, RoadmapDetailBaseIntro roadmapDetailBaseIntro) {
         return RoadmapDetailIntro.builder()
                 .date(roadmap.getCreateDate().toLocalDate().toString())
                 .simpleInfo(roadmapDetailBaseIntro)

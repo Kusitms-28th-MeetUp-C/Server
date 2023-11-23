@@ -12,7 +12,7 @@ public class MySharedContentDto {
     private String title;
     private String contentType;
 
-    public static MySharedContentDto of(Long id,SharedType sharedType, String title, String contentType){
+    public static MySharedContentDto of(Long id, SharedType sharedType, String title, String contentType) {
         return MySharedContentDto.builder()
                 .id(id)
                 .sharedType(sharedType)

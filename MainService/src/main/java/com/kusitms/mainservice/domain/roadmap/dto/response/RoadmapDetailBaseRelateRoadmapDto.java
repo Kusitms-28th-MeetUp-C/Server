@@ -12,7 +12,8 @@ public class RoadmapDetailBaseRelateRoadmapDto {
     private String title;
     private int step;
     private int count;
-    public static RoadmapDetailBaseRelateRoadmapDto of(Roadmap roadmap, int count){
+
+    public static RoadmapDetailBaseRelateRoadmapDto of(Roadmap roadmap, int count) {
         return RoadmapDetailBaseRelateRoadmapDto.builder()
                 .roadmapId(roadmap.getId())
                 .title(roadmap.getTitle())

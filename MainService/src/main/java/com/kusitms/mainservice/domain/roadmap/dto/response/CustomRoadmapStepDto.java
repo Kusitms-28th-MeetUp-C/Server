@@ -9,7 +9,8 @@ import lombok.Getter;
 public class CustomRoadmapStepDto {
     private Long stepId;
     private String title;
-    public static CustomRoadmapStepDto of(CustomRoadmapSpace customRoadmapSpace){
+
+    public static CustomRoadmapStepDto of(CustomRoadmapSpace customRoadmapSpace) {
         return CustomRoadmapStepDto.builder()
                 .stepId(customRoadmapSpace.getId())
                 .title(customRoadmapSpace.getTitle())

@@ -16,7 +16,8 @@ public class MyPageUserResponseDto {
     private int roadmapNum;
     private int point;
     private String sessionId;
-    public static MyPageUserResponseDto of(User user,int templateNum, int roadmapNum, int point){
+
+    public static MyPageUserResponseDto of(User user, int templateNum, int roadmapNum, int point) {
         return MyPageUserResponseDto.builder()
                 .userId(user.getId())
                 .profile(user.getProfile())

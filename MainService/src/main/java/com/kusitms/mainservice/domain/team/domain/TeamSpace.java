@@ -30,7 +30,7 @@ public class TeamSpace {
         return teamSpace;
     }
 
-    public void addTeam(Team team){
+    public void addTeam(Team team) {
         this.team = team;
     }
 }

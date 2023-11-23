@@ -9,7 +9,8 @@ import lombok.Getter;
 public class CreateTemplateResponseDto {
     private Long templateId;
     private String title;
-    public static CreateTemplateResponseDto of(Template template){
+
+    public static CreateTemplateResponseDto of(Template template) {
         return CreateTemplateResponseDto.builder()
                 .templateId(template.getId())
                 .title(template.getTitle())

@@ -32,8 +32,8 @@ public class CustomRoadmapSpace {
     @Builder.Default
     private List<CustomRoadmapTemplate> customRoadmapTemplateList = new ArrayList<>();
 
-    public static CustomRoadmapSpace createCustomRoadmapSpace(RoadmapSpace roadmapSpace, CustomRoadmap customRoadmap){
-        CustomRoadmapSpace customRoadmapSpace =  CustomRoadmapSpace.builder()
+    public static CustomRoadmapSpace createCustomRoadmapSpace(RoadmapSpace roadmapSpace, CustomRoadmap customRoadmap) {
+        CustomRoadmapSpace customRoadmapSpace = CustomRoadmapSpace.builder()
                 .title(roadmapSpace.getTitle())
                 .step(roadmapSpace.getStep())
                 .startDate(LocalDate.now())
@@ -46,17 +46,17 @@ public class CustomRoadmapSpace {
         return customRoadmapSpace;
     }
 
-    public void addCustomRoadmapTemplate(CustomRoadmapTemplate customRoadmapTemplate){
+    public void addCustomRoadmapTemplate(CustomRoadmapTemplate customRoadmapTemplate) {
         this.customRoadmapTemplateList.add(customRoadmapTemplate);
     }
 
-    public void updateCompletedAneEndTime(boolean isCompleted){
+    public void updateCompletedAneEndTime(boolean isCompleted) {
         this.isCompleted = isCompleted;
-        if(isCompleted) this.updateEndTime(LocalDate.now());
+        if (isCompleted) this.updateEndTime(LocalDate.now());
         else this.updateEndTime(null);
     }
 
-    public void updateEndTime(LocalDate endDate){
+    public void updateEndTime(LocalDate endDate) {
         this.endDate = endDate;
     }
 }

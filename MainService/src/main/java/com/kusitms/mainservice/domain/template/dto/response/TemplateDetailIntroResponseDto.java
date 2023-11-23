@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
+
 @Getter
 @Builder
 public class TemplateDetailIntroResponseDto {
@@ -13,7 +14,7 @@ public class TemplateDetailIntroResponseDto {
     private String introduction;
     private List<ReviewContentResponseDto> reviews;
 
-    public static TemplateDetailIntroResponseDto of(Template template, TemplateDetailIntroBaseResponseDto templateIntro, List<ReviewContentResponseDto> reviews){
+    public static TemplateDetailIntroResponseDto of(Template template, TemplateDetailIntroBaseResponseDto templateIntro, List<ReviewContentResponseDto> reviews) {
         return TemplateDetailIntroResponseDto.builder()
                 .date(template.getCreateDate().toLocalDate().toString())
                 .simpleInfo(templateIntro)

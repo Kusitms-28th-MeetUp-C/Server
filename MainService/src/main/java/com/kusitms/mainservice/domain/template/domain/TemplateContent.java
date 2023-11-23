@@ -3,7 +3,6 @@ package com.kusitms.mainservice.domain.template.domain;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
 @Getter
 @Builder

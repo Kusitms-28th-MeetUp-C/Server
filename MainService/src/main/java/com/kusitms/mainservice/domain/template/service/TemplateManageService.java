@@ -30,9 +30,6 @@ import com.kusitms.mainservice.domain.user.repository.UserRepository;
 import com.kusitms.mainservice.global.error.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -140,10 +137,12 @@ public class TemplateManageService {
         saveCustomTemplateContent(template, customTemplate);
         saveSearchUserTemplate(user, customTemplate);
     }
-    private void deleteCustomTemplateContent(Long templateId){
+
+    private void deleteCustomTemplateContent(Long templateId) {
         customTemplateContentRepository.deleteByTemplateId(templateId);
 
     }
+
     private void updateSearchUserTemplateTeam(Team team, CustomTemplate customTemplate) {
         SearchUserTemplate searchUserTemplate = getSearchUserTemplateFromTemplateId(customTemplate.getId());
         searchUserTemplate.updateTeamTitle(team.getTitle());

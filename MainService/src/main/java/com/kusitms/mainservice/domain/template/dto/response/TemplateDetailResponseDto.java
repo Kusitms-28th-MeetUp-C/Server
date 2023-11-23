@@ -1,7 +1,6 @@
 package com.kusitms.mainservice.domain.template.dto.response;
 
 import com.kusitms.mainservice.domain.template.domain.Template;
-import com.kusitms.mainservice.domain.template.domain.TemplateContent;
 import com.kusitms.mainservice.domain.user.dto.response.DetailUserResponseDto;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,7 +20,7 @@ public class TemplateDetailResponseDto {
     private TemplateDetailConnectRoadmapDto roadmapIdAndConnectRoadmap;
     private DetailUserResponseDto user;
 
-    public static TemplateDetailResponseDto of(Template template, TemplateDetailIntroResponseDto templateIntro,String templateContent , TemplateDetailConnectRoadmapDto roadmapIdAndConnectRoadmap, List<TemplateDetailBaseRelateDto> relatedTemplate, DetailUserResponseDto user){
+    public static TemplateDetailResponseDto of(Template template, TemplateDetailIntroResponseDto templateIntro, String templateContent, TemplateDetailConnectRoadmapDto roadmapIdAndConnectRoadmap, List<TemplateDetailBaseRelateDto> relatedTemplate, DetailUserResponseDto user) {
         return TemplateDetailResponseDto.builder()
                 .templateId(template.getId())
                 .templateType(template.getTemplateType().toString())

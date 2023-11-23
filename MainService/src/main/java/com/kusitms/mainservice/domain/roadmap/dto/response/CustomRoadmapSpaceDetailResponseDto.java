@@ -3,7 +3,6 @@ package com.kusitms.mainservice.domain.roadmap.dto.response;
 import com.kusitms.mainservice.domain.roadmap.domain.CustomRoadmap;
 import com.kusitms.mainservice.domain.roadmap.domain.CustomRoadmapSpace;
 import com.kusitms.mainservice.domain.template.dto.response.BaseCustomTemplateResponseDto;
-import com.kusitms.mainservice.domain.template.dto.response.TemplateTitleResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -22,7 +21,7 @@ public class CustomRoadmapSpaceDetailResponseDto {
     private String introduction;
     private List<BaseCustomTemplateResponseDto> templateList;
 
-    public static List<CustomRoadmapSpaceDetailResponseDto> listOf(CustomRoadmap customRoadmap){
+    public static List<CustomRoadmapSpaceDetailResponseDto> listOf(CustomRoadmap customRoadmap) {
         return customRoadmap.getCustomRoadmapSpaceList().stream()
                 .map(customRoadmapSpace ->
                         CustomRoadmapSpaceDetailResponseDto.of(

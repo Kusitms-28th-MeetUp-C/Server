@@ -36,13 +36,15 @@ public class Roadmap extends BaseTimeEntity {
     @Builder.Default
     private List<RoadmapSpace> roadmapSpaceList = new ArrayList<>();
 
-    public void addRoadmapDownload(RoadmapDownload roadmapDownload){
+    public void addRoadmapDownload(RoadmapDownload roadmapDownload) {
         this.roadmapDownloadList.add(roadmapDownload);
     }
-    public void addRoadmapSpace(RoadmapSpace roadmapSpace){
+
+    public void addRoadmapSpace(RoadmapSpace roadmapSpace) {
         this.roadmapSpaceList.add(roadmapSpace);
     }
-    public static Roadmap createRoadmap(RoadmapSharingRequestDto roadmapSharingRequestDto, RoadmapType roadmapType, User user){
+
+    public static Roadmap createRoadmap(RoadmapSharingRequestDto roadmapSharingRequestDto, RoadmapType roadmapType, User user) {
         Roadmap roadmap = Roadmap.builder()
                 .title(roadmapSharingRequestDto.getTitle())
                 .roadmapType(roadmapType)

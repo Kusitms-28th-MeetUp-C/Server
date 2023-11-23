@@ -94,7 +94,7 @@ public class TeamService {
         CustomRoadmap roadmap = roadmapDownload.getCustomRoadmap();
         List<CustomRoadmapSpaceDetailResponseDto> customRoadmapSpaceDetailResponseDtoList
                 = CustomRoadmapSpaceDetailResponseDto.listOf(roadmap);
-        Long processingNum = getProcessingNum(roadmap)+1;
+        Long processingNum = getProcessingNum(roadmap) + 1;
         return CustomRoadmapDetailResponseDto.of(roadmap, processingNum.intValue(), customRoadmapSpaceDetailResponseDtoList);
     }
 

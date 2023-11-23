@@ -1,6 +1,5 @@
 package com.kusitms.mainservice.domain.team.dto.response;
 
-
 import com.kusitms.mainservice.domain.team.domain.TeamSpace;
 import com.kusitms.mainservice.domain.team.domain.TeamSpaceType;
 import lombok.Builder;
@@ -15,7 +14,7 @@ public class TeamSpaceResponseDto {
     private TeamSpaceType spaceType;
     private String url;
 
-    public static List<TeamSpaceResponseDto> listOf(List<TeamSpace> teamSpaceList){
+    public static List<TeamSpaceResponseDto> listOf(List<TeamSpace> teamSpaceList) {
         return teamSpaceList.stream()
                 .map(TeamSpaceResponseDto::of)
                 .collect(Collectors.toList());

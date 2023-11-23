@@ -1,12 +1,10 @@
 package com.kusitms.mainservice.domain.template.dto.response;
 
-import com.kusitms.mainservice.domain.roadmap.dto.response.RoadmapTitleResponseDto;
 import com.kusitms.mainservice.domain.template.domain.Template;
 import com.kusitms.mainservice.domain.template.domain.TemplateType;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.List;
 @Builder
 @Getter
 public class SearchBaseTemplateResponseDto {
@@ -17,7 +15,7 @@ public class SearchBaseTemplateResponseDto {
     private int estimatedTime;
     private String connectedRoadmap;
 
-    public static SearchBaseTemplateResponseDto of(Template template, int count,String connectedRoadmap){
+    public static SearchBaseTemplateResponseDto of(Template template, int count, String connectedRoadmap) {
         return SearchBaseTemplateResponseDto.builder()
                 .templateId(template.getId())
                 .title(template.getTitle())

@@ -30,7 +30,7 @@ public class CustomRoadmap {
     @Builder.Default
     private List<CustomRoadmapSpace> customRoadmapSpaceList = new ArrayList<>();
 
-    public static CustomRoadmap createCustomRoadmap(Roadmap roadmap, RoadmapDownload roadmapDownload){
+    public static CustomRoadmap createCustomRoadmap(Roadmap roadmap, RoadmapDownload roadmapDownload) {
         CustomRoadmap customRoadmap = CustomRoadmap.builder()
                 .title(roadmap.getTitle())
                 .startDate(LocalDate.now())
@@ -42,11 +42,11 @@ public class CustomRoadmap {
         return customRoadmap;
     }
 
-    public void updateEndDate(LocalDate endDate){
+    public void updateEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 
-    public void addCustomRoadmapSpace(CustomRoadmapSpace customRoadmapSpace){
+    public void addCustomRoadmapSpace(CustomRoadmapSpace customRoadmapSpace) {
         this.customRoadmapSpaceList.add(customRoadmapSpace);
     }
 }

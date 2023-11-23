@@ -23,7 +23,7 @@ public class TeamController {
     private final TeamRoadmapService teamRoadmapService;
 
     @GetMapping
-    public ResponseEntity<SuccessResponse<?>> getAllTeamList(@UserId final Long userId){
+    public ResponseEntity<SuccessResponse<?>> getAllTeamList(@UserId final Long userId) {
         final TeamListResponseDto responseDto = teamService.getAllTeamList(userId);
         return SuccessResponse.ok(responseDto);
     }

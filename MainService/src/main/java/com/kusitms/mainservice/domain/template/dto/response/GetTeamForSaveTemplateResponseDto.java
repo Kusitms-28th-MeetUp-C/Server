@@ -11,7 +11,7 @@ import java.util.List;
 public class GetTeamForSaveTemplateResponseDto {
     private List<TeamTitleResponseDto> teamTitleResponseDtoList;
 
-    public static GetTeamForSaveTemplateResponseDto of(List<TeamTitleResponseDto> teamTitleResponseDtoList){
+    public static GetTeamForSaveTemplateResponseDto of(List<TeamTitleResponseDto> teamTitleResponseDtoList) {
 
         return GetTeamForSaveTemplateResponseDto.builder()
                 .teamTitleResponseDtoList(teamTitleResponseDtoList)

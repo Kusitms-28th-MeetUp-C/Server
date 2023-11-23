@@ -8,7 +8,7 @@ import lombok.Getter;
 public class UserSignUpResponseDto {
     private String name;
 
-    public static UserSignUpResponseDto of(String name){
+    public static UserSignUpResponseDto of(String name) {
         return UserSignUpResponseDto.builder()
                 .name(name)
                 .build();

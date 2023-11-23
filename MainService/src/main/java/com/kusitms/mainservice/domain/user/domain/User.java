@@ -66,7 +66,7 @@ public class User {
                 .build();
     }
 
-    public void updateSignUpUserInfo(String name, UserType userType){
+    public void updateSignUpUserInfo(String name, UserType userType) {
         this.name = name;
         this.userType = userType;
     }

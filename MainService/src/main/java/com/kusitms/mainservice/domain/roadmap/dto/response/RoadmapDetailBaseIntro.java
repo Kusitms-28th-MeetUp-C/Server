@@ -9,7 +9,8 @@ import lombok.Getter;
 public class RoadmapDetailBaseIntro {
     private int step;
     private int teamCount;
-    public static RoadmapDetailBaseIntro of(Roadmap roadmap, int teamCount){
+
+    public static RoadmapDetailBaseIntro of(Roadmap roadmap, int teamCount) {
         return RoadmapDetailBaseIntro.builder()
                 .step(roadmap.getRoadmapSpaceList().size())
                 .teamCount(teamCount)

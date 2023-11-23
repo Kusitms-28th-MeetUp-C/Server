@@ -11,7 +11,8 @@ import org.springframework.data.domain.Page;
 public class NotMyPageRoadmapResponseDto {
     private DetailUserResponseDto user;
     private Page<SearchBaseRoadmapResponseDto> roadmapList;
-    public static NotMyPageRoadmapResponseDto of(DetailUserResponseDto user, Page<SearchBaseRoadmapResponseDto> roadmapList ){
+
+    public static NotMyPageRoadmapResponseDto of(DetailUserResponseDto user, Page<SearchBaseRoadmapResponseDto> roadmapList) {
         return NotMyPageRoadmapResponseDto.builder()
                 .user(user)
                 .roadmapList(roadmapList)

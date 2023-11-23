@@ -15,7 +15,7 @@ public class SearchUserTemplate {
     private String relatedTeamTitle;
     private TemplateType templateType;
 
-    public static SearchUserTemplate of(User user, CustomTemplate customTemplate, String relatedTeamTitle){
+    public static SearchUserTemplate of(User user, CustomTemplate customTemplate, String relatedTeamTitle) {
         return SearchUserTemplate.builder()
                 .userId(user.getId().toString())
                 .templateId(customTemplate.getId())
@@ -25,7 +25,7 @@ public class SearchUserTemplate {
                 .build();
     }
 
-    public void updateTeamTitle(String title){
+    public void updateTeamTitle(String title) {
         this.relatedTeamTitle = title;
     }
 }
