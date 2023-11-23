@@ -11,14 +11,17 @@ import static com.kusitms.socketservice.global.error.ErrorCode.INVALID_TEMPLATE_
 @RequiredArgsConstructor
 @Getter
 public enum TemplateType {
+    ALL("all"),
     IT("it"),
     SURVEY_DATA_ANALYSIS("survey_data_analysis"),
     CORPORATE_ANALYSIS("corporate_analysis"),
     PT("pt"),
     DESIGN("design"),
     MARKETING("marketing"),
-    ETC("etc");
-
+    ETC("etc"),
+    TEAM("team"),
+    CLUB("club"),
+    VIDEO("video");
     private final String stringTemplateType;
 
     public static TemplateType getEnumTemplateTypeFromStringTemplateType(String stringTemplateType) {
