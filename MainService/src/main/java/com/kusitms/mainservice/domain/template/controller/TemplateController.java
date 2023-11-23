@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class TemplateController {
     private final TemplateService templateService;
-    private final TemplateManageService templateManageService;
 
     @PostMapping
     public ResponseEntity<SuccessResponse<?>> getTemplateByTitleAndTemplateType(@RequestBody SearchTemplateRequsetDto searchTemplateRequsetDto, @PageableDefault(size = 12) Pageable pageable) {

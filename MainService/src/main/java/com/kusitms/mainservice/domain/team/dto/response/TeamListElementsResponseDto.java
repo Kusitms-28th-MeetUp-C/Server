@@ -1,6 +1,5 @@
 package com.kusitms.mainservice.domain.team.dto.response;
 
-import com.kusitms.mainservice.domain.roadmap.dto.response.BaseRoadmapResponseDto;
 import com.kusitms.mainservice.domain.roadmap.dto.response.CustomRoadmapDetailResponseDto;
 import lombok.Builder;
 import lombok.Getter;

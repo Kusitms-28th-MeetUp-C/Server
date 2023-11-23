@@ -1,6 +1,5 @@
 package com.kusitms.mainservice.domain.template.dto.response;
 
-import com.kusitms.mainservice.domain.roadmap.dto.response.BaseRoadmapResponseDto;
 import com.kusitms.mainservice.domain.template.domain.Template;
 import com.kusitms.mainservice.domain.template.domain.TemplateType;
 import com.kusitms.mainservice.domain.user.dto.response.MakerResponseDto;

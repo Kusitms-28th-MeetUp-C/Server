@@ -18,7 +18,7 @@ public class BaseTemplateResponseDto {
     private int estimatedTime;
     private List<RoadmapTitleResponseDto> connectedRoadmap;
 
-    public static BaseTemplateResponseDto of(Template template, List<RoadmapTitleResponseDto> connectedRoadmap){
+    public static BaseTemplateResponseDto of(Template template, List<RoadmapTitleResponseDto> connectedRoadmap) {
         return BaseTemplateResponseDto.builder()
                 .templateId(template.getId())
                 .title(template.getTitle())

@@ -17,7 +17,7 @@ public class RoadmapDetailResponseDto {
     private String title;
     private List<TemplateTitleResponseDto> templateList;
 
-    public static List<RoadmapDetailResponseDto> listOf(Roadmap roadmap){
+    public static List<RoadmapDetailResponseDto> listOf(Roadmap roadmap) {
         return roadmap.getRoadmapSpaceList().stream()
                 .map(roadmapSpace ->
                         RoadmapDetailResponseDto.of(

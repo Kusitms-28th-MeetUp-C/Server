@@ -11,7 +11,7 @@ public class TemplateDetailIntroBaseResponseDto {
     private int teamCount;
     private int reviewCount;
 
-    public static TemplateDetailIntroBaseResponseDto of(double rating, int estimatedTime, int teamCount, int reviewCount){
+    public static TemplateDetailIntroBaseResponseDto of(double rating, int estimatedTime, int teamCount, int reviewCount) {
         return TemplateDetailIntroBaseResponseDto.builder()
                 .rating(rating)
                 .estimatedTime(estimatedTime)

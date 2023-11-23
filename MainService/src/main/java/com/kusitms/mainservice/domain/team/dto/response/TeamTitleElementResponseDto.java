@@ -13,13 +13,13 @@ public class TeamTitleElementResponseDto {
     private Long teamId;
     private String title;
 
-    public static List<TeamTitleElementResponseDto> listOf(List<Team> teamList){
+    public static List<TeamTitleElementResponseDto> listOf(List<Team> teamList) {
         return teamList.stream()
                 .map(TeamTitleElementResponseDto::of)
                 .collect(Collectors.toList());
     }
 
-    public static TeamTitleElementResponseDto of(Team team){
+    public static TeamTitleElementResponseDto of(Team team) {
         return TeamTitleElementResponseDto.builder()
                 .teamId(team.getId())
                 .title(team.getTitle())

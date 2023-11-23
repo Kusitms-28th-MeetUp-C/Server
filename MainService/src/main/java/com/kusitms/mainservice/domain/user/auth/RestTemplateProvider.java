@@ -43,14 +43,16 @@ public class RestTemplateProvider {
                     googleUserInfo.getPicture());
         }
     }
-    private String getNickName(KakaoUserInfo kakaoUserInfo){
+
+    private String getNickName(KakaoUserInfo kakaoUserInfo) {
         if (kakaoUserInfo.getProperties() != null) {
             return kakaoUserInfo.getProperties().getNickname();
         } else {
             return "Unknown";
         }
     }
-    private String getPicture(KakaoUserInfo kakaoUserInfo){
+
+    private String getPicture(KakaoUserInfo kakaoUserInfo) {
         if (kakaoUserInfo.getProperties() != null) {
             return kakaoUserInfo.getProperties().getProfileImage();
         } else {

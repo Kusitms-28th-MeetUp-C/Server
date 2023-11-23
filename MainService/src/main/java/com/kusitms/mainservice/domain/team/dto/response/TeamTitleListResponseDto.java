@@ -10,7 +10,7 @@ import java.util.List;
 public class TeamTitleListResponseDto {
     private List<TeamTitleElementResponseDto> teamList;
 
-    public static TeamTitleListResponseDto of(List<TeamTitleElementResponseDto> teamList){
+    public static TeamTitleListResponseDto of(List<TeamTitleElementResponseDto> teamList) {
         return TeamTitleListResponseDto.builder()
                 .teamList(teamList)
                 .build();

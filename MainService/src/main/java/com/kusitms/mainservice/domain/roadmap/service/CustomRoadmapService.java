@@ -1,6 +1,7 @@
 package com.kusitms.mainservice.domain.roadmap.service;
 
-import com.kusitms.mainservice.domain.roadmap.domain.*;
+import com.kusitms.mainservice.domain.roadmap.domain.CustomRoadmap;
+import com.kusitms.mainservice.domain.roadmap.domain.CustomRoadmapSpace;
 import com.kusitms.mainservice.domain.roadmap.repository.CustomRoadmapSpaceRepository;
 import com.kusitms.mainservice.global.error.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -9,11 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
-import static com.kusitms.mainservice.domain.roadmap.domain.RoadmapType.getEnumRoadmapTypeFromStringRoadmapType;
-import static com.kusitms.mainservice.domain.template.domain.TemplateContent.createTemplateContent;
-import static com.kusitms.mainservice.domain.template.domain.TemplateType.getEnumTemplateTypeFromStringTemplateType;
 import static com.kusitms.mainservice.global.error.ErrorCode.ROADMAP_NOT_FOUND;
-import static com.kusitms.mainservice.global.error.ErrorCode.USER_NOT_FOUND;
 
 
 @RequiredArgsConstructor
@@ -31,10 +28,10 @@ public class CustomRoadmapService {
     private void updateCustomRoadmapEndTime(CustomRoadmapSpace customRoadmapSpace) {
         CustomRoadmap customRoadmap = customRoadmapSpace.getCustomRoadmap();
         boolean isCompleted = getCompleteStateFromCustomRoadmap(customRoadmap);
-        if(!isCompleted) customRoadmap.updateEndDate(LocalDate.now());
+        if (!isCompleted) customRoadmap.updateEndDate(LocalDate.now());
     }
 
-    private boolean getCompleteStateFromCustomRoadmap(CustomRoadmap customRoadmap){
+    private boolean getCompleteStateFromCustomRoadmap(CustomRoadmap customRoadmap) {
         return customRoadmap.getCustomRoadmapSpaceList().stream()
                 .anyMatch(currentRoadmapSpace -> !currentRoadmapSpace.isCompleted());
     }

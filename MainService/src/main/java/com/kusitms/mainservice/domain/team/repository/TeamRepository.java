@@ -16,6 +16,7 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
     List<Team> findAllByUserId(Long userId);
 
     Optional<Team> findById(Long Id);
+
     @Query("SELECT cr.id FROM Team t JOIN t.roadmapDownload rd JOIN rd.customRoadmap cr WHERE t.id = :teamId AND t.user.id = :userId")
-    Optional<Long> findCustomRoadmapIdByTeamIdAndUserId(@Param("userId") Long userId,@Param("teamId") Long teamId);
+    Optional<Long> findCustomRoadmapIdByTeamIdAndUserId(@Param("userId") Long userId, @Param("teamId") Long teamId);
 }

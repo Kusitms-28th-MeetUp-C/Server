@@ -10,7 +10,7 @@ public class MyPageResponseDto {
     private MyPageUserResponseDto user;
     private Page<MySharedContentDto> contentList;
 
-    public static MyPageResponseDto of(MyPageUserResponseDto myPageUserResponseDto,Page<MySharedContentDto> mySharedContentDtoList){
+    public static MyPageResponseDto of(MyPageUserResponseDto myPageUserResponseDto, Page<MySharedContentDto> mySharedContentDtoList) {
         return MyPageResponseDto.builder()
                 .user(myPageUserResponseDto)
                 .contentList(mySharedContentDtoList)

@@ -10,7 +10,8 @@ public class ArticleResponseDto {
     private Long id;
     private String title;
     private String image;
-    public static ArticleResponseDto of(Article article){
+
+    public static ArticleResponseDto of(Article article) {
         return ArticleResponseDto.builder()
                 .id(article.getId())
                 .title(article.getTitle())

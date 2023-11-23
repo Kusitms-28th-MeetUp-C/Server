@@ -31,7 +31,7 @@ public class RoadmapDownload {
     @Builder.Default
     private List<Team> teamList = new ArrayList<>();
 
-    public static RoadmapDownload creatRoadmapDownload(User user, Roadmap roadmap){
+    public static RoadmapDownload creatRoadmapDownload(User user, Roadmap roadmap) {
         RoadmapDownload roadmapDownload = RoadmapDownload.builder()
                 .roadmap(roadmap)
                 .user(user)
@@ -41,11 +41,11 @@ public class RoadmapDownload {
         return roadmapDownload;
     }
 
-    public void addTeam(Team team){
+    public void addTeam(Team team) {
         this.teamList.add(team);
     }
 
-    public void addCustomRoadmap(CustomRoadmap customRoadmap){
+    public void addCustomRoadmap(CustomRoadmap customRoadmap) {
         this.customRoadmap = customRoadmap;
     }
 }

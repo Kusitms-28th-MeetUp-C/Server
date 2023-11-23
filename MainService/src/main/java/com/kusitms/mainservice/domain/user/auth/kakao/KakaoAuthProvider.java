@@ -3,7 +3,6 @@ package com.kusitms.mainservice.domain.user.auth.kakao;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kusitms.mainservice.global.error.exception.InternalServerException;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

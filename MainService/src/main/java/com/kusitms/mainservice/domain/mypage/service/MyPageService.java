@@ -48,53 +48,62 @@ public class MyPageService {
         MyPageResponseDto myPageResponseDto = createMyPageResponseDto(userId, pageable);
         return myPageResponseDto;
     }
-    public Page<MySharedContentDto> getSharedContentBySharedType(Long userId, String sharedType, Pageable pageable){
+
+    public Page<MySharedContentDto> getSharedContentBySharedType(Long userId, String sharedType, Pageable pageable) {
         Page<MySharedContentDto> mySharedContentDtoPage = createMySharedContentDtoPage(userId, sharedType, pageable);
         return mySharedContentDtoPage;
     }
+
     public String uploadProfile(MultipartFile multipartFile, Long userId) throws IOException {
         User user = getUserByUserId(userId);
         String url = saveFileToUser(multipartFile, user);
         return url;
     }
-    public MyPageUserResponseDto updateUserInfo( Long userId, ModifyUserProfileRequestDto modifyUserProfileRequestDto){
+
+    public MyPageUserResponseDto updateUserInfo(Long userId, ModifyUserProfileRequestDto modifyUserProfileRequestDto) {
         User user = getUserByUserId(userId);
         user.updateMypage(modifyUserProfileRequestDto);
         return createMyPageUserResponseDto(user);
     }
-    public NotMyPageTemplateResponseDto getNotMyPageTemplateResponse(Long userId, Pageable pageable){
+
+    public NotMyPageTemplateResponseDto getNotMyPageTemplateResponse(Long userId, Pageable pageable) {
         User user = getUserByUserId(userId);
         Page<Template> templatePage = getTemplateByUserId(userId, pageable);
         DetailUserResponseDto detailUserResponseDto = createDetailUserResponseDto(user);
         Page<SearchBaseTemplateResponseDto> searchBaseTemplateResponseDtoList = templateService.getTemplatesWithPaging(templatePage);
         return NotMyPageTemplateResponseDto.of(detailUserResponseDto, searchBaseTemplateResponseDtoList);
     }
-    public NotMyPageRoadmapResponseDto getNotMyPageRoadmapResponse(Long userId, Pageable pageable){
+
+    public NotMyPageRoadmapResponseDto getNotMyPageRoadmapResponse(Long userId, Pageable pageable) {
         User user = getUserByUserId(userId);
-        Page<Roadmap> roadmapPage = getRoadmapByUserId(userId,pageable);
+        Page<Roadmap> roadmapPage = getRoadmapByUserId(userId, pageable);
         DetailUserResponseDto detailUserResponseDto = createDetailUserResponseDto(user);
         Page<SearchBaseRoadmapResponseDto> searchBaseRoadmapResponseDtos = roadmapService.createSearchBaseRoadmapResponseDtoPage(roadmapPage);
         return NotMyPageRoadmapResponseDto.of(detailUserResponseDto, searchBaseRoadmapResponseDtos);
     }
-    private Page<Roadmap> getRoadmapByUserId(Long userId, Pageable pageable){
-        return  roadmapRepository.findAllByUserId(userId,pageable);
-    }
-    private Page<Template> getTemplateByUserId(Long userId, Pageable pageable){
-        return templateRepository.findAllByUserId(userId,pageable);
-    }
-    private Page<MySharedContentDto> createMySharedContentDtoPage(Long userId, String sharedType, Pageable pageable){
 
-        if(sharedType.equals("템플릿")){
-            Page<MySharedContentDto> mySharedContentDtoPage = createTemplateContentpage(userId,pageable);
-            return mySharedContentDtoPage;
-        }
-        if(sharedType.equals("로드맵")){
-            Page<MySharedContentDto> mySharedContentDtoPage = createRoadmapContentpage(userId,pageable);
-            return mySharedContentDtoPage;
-        }
-        return createMySharedContentDtoList(userId,pageable);
+    private Page<Roadmap> getRoadmapByUserId(Long userId, Pageable pageable) {
+        return roadmapRepository.findAllByUserId(userId, pageable);
     }
-    private Page<MySharedContentDto> createTemplateContentpage(Long userId,Pageable pageable){
+
+    private Page<Template> getTemplateByUserId(Long userId, Pageable pageable) {
+        return templateRepository.findAllByUserId(userId, pageable);
+    }
+
+    private Page<MySharedContentDto> createMySharedContentDtoPage(Long userId, String sharedType, Pageable pageable) {
+
+        if (sharedType.equals("템플릿")) {
+            Page<MySharedContentDto> mySharedContentDtoPage = createTemplateContentpage(userId, pageable);
+            return mySharedContentDtoPage;
+        }
+        if (sharedType.equals("로드맵")) {
+            Page<MySharedContentDto> mySharedContentDtoPage = createRoadmapContentpage(userId, pageable);
+            return mySharedContentDtoPage;
+        }
+        return createMySharedContentDtoList(userId, pageable);
+    }
+
+    private Page<MySharedContentDto> createTemplateContentpage(Long userId, Pageable pageable) {
         Page<Template> templatePage = templateRepository.findAllByUserId(userId, pageable);
         return templatePage.map(template ->
                 MySharedContentDto.of(
@@ -105,7 +114,8 @@ public class MyPageService {
                 )
         );
     }
-    private Page<MySharedContentDto> createRoadmapContentpage(Long userId,Pageable pageable){
+
+    private Page<MySharedContentDto> createRoadmapContentpage(Long userId, Pageable pageable) {
         Page<Roadmap> roadmapPage = roadmapRepository.findAllByUserId(userId, pageable);
         return roadmapPage.map(roadmap ->
                 MySharedContentDto.of(
@@ -116,6 +126,7 @@ public class MyPageService {
                 )
         );
     }
+
     private String saveFileToUser(MultipartFile multipartFile, User user) throws IOException {
         String url = s3Service.saveFile(multipartFile, user.getId().toString());
         user.updateProfile(url);
@@ -123,7 +134,7 @@ public class MyPageService {
     }
 
     private MyPageResponseDto createMyPageResponseDto(Long userId, Pageable pageable) {
-       User user = getUserByUserId(userId);
+        User user = getUserByUserId(userId);
         MyPageUserResponseDto myPageUserResponseDto = createMyPageUserResponseDto(user);
         Page<MySharedContentDto> mySharedContentDtoList = createMySharedContentDtoList(userId, pageable);
         return MyPageResponseDto.of(myPageUserResponseDto, mySharedContentDtoList);

@@ -1,8 +1,6 @@
 package com.kusitms.mainservice.domain.template.dto.response;
 
-import com.kusitms.mainservice.domain.roadmap.dto.response.RoadmapTitleResponseDto;
 import com.kusitms.mainservice.domain.template.domain.Template;
-import com.kusitms.mainservice.domain.template.domain.TemplateType;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -15,7 +13,8 @@ public class TemplateDetailBaseRelateDto {
     private int estimatedTime;
     private double rating;
     private String connectedRoadmap;
-    public static TemplateDetailBaseRelateDto of(Template template, int teamCount, double rating,String connectedRoadmap){
+
+    public static TemplateDetailBaseRelateDto of(Template template, int teamCount, double rating, String connectedRoadmap) {
         return TemplateDetailBaseRelateDto.builder()
                 .templateId(template.getId())
                 .title(template.getTitle())

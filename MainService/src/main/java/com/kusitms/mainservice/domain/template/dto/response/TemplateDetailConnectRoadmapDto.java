@@ -8,7 +8,8 @@ import lombok.Getter;
 public class TemplateDetailConnectRoadmapDto {
     private Long roadmapId;
     private String connectedRoadmap;
-    public static TemplateDetailConnectRoadmapDto of(String connectedRoadmap, Long roadmapId){
+
+    public static TemplateDetailConnectRoadmapDto of(String connectedRoadmap, Long roadmapId) {
         return TemplateDetailConnectRoadmapDto.builder()
                 .roadmapId(roadmapId)
                 .connectedRoadmap(connectedRoadmap)

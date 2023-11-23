@@ -7,5 +7,6 @@ import java.util.Optional;
 
 public interface CustomTemplateContentRepository extends MongoRepository<CustomTemplateContent, String> {
     Optional<CustomTemplateContent> findByTemplateId(Long templateId);
+
     void deleteByTemplateId(Long templateId);
 }

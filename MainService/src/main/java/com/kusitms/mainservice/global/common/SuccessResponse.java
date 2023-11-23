@@ -15,12 +15,12 @@ public class SuccessResponse<T> {
     private String message;
     private T data;
 
-    public static <T> ResponseEntity<SuccessResponse<?>> ok(T data){
+    public static <T> ResponseEntity<SuccessResponse<?>> ok(T data) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(SuccessResponse.of(SuccessCode.OK, data));
     }
 
-    public static <T> ResponseEntity<SuccessResponse<?>> created(T data){
+    public static <T> ResponseEntity<SuccessResponse<?>> created(T data) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(SuccessResponse.of(SuccessCode.CREATED, data));
     }

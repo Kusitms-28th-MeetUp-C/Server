@@ -26,7 +26,8 @@ public class RoadmapSpace {
     @OneToMany(mappedBy = "roadmapSpace")
     @Builder.Default
     private List<RoadmapTemplate> RoadmapTemplateList = new ArrayList<>();
-    public static RoadmapSpace createRoadmapSpace(StepDto stepDto, Roadmap roadmap, int step){
+
+    public static RoadmapSpace createRoadmapSpace(StepDto stepDto, Roadmap roadmap, int step) {
         RoadmapSpace roadmapSpace = RoadmapSpace.builder()
                 .title(stepDto.getStepTitle())
                 .step(step)
@@ -35,7 +36,8 @@ public class RoadmapSpace {
         roadmap.addRoadmapSpace(roadmapSpace);
         return roadmapSpace;
     }
-    public void addRoadmapTemplate(RoadmapTemplate roadmapTemplate){
+
+    public void addRoadmapTemplate(RoadmapTemplate roadmapTemplate) {
         this.RoadmapTemplateList.add(roadmapTemplate);
     }
 }
