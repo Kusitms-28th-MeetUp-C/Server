@@ -32,14 +32,14 @@ public class SearchRepositoryImpl implements SearchRepository {
     }
 
     @Override
-    public List<SearchUserTemplate> findAllByUserId(String userId){
+    public List<SearchUserTemplate> findAllByUserId(String userId) {
         AggregateIterable<Document> result = getResultFromUserId(userId);
         List<SearchUserTemplate> searchUserTemplates = new ArrayList<>();
         result.forEach(doc -> searchUserTemplates.add(mongoConverter.read(SearchUserTemplate.class, doc)));
         return searchUserTemplates;
     }
 
-    private AggregateIterable<Document> getResultFromUserId(String userId){
+    private AggregateIterable<Document> getResultFromUserId(String userId) {
         MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
         MongoCollection<Document> collection = database.getCollection(COLLECTION_NAME);
         return collection.aggregate(Arrays.asList(
@@ -49,7 +49,7 @@ public class SearchRepositoryImpl implements SearchRepository {
                                         new Document(new Document("text",
                                                 new Document("query", userId)
                                                         .append("path", "userId"))))))
-                        .append("sort",  new Document("unused", new Document("$meta", "searchScore"))))));
+                        .append("sort", new Document("unused", new Document("$meta", "searchScore"))))));
     }
 
     private AggregateIterable<Document> getResultFromSearchText(String searchText, String userId) {
@@ -60,11 +60,11 @@ public class SearchRepositoryImpl implements SearchRepository {
                         .append("compound", new Document("must",
                                 Arrays.asList(
                                         new Document(new Document("text",
-                                            new Document("query", searchText)
-                                                    .append("path", new Document("wildcard", "*")))),
+                                                new Document("query", searchText)
+                                                        .append("path", new Document("wildcard", "*")))),
                                         new Document(new Document("text",
-                                            new Document("query", userId)
-                                                    .append("path", "userId"))))))
-                        .append("sort",  new Document("unused", new Document("$meta", "searchScore"))))));
+                                                new Document("query", userId)
+                                                        .append("path", "userId"))))))
+                        .append("sort", new Document("unused", new Document("$meta", "searchScore"))))));
     }
 }

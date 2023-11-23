@@ -15,7 +15,7 @@ public class SearchResultElementResponseDto {
     private String teamTitle;
     private String category;
 
-    public static List<SearchResultElementResponseDto> listOf(List<SearchUserTemplate> searchUserTemplateList){
+    public static List<SearchResultElementResponseDto> listOf(List<SearchUserTemplate> searchUserTemplateList) {
         return searchUserTemplateList.stream()
                 .map(searchUserTemplate ->
                         SearchResultElementResponseDto.of(
@@ -27,7 +27,7 @@ public class SearchResultElementResponseDto {
     }
 
     public static SearchResultElementResponseDto of(Long templateId, String title,
-                                                    String teamTitle, String category){
+                                                    String teamTitle, String category) {
         return SearchResultElementResponseDto.builder()
                 .templateId(templateId)
                 .title(title)

@@ -25,8 +25,8 @@ public class SearchService {
         return SearchResultResponseDto.of(searchResultElementResponseDtoList);
     }
 
-    private List<SearchUserTemplate> getSearchResult(String searchText, String userId){
-        if(!Objects.equals(searchText, EMPTY_STRING))
+    private List<SearchUserTemplate> getSearchResult(String searchText, String userId) {
+        if (!Objects.equals(searchText, EMPTY_STRING))
             return searchRepository.findAllBySearchText(searchText, userId);
         else
             return searchRepository.findAllByUserId(userId);

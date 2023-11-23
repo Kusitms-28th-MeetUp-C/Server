@@ -11,7 +11,7 @@ public class ChatUser {
     private String profile;
     private UserType type;
 
-    public static ChatUser createChatUser(User user){
+    public static ChatUser createChatUser(User user) {
         return ChatUser.builder()
                 .sessionId(user.getSessionId())
                 .name(user.getName())
